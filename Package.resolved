@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "BitByteData",
+        "repositoryURL": "git@github.com:tsolomko/BitByteData.git",
+        "state": {
+          "branch": null,
+          "revision": "3ee55b113ae52d5c1f4cbec0ed4eae613dcd7eff",
+          "version": "1.4.3"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
