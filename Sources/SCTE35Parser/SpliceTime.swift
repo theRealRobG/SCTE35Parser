@@ -23,5 +23,5 @@ public struct SpliceTime {
     /// A 33-bit field that indicates time in terms of ticks of the program's 90 kHz clock.
     /// This field, when modified by `ptsAdjustment`, represents the time of the intended
     /// splice point.
-    public let ptsTime: UInt?
+    public let ptsTime: UInt64?
 }

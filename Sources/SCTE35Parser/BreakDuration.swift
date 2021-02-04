@@ -29,5 +29,5 @@ public struct BreakDuration {
     public let autoReturn: Bool
     /// A 33-bit field that indicates elapsed time in terms of ticks of the program's 90 kHz
     /// clock.
-    public let duration: UInt
+    public let duration: UInt64
 }
