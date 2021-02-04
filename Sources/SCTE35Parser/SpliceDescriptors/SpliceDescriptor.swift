@@ -46,7 +46,7 @@ public enum SpliceDescriptor {
     /// place the `SpliceInfoSection` accurately. Devices that do not recognize a value in any field
     /// shall ignore the message and take no action.
     case segmentationDescriptor(SegmentationDescriptor)
-    case timeDescriptor
+    case timeDescriptor(TimeDescriptor)
     case audioDescriptor
     
     /// This 8 bit number defines the syntax for the private bytes that make up the body of this
