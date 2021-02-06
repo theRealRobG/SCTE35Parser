@@ -6,6 +6,6 @@ final class SCTE35ParserTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-        XCTAssertEqual(SCTE35Parser().text, "Hello, World!")
+//        XCTAssertEqual(SCTE35Parser().text, "Hello, World!")
     }
 }
