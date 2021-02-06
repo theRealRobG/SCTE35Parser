@@ -101,6 +101,11 @@ class MockDataBitReader: DataBitReader {
         }
     }
     
+    init() {
+        initData = nil
+        initByteReader = nil
+    }
+    
     required init(data: Data) {
         initData = data
         initByteReader = nil

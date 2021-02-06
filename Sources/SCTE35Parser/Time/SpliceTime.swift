@@ -24,4 +24,34 @@ public struct SpliceTime {
     /// This field, when modified by `ptsAdjustment`, represents the time of the intended
     /// splice point.
     public let ptsTime: UInt64?
+    
+    public init(ptsTime: UInt64?) {
+        self.ptsTime = ptsTime
+    }
+}
+
+// MARK: - Parsing
+extension SpliceTime {
+    init(bitReader: DataBitReader) throws {
+        try bitReader.validate(
+            expectedMinimumBitsLeft: 1,
+            parseDescription: "SpliceTime; reading timeSpecifiedFlag"
+        )
+        let timeSpecifiedFlag = bitReader.bit() == 1
+        if timeSpecifiedFlag {
+            try bitReader.validate(
+                expectedMinimumBitsLeft: 39,
+                parseDescription: "SpliceTime; timeSpecifiedFlag == 1"
+            )
+            _ = bitReader.bits(count: 6)
+            ptsTime = bitReader.uint64(fromBits: 33)
+        } else {
+            try bitReader.validate(
+                expectedMinimumBitsLeft: 7,
+                parseDescription: "SpliceTime; timeSpecifiedFlag == 0"
+            )
+            _ = bitReader.bits(count: 7)
+            ptsTime = nil
+        }
+    }
 }

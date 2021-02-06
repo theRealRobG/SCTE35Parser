@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum ParserError: Error {
+public enum ParserError: Error, Equatable {
     case unexpectedEndOfData(UnexpectedEndOfDataErrorInfo)
     
     public var code: Code {
