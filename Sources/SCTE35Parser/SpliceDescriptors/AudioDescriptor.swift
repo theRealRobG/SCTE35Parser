@@ -40,7 +40,7 @@ public struct AudioDescriptor {
 }
 
 public extension AudioDescriptor {
-    public struct Component {
+    struct Component {
         /// An optional 8-bit value that identifies the elementary PID stream containing the audio
         /// channel that follows. If used, the value shall be the same as the value used in the
         /// `stream_identifier_descriptor()` to identify that elementary PID stream. If this is not used,
