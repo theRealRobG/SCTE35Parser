@@ -46,8 +46,21 @@ public enum SpliceDescriptor {
     /// place the `SpliceInfoSection` accurately. Devices that do not recognize a value in any field
     /// shall ignore the message and take no action.
     case segmentationDescriptor(SegmentationDescriptor)
+    /// The `TimeDescriptor` provides an optional extension to the `SpliceInsert`, `SpliceNull` and
+    /// `TimeSignal` commands that allows a programmer’s wall clock time to be sent to a client. For the
+    /// highest accuracy, this descriptor should be used with a `TimeSignal` or `SpliceInsert` command
+    /// that has a `ptsTime` defined.
     case timeDescriptor(TimeDescriptor)
-    case audioDescriptor
+    /// The `AudioDescriptor` should be used when programmers and/or MVPDs do not support dynamic
+    /// signaling (e.g., signaling of audio language changes) and with legacy audio formats that do not
+    /// support dynamic signaling. As discussed in Section 9.1.5 of the SCTE Operational Practice on
+    /// Multiple Audio Signaling [SCTE 248], since most MVPD head-ends do not change the PAT/PMT to
+    /// signal changed audio streams, this descriptor in SCTE 35 should be used to signal such changes.
+    /// This descriptor is an implementation of a `SpliceDescriptor`. It provides the ability to
+    /// dynamically signal the audios actually in use in the stream. This descriptor shall only be used
+    /// with a `TimeSignal` command and a segmentation descriptor with the type `programStart` or
+    /// `programOverlapStart`.
+    case audioDescriptor(AudioDescriptor)
     
     /// This 8 bit number defines the syntax for the private bytes that make up the body of this
     /// descriptor. The descriptor tags are defined by the owner of the descriptor, as registered using
@@ -71,6 +84,12 @@ public enum SpliceDescriptor {
     /// only the private information contained within this descriptor. The code 0x43554549 (ASCII "CUEI")
     /// for descriptors defined in this specification has been registered with SMPTE.
     public var identifier: UInt32 {
-        fatalError("TODO - implement once all descriptors are implemented")
+        switch self {
+        case .availDescriptor(let descriptor): return descriptor.identifier
+        case .dtmfDescriptor(let descriptor): return descriptor.identifier
+        case .segmentationDescriptor(let descriptor): return descriptor.identifier
+        case .timeDescriptor(let descriptor): return descriptor.identifier
+        case .audioDescriptor(let descriptor): return descriptor.identifier
+        }
     }
 }
