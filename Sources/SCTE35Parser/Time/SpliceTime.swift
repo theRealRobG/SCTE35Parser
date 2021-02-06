@@ -31,6 +31,7 @@ public struct SpliceTime {
 }
 
 // MARK: - Parsing
+
 extension SpliceTime {
     init(bitReader: DataBitReader) throws {
         try bitReader.validate(

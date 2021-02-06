@@ -31,3 +31,17 @@ public struct BreakDuration {
     /// clock.
     public let duration: UInt64
 }
+
+// MARK: - Parsing
+
+extension BreakDuration {
+    init(bitReader: DataBitReader) throws {
+        try bitReader.validate(
+            expectedMinimumBitsLeft: 40,
+            parseDescription: "BreakDuration"
+        )
+        autoReturn = bitReader.bit() == 1
+        _ = bitReader.bits(count: 6)
+        duration = bitReader.uint64(fromBits: 33)
+    }
+}
