@@ -60,7 +60,7 @@
  }
  ```
  */
-public struct SegmentationDescriptor {
+public struct SegmentationDescriptor: Equatable {
     /// This 32-bit number is used to identify the owner of the descriptor. The identifier shall have a
     /// value of 0x43554549 (ASCII “CUEI”).
     public let identifier: UInt32
@@ -75,7 +75,7 @@ public struct SegmentationDescriptor {
 }
 
 public extension SegmentationDescriptor {
-    struct ScheduledEvent {
+    struct ScheduledEvent: Equatable {
         /// This is provided to facilitate implementations that use methods that are out of scope of this
         /// standard to process and manage this Segment.
         public let deliveryRestrictions: DeliveryRestrictions?
@@ -115,7 +115,7 @@ public extension SegmentationDescriptor {
 public extension SegmentationDescriptor.ScheduledEvent {
     /// This is provided to facilitate implementations that use methods that are out of scope of this
     /// standard to process and manage this Segment.
-    struct DeliveryRestrictions {
+    struct DeliveryRestrictions: Equatable {
         /// This shall have the value of `true` when there are no restrictions with respect to web
         /// delivery of this Segment. This shall have the value of `false` to signal that restrictions
         /// related to web delivery of this Segment are asserted.
@@ -139,23 +139,23 @@ public extension SegmentationDescriptor.ScheduledEvent.DeliveryRestrictions {
     /// This field signals three pre-defined groups of devices. The population of each group is
     /// independent and the groups are non-hierarchical. The delivery and format of the messaging to
     /// define the devices contained in the groups is out of the scope of this standard.
-    enum DeviceRestrictions {
+    enum DeviceRestrictions: Int, Equatable {
         /// This Segment is restricted for a class of devices defined by an out of band message that
         /// describes which devices are excluded.
-        case restrictGroup0 // 00
+        case restrictGroup0 = 0 // 00
         /// This Segment is restricted for a class of devices defined by an out of band message that
         /// describes which devices are excluded.
-        case restrictGroup1 // 01
+        case restrictGroup1 = 1 // 01
         /// This Segment is restricted for a class of devices defined by an out of band message that
         /// describes which devices are excluded.
-        case restrictGroup2 // 10
+        case restrictGroup2 = 2 // 10
         /// This Segment has no device restrictions.
-        case none           // 11
+        case none = 3           // 11
     }
 }
 
 public extension SegmentationDescriptor.ScheduledEvent {
-    struct ComponentSegmentation {
+    struct ComponentSegmentation: Equatable {
         /// An 8-bit value that identifies the elementary PID stream containing the Segmentation Point
         /// specified by the value of `SpliceTime` that follows. The value shall be the same as the value
         /// used in the `stream_identifier_descriptor()` to identify that elementary PID stream. The
@@ -173,7 +173,7 @@ public extension SegmentationDescriptor.ScheduledEvent {
 }
 
 public extension SegmentationDescriptor.ScheduledEvent {
-    struct SubSegment {
+    struct SubSegment: Equatable {
         /// If specified, this field provides identification for a specific sub-Segment within a
         /// collection of sub-Segments. This value, when utilized, is expected to be set to one for the
         /// first sub-Segment within a collection of sub-Segments. This field is expected to increment by
@@ -182,5 +182,92 @@ public extension SegmentationDescriptor.ScheduledEvent {
         /// If specified, this field provides a count of the expected number of individual sub-Segments
         /// within the collection of sub-Segments.
         public let subSegmentsExpected: UInt8
+    }
+}
+
+// MARK: - Parsing
+
+extension SegmentationDescriptor {
+    // NOTE: It is assumed that the splice_descriptor_tag has already been read.
+    init(bitReader: DataBitReader) throws {
+        let descriptorLength = bitReader.int(fromBytes: 1)
+        try bitReader.validate(
+            expectedMinimumBitsLeft: descriptorLength * 8,
+            parseDescription: "SegmentationDescriptor; descriptor length"
+        )
+        let bitsLeftAfterDescriptor = bitReader.bitsLeft - (descriptorLength * 8)
+        self.identifier = bitReader.uint32(fromBits: 32)
+        guard self.identifier == 1129661769 else {
+            throw ParserError.invalidSegmentationDescriptorIdentifier(Int(self.identifier))
+        }
+        self.eventId = bitReader.uint32(fromBits: 32)
+        let segmentationEventCancelled = bitReader.bit() == 1
+        _ = bitReader.bits(count: 7)
+        if segmentationEventCancelled {
+            self.scheduledEvent = nil
+        } else {
+            self.scheduledEvent = try ScheduledEvent(bitReader: bitReader, bitsLeftAfterDescriptor: bitsLeftAfterDescriptor)
+        }
+    }
+}
+
+extension SegmentationDescriptor.ScheduledEvent {
+    init(bitReader: DataBitReader, bitsLeftAfterDescriptor: Int) throws {
+        let programSegmentationFlag = bitReader.bit() == 1
+        let segmentationDurationFlag = bitReader.bit() == 1
+        let deliveryNotRestrictedFlag = bitReader.bit() == 1
+        if deliveryNotRestrictedFlag {
+            _ = bitReader.bits(count: 5)
+            self.deliveryRestrictions = nil
+        } else {
+            let webDeliveryAllowedFlag = bitReader.bit() == 1
+            let noRegionalBlackoutFlag = bitReader.bit() == 1
+            let archiveAllowedFlag = bitReader.bit() == 1
+            let deviceRestrictions = DeliveryRestrictions.DeviceRestrictions(rawValue: bitReader.int(fromBits: 2)) ?? .none
+            self.deliveryRestrictions = DeliveryRestrictions(
+                webDeliveryAllowed: webDeliveryAllowedFlag,
+                noRegionalBlackout: noRegionalBlackoutFlag,
+                archiveAllowed: archiveAllowedFlag,
+                deviceRestrictions: deviceRestrictions
+            )
+        }
+        if programSegmentationFlag {
+            self.componentSegments = nil
+        } else {
+            let componentCount = bitReader.byte()
+            self.componentSegments = (0..<componentCount).reduce(into: []) { segments, _ in
+                let componentTag = bitReader.byte()
+                _ = bitReader.bits(count: 7)
+                let ptsOffset =  bitReader.uint64(fromBits: 33)
+                segments?.append(ComponentSegmentation(componentTag: componentTag, ptsOffset: ptsOffset))
+            }
+        }
+        if segmentationDurationFlag {
+            self.segmentationDuration = bitReader.uint64(fromBits: 40)
+        } else {
+            self.segmentationDuration = nil
+        }
+        self.segmentationUPID = try SegmentationDescriptor.SegmentationUPID(bitReader: bitReader)
+        let segmentationTypeIDRawValue = bitReader.byte()
+        guard let segmentationTypeID = SegmentationDescriptor.SegmentationTypeID(rawValue: segmentationTypeIDRawValue) else {
+            throw ParserError.unrecognisedSegmentationTypeID(Int(segmentationTypeIDRawValue))
+        }
+        self.segmentationTypeID = segmentationTypeID
+        self.segmentNum = bitReader.byte()
+        self.segmentsExpected = bitReader.byte()
+        guard bitsLeftAfterDescriptor <= (bitReader.bitsLeft - 16) else {
+            self.subSegment = nil
+            return
+        }
+        if segmentationTypeID == .providerPlacementOpportunityStart || segmentationTypeID == .distributorPlacementOpportunityStart || segmentationTypeID == .providerOverlayPlacementOpportunityStart || segmentationTypeID == .distributorOverlayPlacementOpportunityStart {
+            let subSegmentNum = bitReader.byte()
+            let subSegmentsExpected = bitReader.byte()
+            self.subSegment = SubSegment(
+                subSegmentNum: subSegmentNum,
+                subSegmentsExpected: subSegmentsExpected
+            )
+        } else {
+            self.subSegment = nil
+        }
     }
 }

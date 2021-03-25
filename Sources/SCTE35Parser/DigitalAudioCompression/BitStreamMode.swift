@@ -22,7 +22,7 @@
  ‘111’ ‘010’ - ‘111’ main audio service: karaoke
  ```
  */
-public enum BitStreamMode {
+public enum BitStreamMode: Equatable {
     case completeMain
     case musicAndEffects
     case visuallyImpaired

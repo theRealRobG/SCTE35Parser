@@ -19,7 +19,7 @@
  }
  ```
  */
-public struct PrivateCommand {
+public struct PrivateCommand: Equatable {
     /// This 32-bit number is used to identify the owner of the command.
     ///
     /// The identifier is a 32-bit field as defined in [ITU-T H.222.0]. Refer to clauses 2.6.8 and 2.6.9
@@ -27,8 +27,27 @@ public struct PrivateCommand {
     /// in registration descriptor. Only identifier values registered and recognized by SMPTE
     /// Registration Authority, LLC should be used (see [b-SMPTE RA]). Its use in the `PrivateCommand`
     /// structure shall scope and identify only the private information contained within this command.
-    public let identifier: UInt32
+    public let identifier: String
     /// The remainder of the descriptor is dedicated to data fields as required by the descriptor being
     /// defined.
-    public let privateByte: UInt8
+    public let privateBytes: [UInt8]
+}
+
+// MARK: - Parsing
+
+extension PrivateCommand {
+    init(bitReader: DataBitReader, spliceCommandLength: Int) throws {
+        try bitReader.validate(
+            expectedMinimumBitsLeft: spliceCommandLength * 8,
+            parseDescription: "PrivateCommand; validating spliceCommandLength"
+        )
+        self.identifier = bitReader.string(fromBytes: 4)
+        var bytesLeft = spliceCommandLength - 4
+        var privateBytes = [UInt8]()
+        while bytesLeft > 0 {
+            bytesLeft -= 1
+            privateBytes.append(bitReader.byte())
+        }
+        self.privateBytes = privateBytes
+    }
 }

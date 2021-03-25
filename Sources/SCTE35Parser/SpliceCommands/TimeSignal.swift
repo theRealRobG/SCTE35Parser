@@ -21,7 +21,7 @@
  }
  ```
  */
-public struct TimeSignal {
+public struct TimeSignal: Equatable {
     /// The `SpliceTime` structure, when modified by `ptsAdjustment`, specifies the time of the
     /// splice event.
     public let spliceTime: SpliceTime
@@ -32,4 +32,12 @@ public struct TimeSignal {
     /// In this specific case, this is a computed property, that is `true` when
     /// `spliceTime.ptsTime == nil`
     public var isImmediate: Bool { spliceTime.ptsTime == nil }
+}
+
+// MARK: - Parsing
+
+extension TimeSignal {
+    init(bitReader: DataBitReader) throws {
+        self.spliceTime = try SpliceTime(bitReader: bitReader)
+    }
 }

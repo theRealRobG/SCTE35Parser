@@ -37,7 +37,7 @@
  }
  ```
  */
-public struct SpliceInsert {
+public struct SpliceInsert: Equatable {
     /// A 32-bit unique splice event identifier.
     public let eventId: UInt32
     /// Information on the scheduled event. If this value is `nil` it indicates that a previously
@@ -49,7 +49,7 @@ public struct SpliceInsert {
 }
 
 public extension SpliceInsert {
-    struct ScheduledEvent {
+    struct ScheduledEvent: Equatable {
         /// When set to `true`, indicates that the splice event is an opportunity to exit from the
         /// network feed and that the value of `spliceTime`, as modified by `ptsAdjustment`, shall
         /// refer to an intended out point or program out point. When set to `false`, the flag
@@ -89,7 +89,7 @@ public extension SpliceInsert {
 
 public extension SpliceInsert.ScheduledEvent {
     /// Information on the type of splice message.
-    enum SpliceMode {
+    enum SpliceMode: Equatable {
         /// Indicates that the message refers to a Program Splice Point and that the mode is the
         /// Program Splice Mode whereby all PIDs/components of the program are to be spliced.
         case programSpliceMode(ProgramMode)
@@ -102,7 +102,7 @@ public extension SpliceInsert.ScheduledEvent {
 public extension SpliceInsert.ScheduledEvent.SpliceMode {
     /// Indicates that the message refers to a Program Splice Point and that the mode is the
     /// Program Splice Mode whereby all PIDs/components of the program are to be spliced.
-    struct ProgramMode {
+    struct ProgramMode: Equatable {
         /// The `SpliceTime` structure, when modified by `ptsAdjustment`, specifies the time of the
         /// splice event.
         public let spliceTime: SpliceTime?
@@ -110,7 +110,7 @@ public extension SpliceInsert.ScheduledEvent.SpliceMode {
     
     /// Indicates that the mode is the Component Splice Mode whereby each component that is
     /// intended to be spliced will be listed separately by the syntax that follows.
-    struct ComponentMode {
+    struct ComponentMode: Equatable {
         /// An 8-bit value that identifies the elementary PID stream containing the Splice Point
         /// specified by the value of `spliceTime` that follows. The value shall be the same as
         /// the value used in the stream_identification_descriptor() to identify that elementary

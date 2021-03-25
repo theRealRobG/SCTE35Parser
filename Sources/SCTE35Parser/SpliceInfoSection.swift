@@ -5,6 +5,9 @@
 //  Created by Robert Galluccio on 06/02/2021.
 //
 
+import Foundation
+import BitByteData
+
 /**
  ```
  {
@@ -48,7 +51,7 @@
 /// The `SpliceInfoSection` shall be carried in transport packets whereby only one section or partial
 /// section may be in any transport packet. `SpliceInfoSection`s shall always start at the beginning of a
 /// transport packet payload.
-public struct SpliceInfoSection {
+public struct SpliceInfoSection: Equatable {
     /// This is an 8-bit field. Its value shall be 0xFC.
     public let tableID: UInt8
     /// A two-bit field that indicates if the content preparation system has created a Stream Access
@@ -101,6 +104,35 @@ public struct SpliceInfoSection {
     /// prior to decryption of the encrypted fields and shall utilize the encrypted fields in their
     /// encrypted state.
     public let CRC_32: UInt32
+    
+    public init(
+        tableID: UInt8,
+        sapType: SAPType,
+        protocolVersion: UInt8,
+        encryptedPacket: EncryptedPacket?,
+        ptsAdjustment: UInt64,
+        tier: UInt16,
+        spliceCommand: SpliceCommand,
+        spliceDescriptors: [SpliceDescriptor],
+        CRC_32: UInt32
+    ) {
+        self.tableID = tableID
+        self.sapType = sapType
+        self.protocolVersion = protocolVersion
+        self.encryptedPacket = encryptedPacket
+        self.ptsAdjustment = ptsAdjustment
+        self.tier = tier
+        self.spliceCommand = spliceCommand
+        self.spliceDescriptors = spliceDescriptors
+        self.CRC_32 = CRC_32
+    }
+    
+    public init(base64String: String) throws {
+        guard let data = Data(base64Encoded: base64String) else {
+            throw ParserError.invalidInputString(base64String)
+        }
+        try self.init(data: data)
+    }
 }
 
 public extension SpliceInfoSection {
@@ -121,7 +153,12 @@ public extension SpliceInfoSection {
 public extension SpliceInfoSection {
     /// This indicates that portions of the `SpliceInfoSection`, starting with `spliceCommandType` and
     /// ending with and including `E_CRC_32`, are encrypted.
-    struct EncryptedPacket {
+    struct EncryptedPacket: Equatable {
+        /// The `encryptionAlgorithm` field of the `SpliceInfoSection` is a 6-bit value. All Data Encryption Standard
+        /// variants use a 64-bit key (actually 56 bits plus a checksum) to encrypt or decrypt a block of 8 bytes. In the
+        /// case of triple DES, there will need to be 3 64-bit keys, one for each of the three passes of the DES
+        /// algorithm. The “standard” triple DES actually uses two keys, where the first and third keys are identical.
+        public let encryptionAlgorithm: EncryptionAlgorithm?
         /// An 8-bit unsigned integer that conveys which control word (key) is to be used to decrypt the
         /// message. The splicing device may store up to 256 keys previously provided for this purpose.
         /// When the `encryptedPacket` is `false`, this field is present but undefined.
@@ -138,5 +175,112 @@ public extension SpliceInfoSection {
         /// performed successfully. Hence, the zero output is obtained following decryption and by
         /// processing the fields `SpliceCommandType` through `E_CRC_32`.
         public let E_CRC_32: UInt32
+    }
+}
+
+public extension SpliceInfoSection.EncryptedPacket {
+    /// The `encryptionAlgorithm` field of the `SpliceInfoSection` is a 6-bit value. All Data Encryption Standard
+    /// variants use a 64-bit key (actually 56 bits plus a checksum) to encrypt or decrypt a block of 8 bytes. In the
+    /// case of triple DES, there will need to be 3 64-bit keys, one for each of the three passes of the DES
+    /// algorithm. The “standard” triple DES actually uses two keys, where the first and third keys are identical.
+    enum EncryptionAlgorithm: Equatable {
+        /// No encryption
+        case noEncryption
+        /// DES - ECB Mode
+        case desECBMode
+        /// DES - CBC Mode
+        case desCBCMode
+        /// Triple DES EDE3 - ECB Mode
+        case tripleDES
+        /// User private
+        case userPrivate(UInt8)
+        
+        init?(_ value: UInt8) {
+            if value == 0 { self = .noEncryption }
+            else if value == 1 { self = .desECBMode }
+            else if value == 2 { self = .desCBCMode }
+            else if value == 3 { self = .tripleDES }
+            else if value >= 4, value <= 31 { return nil }
+            else if value >= 32, value <= 63 { self = .userPrivate(value) }
+            else { return nil }
+        }
+    }
+}
+
+// MARK: - Parsing
+
+var lastReadValue = 0
+func robLog(
+    _ bitReader: DataBitReader,
+    file: StaticString = #file,
+    line: Int = #line
+) {
+    let bitsLeft = bitReader.bitsLeft
+    print("ROBLOG - \(file) - \(line) - bits: \(bitsLeft) (\(lastReadValue - bitsLeft))")
+    lastReadValue = bitsLeft
+}
+
+extension SpliceInfoSection {
+    init(data: Data) throws {
+        let bitReader = MsbBitReader(data: data)
+        try bitReader.validate(
+            expectedMinimumBitsLeft: 24,
+            parseDescription: "SpliceInfoSection; need at least 24 bits to get to end of section_length field"
+        )
+        self.tableID = bitReader.byte()
+        guard bitReader.bit() == 0 else { throw ParserError.invalidSectionSyntaxIndicator }
+        guard bitReader.bit() == 0 else { throw ParserError.invalidPrivateIndicator }
+        self.sapType = SAPType(rawValue: bitReader.byte(fromBits: 2)) ?? .unspecified
+        let sectionLengthInBytes = bitReader.int(fromBits: 12)
+        try bitReader.validate(
+            expectedMinimumBitsLeft: sectionLengthInBytes * 8,
+            parseDescription: "SpliceInfoSection; section_length defined as \(sectionLengthInBytes)"
+        )
+        self.protocolVersion = bitReader.byte()
+        let isEncrypted = bitReader.bit() == 1
+        if isEncrypted {
+            fatalError("Currently does not handle encrypted SCTE35")
+        }
+        let encryptionAlgorithm = EncryptedPacket.EncryptionAlgorithm(bitReader.byte(fromBits: 6))
+        self.ptsAdjustment = bitReader.uint64(fromBits: 33)
+        let cwIndex = bitReader.byte()
+        self.tier = bitReader.uint16(fromBits: 12)
+        let spliceCommandLength = bitReader.int(fromBits: 12)
+        self.spliceCommand = try SpliceCommand(bitReader: bitReader, spliceCommandLength: spliceCommandLength)
+        let descriptorLoopLength = bitReader.int(fromBits: 16)
+        self.spliceDescriptors = try [SpliceDescriptor].init(bitReader: bitReader, descriptorLoopLength: descriptorLoopLength)
+        if isEncrypted {
+            let alignmentStuffing: UInt8
+            switch encryptionAlgorithm {
+            case .desCBCMode:
+                alignmentStuffing = bitReader.byte()
+                fatalError("Enryption not handled yet")
+            case .desECBMode:
+                alignmentStuffing = bitReader.byte()
+                fatalError("Enryption not handled yet")
+            case .noEncryption:
+                alignmentStuffing = bitReader.byte()
+                fatalError("Enryption not handled yet")
+            case .none:
+                alignmentStuffing = bitReader.byte()
+                fatalError("Enryption not handled yet")
+            case .tripleDES:
+                alignmentStuffing = bitReader.byte()
+                fatalError("Enryption not handled yet")
+            case .userPrivate:
+                alignmentStuffing = bitReader.byte()
+                fatalError("Enryption not handled yet")
+            }
+            let E_CRC_32 = bitReader.uint32(fromBits: 32)
+            self.encryptedPacket = EncryptedPacket(
+                encryptionAlgorithm: encryptionAlgorithm,
+                cwIndex: cwIndex,
+                alignmentStuffing: alignmentStuffing,
+                E_CRC_32: E_CRC_32
+            )
+        } else {
+            self.encryptedPacket = nil
+        }
+        self.CRC_32 = bitReader.uint32(fromBits: 32)
     }
 }

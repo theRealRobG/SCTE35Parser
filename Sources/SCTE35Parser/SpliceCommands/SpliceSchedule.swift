@@ -39,7 +39,7 @@
  }
  ```
  */
-public struct SpliceSchedule {
+public struct SpliceSchedule: Equatable {
     /// An 8-bit unsigned integer that indicates the number of splice events specified in the loop
     /// that follows.
     public let spliceCount: UInt8
@@ -47,7 +47,7 @@ public struct SpliceSchedule {
 }
 
 public extension SpliceSchedule {
-    struct Event {
+    struct Event: Equatable {
         /// A 32-bit unique splice event identifier.
         public let eventId: UInt32
         /// Information on the scheduled event. If this value is `nil` it indicates that a previously
@@ -60,7 +60,7 @@ public extension SpliceSchedule {
 }
 
 public extension SpliceSchedule.Event {
-    struct ScheduledEvent {
+    struct ScheduledEvent: Equatable {
         /// A 32-bit unique splice event identifier.
         public let eventId: UInt32
         /// When set to `true`, indicates that the splice event is an opportunity to exit from the
@@ -92,7 +92,7 @@ public extension SpliceSchedule.Event {
 
 public extension SpliceSchedule.Event.ScheduledEvent {
     /// Information on the type of splice message.
-    enum SpliceMode {
+    enum SpliceMode: Equatable {
         /// Indicates that the message refers to a Program Splice Point and that the mode is the
         /// Program Splice Mode whereby all PIDs/components of the program are to be spliced.
         case programSpliceMode(ProgramMode)
@@ -105,7 +105,7 @@ public extension SpliceSchedule.Event.ScheduledEvent {
 public extension SpliceSchedule.Event.ScheduledEvent.SpliceMode {
     /// Indicates that the message refers to a Program Splice Point and that the mode is the
     /// Program Splice Mode whereby all PIDs/components of the program are to be spliced.
-    struct ProgramMode {
+    struct ProgramMode: Equatable {
         /// A 32-bit unsigned integer quantity representing the time of the signalled splice event
         /// as the number of seconds since 00 hours coordinated universal time (UTC), January 6th,
         /// 1980, with the count of intervening leap seconds included. The `utcSpliceTime` may be
@@ -116,7 +116,7 @@ public extension SpliceSchedule.Event.ScheduledEvent.SpliceMode {
     
     /// Indicates that the mode is the Component Splice Mode whereby each component that is
     /// intended to be spliced will be listed separately by the syntax that follows.
-    struct ComponentMode {
+    struct ComponentMode: Equatable {
         /// An 8-bit value that identifies the elementary PID stream containing the Splice Point
         /// specified by the value of `utcSpliceTime` that follows. The value shall be the same as
         /// the value used in the stream_identification_descriptor() to identify that elementary

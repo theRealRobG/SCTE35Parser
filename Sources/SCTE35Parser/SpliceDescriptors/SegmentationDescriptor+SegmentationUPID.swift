@@ -13,7 +13,7 @@ public extension SegmentationDescriptor {
     /// of collecting other data related to these numbers and therefore they do not need to be of
     /// identical types. These ids may be in other descriptors in the Program and, where the same
     /// identifier is used (ISAN for example), it shall match between Programs.
-    enum SegmentationUPID {
+    enum SegmentationUPID: Equatable {
         /// The `SegmentationUPID` is not defined and is not present in the descriptor.
         case notUsed
         /// Deprecated: use type `0x0C`; The `SegmentationUPID` does not follow a standard naming scheme.
@@ -62,7 +62,7 @@ public extension SegmentationDescriptor {
         /// Advertising information. The specific usage is out of scope of this standard.
         case adsInformation(String)
         /// Universal Resource Identifier (see [RFC 3986]).
-        case uri(String)
+        case uri(URL)
         /// Universally Unique Identifier (see [RFC 4122]). This `SegmentationUPIDType` can be used
         /// instead of an URI if it is desired to transfer the UUID payload only.
         case uuid(UUID)
@@ -92,8 +92,111 @@ public extension SegmentationDescriptor {
 }
 
 public extension SegmentationDescriptor {
-    struct ManagedPrivateUPID {
+    struct ManagedPrivateUPID: Equatable {
         public let formatSpecifier: String
-        public let privateData: Any
+        public let privateData: String
+        
+        public init(
+            formatSpecifier: String,
+            privateData: String
+        ) {
+            self.formatSpecifier = formatSpecifier
+            self.privateData = privateData
+        }
+    }
+}
+
+// MARK: - Parsing
+
+extension SegmentationDescriptor.SegmentationUPID {
+    // NOTE: It is assumed that this is starting reading from segmentation_upid_type
+    init(bitReader: DataBitReader) throws {
+        let upidTypeRawValue = bitReader.byte()
+        guard let upidType = SegmentationDescriptor.SegmentationUPIDType(rawValue: upidTypeRawValue) else {
+            throw ParserError.unrecognisedSegmentationUPIDType(Int(upidTypeRawValue))
+        }
+        let upidLength = bitReader.byte()
+        try bitReader.validate(
+            expectedMinimumBitsLeft: Int(upidLength) * 8,
+            parseDescription: "SegmentationUPID; reading loop"
+        )
+        try self.init(bitReader: bitReader, upidType: upidType, upidLength: upidLength)
+    }
+    
+    init(
+        bitReader: DataBitReader,
+        upidType: SegmentationDescriptor.SegmentationUPIDType,
+        upidLength: UInt8
+    ) throws {
+        switch upidType {
+        case .notUsed:
+            try Self.validate(upidLength: upidLength, expectedLength: 0, upidType: upidType)
+            self = .notUsed
+        case .userDefined:
+            self = .userDefined(bitReader.string(fromBytes: UInt(upidLength)))
+        case .isci:
+            try Self.validate(upidLength: upidLength, expectedLength: 8, upidType: upidType)
+            self = .isci(bitReader.string(fromBytes: 8))
+        case .adID:
+            try Self.validate(upidLength: upidLength, expectedLength: 12, upidType: upidType)
+            self = .adID(bitReader.string(fromBytes: 12))
+        case .umid:
+            try Self.validate(upidLength: upidLength, expectedLength: 32, upidType: upidType)
+            self = .umid(bitReader.string(fromBytes: 32))
+        case .deprecatedISAN:
+            try Self.validate(upidLength: upidLength, expectedLength: 8, upidType: upidType)
+            self = .deprecatedISAN(bitReader.string(fromBytes: 8))
+        case .isan:
+            try Self.validate(upidLength: upidLength, expectedLength: 12, upidType: upidType)
+            self = .isan(bitReader.string(fromBytes: 12))
+        case .tid:
+            try Self.validate(upidLength: upidLength, expectedLength: 12, upidType: upidType)
+            self = .tid(bitReader.string(fromBytes: 12))
+        case .ti:
+            try Self.validate(upidLength: upidLength, expectedLength: 8, upidType: upidType)
+            self = .ti("0x\(bitReader.bytes(count: 8).map { String(format: "%02X", $0) }.joined())")
+        case .adi:
+            fatalError()
+        case .eidr:
+            fatalError()
+        case .atscContentIdentifier:
+            fatalError()
+        case .mpu:
+            fatalError()
+        case .mid:
+            fatalError()
+        case .adsInformation:
+            self = .adsInformation(bitReader.string(fromBytes: UInt(upidLength)))
+        case .uri:
+            let urlString = bitReader.string(fromBytes: UInt(upidLength))
+            guard let url = URL(string: urlString) else {
+                throw ParserError.invalidURLInSegmentationUPID(urlString)
+            }
+            self = .uri(url)
+        case .uuid:
+            try Self.validate(upidLength: upidLength, expectedLength: 16, upidType: upidType)
+            let uuidString = bitReader.string(fromBytes: 16)
+            guard let uuid = UUID(uuidString: uuidString) else {
+                throw ParserError.invalidUUIDInSegmentationUPID(uuidString)
+            }
+            self = .uuid(uuid)
+        }
+    }
+    
+    private static func validate(
+        upidLength: UInt8,
+        expectedLength: Int,
+        upidType: SegmentationDescriptor.SegmentationUPIDType
+    ) throws {
+        let declaredUPIDLength = Int(upidLength)
+        guard declaredUPIDLength == expectedLength else {
+            throw ParserError.unexpectedSegmentationUPIDLength(
+                UnexpectedSegmentationUPIDLengthErrorInfo(
+                    declaredSegmentationUPIDLength: declaredUPIDLength,
+                    expectedSegmentationUPIDLength: expectedLength,
+                    segmentationUPIDType: upidType
+                )
+            )
+        }
     }
 }

@@ -31,7 +31,7 @@
  }
  ```
  */
-public struct AudioDescriptor {
+public struct AudioDescriptor: Equatable {
     /// This 32-bit number is used to identify the owner of the descriptor. The identifier shall have a
     /// value of 0x43554549 (ASCII “CUEI”).
     public let identifier: UInt32
@@ -40,7 +40,7 @@ public struct AudioDescriptor {
 }
 
 public extension AudioDescriptor {
-    struct Component {
+    struct Component: Equatable {
         /// An optional 8-bit value that identifies the elementary PID stream containing the audio
         /// channel that follows. If used, the value shall be the same as the value used in the
         /// `stream_identifier_descriptor()` to identify that elementary PID stream. If this is not used,
@@ -77,7 +77,7 @@ public extension AudioDescriptor {
     /// When the MSB is 0, the lower 3 bits are set to the same value as the acmod field in the AC-3
     /// elementary stream. When the MSB field is 1, the lower 3 bits indicate the maximum number of
     /// encoded audio channels (counting the lfe channel as 1).
-    enum NumChannels {
+    enum NumChannels: Equatable {
         case audioCodingMode(AudioCodingMode)
         case maxNumberOfEncodedChannels(MaxNumberOfEncodedChannels)
     }

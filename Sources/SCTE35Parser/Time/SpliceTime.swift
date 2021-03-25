@@ -19,7 +19,7 @@
  }
  ```
  */
-public struct SpliceTime {
+public struct SpliceTime: Equatable {
     /// A 33-bit field that indicates time in terms of ticks of the program's 90 kHz clock.
     /// This field, when modified by `ptsAdjustment`, represents the time of the intended
     /// splice point.

@@ -5,7 +5,7 @@
 //  Created by Robert Galluccio on 30/01/2021.
 //
 
-public enum SpliceCommand {
+public enum SpliceCommand: Equatable {
     /// The `spliceNull` command is provided for extensibility of the standard. The `spliceNull` command
     /// allows a `SpliceInfoTable` to be sent that can carry descriptors without having to send one of
     /// the other defined commands. This command may also be used as a "heartbeat message" for monitoring
@@ -46,6 +46,39 @@ public enum SpliceCommand {
         case .timeSignal: return .timeSignal
         case .bandwidthReservation: return .bandwidthReservation
         case .privateCommand: return .privateCommand
+        }
+    }
+}
+
+// MARK: - Parsing
+
+extension SpliceCommand {
+    /// Constructs a `SpliceCommand` using a `DataBitReader` that should have been constructed with a
+    /// SCTE35 `SpliceInfoSection`; the expectation is that the data has been read up until (but not
+    /// including) the `spliceCommandType`.
+    /// - Parameters:
+    ///   - bitReader: A bit reader that is reading `Data` associated with a SCTE35 `SpliceInfoSection`
+    ///   and has been advanced up until (not including) the `spliceCommandType`.
+    ///   - spliceCommandLength: The indicated length in bytes of the `SpliceCommand` section (that
+    ///   starts _after_ the `spliceCommandType`).
+    /// - Throws: `ParserError`
+    init(bitReader: DataBitReader, spliceCommandLength: Int) throws {
+        let spliceCommandType = bitReader.byte()
+        switch SpliceCommandType(rawValue: spliceCommandType) {
+        case .bandwidthReservation:
+            self = .bandwidthReservation
+        case .privateCommand:
+            fatalError()
+        case .spliceInsert:
+            fatalError()
+        case .spliceNull:
+            self = .spliceNull
+        case .spliceSchedule:
+            fatalError()
+        case .timeSignal:
+            self = .timeSignal(try TimeSignal(bitReader: bitReader))
+        case .none:
+            throw ParserError.unrecognisedSpliceCommandType(Int(spliceCommandType))
         }
     }
 }

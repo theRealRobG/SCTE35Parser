@@ -17,7 +17,7 @@
  }
  ```
  */
-public struct BreakDuration {
+public struct BreakDuration: Equatable {
     /// A flag that, when set to `true`, denotes that the `duration` shall be used by
     /// the splicing device to know when the return to the network feed (end of break)
     /// is to take place. A `SpliceInsert` command with `outOfNetworkIndicator` set

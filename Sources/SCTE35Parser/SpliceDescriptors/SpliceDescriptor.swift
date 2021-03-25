@@ -27,7 +27,7 @@
  }
  ```
  */
-public enum SpliceDescriptor {
+public enum SpliceDescriptor: Equatable {
     /// The `availDescriptor` provides an optional extension to the `SpliceInsert` command that allows an
     /// authorization identifier to be sent for an avail. Multiple copies of this descriptor may be
     /// included by using the loop mechanism provided. This identifier is intended to replicate the
@@ -90,6 +90,44 @@ public enum SpliceDescriptor {
         case .segmentationDescriptor(let descriptor): return descriptor.identifier
         case .timeDescriptor(let descriptor): return descriptor.identifier
         case .audioDescriptor(let descriptor): return descriptor.identifier
+        }
+    }
+}
+
+// MARK: - Parsing
+
+extension Array where Element == SpliceDescriptor {
+    init(bitReader: DataBitReader, descriptorLoopLength: Int) throws {
+        try bitReader.validate(
+            expectedMinimumBitsLeft: descriptorLoopLength * 8,
+            parseDescription: "SpliceDescriptor; reading loop"
+        )
+        
+        let expectedEnd = bitReader.bitsRead + (descriptorLoopLength * 8)
+        var spliceDescriptors = [SpliceDescriptor]()
+        while bitReader.bitsRead < expectedEnd {
+            try spliceDescriptors.append(SpliceDescriptor(bitReader: bitReader))
+        }
+        self = spliceDescriptors
+    }
+}
+
+extension SpliceDescriptor {
+    init(bitReader: DataBitReader) throws {
+        let spliceDescriptorTag = bitReader.byte()
+        switch SpliceDescriptorTag(rawValue: spliceDescriptorTag) {
+        case .audioDescriptor:
+            fatalError()
+        case .availDescriptor:
+            fatalError()
+        case .dtmfDescriptor:
+            fatalError()
+        case .segmentationDescriptor:
+            self = try .segmentationDescriptor(SegmentationDescriptor(bitReader: bitReader))
+        case.timeDescriptor:
+            fatalError()
+        case .none:
+            fatalError()
         }
     }
 }
