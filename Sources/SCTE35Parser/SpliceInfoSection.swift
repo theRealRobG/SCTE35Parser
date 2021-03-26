@@ -133,6 +133,28 @@ public struct SpliceInfoSection: Equatable {
         }
         try self.init(data: data)
     }
+    
+    public init(hexString: String) throws {
+        guard let data = Data(hexString: hexString) else {
+            throw ParserError.invalidInputString(hexString)
+        }
+        try self.init(data: data)
+    }
+    
+    public init(_ string: String) throws {
+        let looksHex = string.hasPrefix("0x")
+        if looksHex {
+            guard let data = Data(hexString: string) ?? Data(base64Encoded: string) else {
+                throw ParserError.invalidInputString(string)
+            }
+            try self.init(data: data)
+        } else {
+            guard let data = Data(base64Encoded: string) ?? Data(hexString: string) else {
+                throw ParserError.invalidInputString(string)
+            }
+            try self.init(data: data)
+        }
+    }
 }
 
 public extension SpliceInfoSection {
@@ -209,18 +231,7 @@ public extension SpliceInfoSection.EncryptedPacket {
 
 // MARK: - Parsing
 
-var lastReadValue = 0
-func robLog(
-    _ bitReader: DataBitReader,
-    file: StaticString = #file,
-    line: Int = #line
-) {
-    let bitsLeft = bitReader.bitsLeft
-    print("ROBLOG - \(file) - \(line) - bits: \(bitsLeft) (\(lastReadValue - bitsLeft))")
-    lastReadValue = bitsLeft
-}
-
-extension SpliceInfoSection {
+public extension SpliceInfoSection {
     init(data: Data) throws {
         let bitReader = MsbBitReader(data: data)
         try bitReader.validate(

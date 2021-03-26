@@ -4,6 +4,7 @@ import XCTest
 final class SCTE35ParserTests: XCTestCase {
     func testExample() throws {
         let base64String = "/DA0AAAAAAAA///wBQb+cr0AUAAeAhxDVUVJSAAAjn/PAAGlmbAICAAAAAAsoKGKNAIAmsnRfg=="
+        let hexString = "0xFC3034000000000000FFFFF00506FE72BD0050001E021C435545494800008E7FCF0001A599B00808000000002CA0A18A3402009AC9D17E"
         let expectedSpliceInfoSection = SpliceInfoSection(
             tableID: 252,
             sapType: .unspecified,
@@ -37,6 +38,7 @@ final class SCTE35ParserTests: XCTestCase {
             ],
             CRC_32: 0x9AC9D17E
         )
-        try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(base64String: base64String))
+        try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(base64String))
+        try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(hexString))
     }
 }
