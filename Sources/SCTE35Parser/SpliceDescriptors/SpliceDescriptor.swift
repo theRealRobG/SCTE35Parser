@@ -119,7 +119,7 @@ extension SpliceDescriptor {
         case .audioDescriptor:
             fatalError()
         case .availDescriptor:
-            fatalError()
+            self = try .availDescriptor(AvailDescriptor(bitReader: bitReader))
         case .dtmfDescriptor:
             fatalError()
         case .segmentationDescriptor:

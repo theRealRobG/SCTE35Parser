@@ -121,3 +121,57 @@ public extension SpliceInsert.ScheduledEvent.SpliceMode {
         public let spliceTime: SpliceTime?
     }
 }
+
+// MARK: - Parsing
+
+extension SpliceInsert {
+    init(bitReader: DataBitReader) throws {
+        self.eventId = bitReader.uint32(fromBits: 32)
+        let isSpliceEventCancelled = bitReader.bit() == 1
+        _ = bitReader.bits(count: 7)
+        if isSpliceEventCancelled {
+            self.scheduledEvent = nil
+        } else {
+            self.scheduledEvent = try ScheduledEvent(bitReader: bitReader)
+        }
+    }
+}
+
+private extension SpliceInsert.ScheduledEvent {
+    init(bitReader: DataBitReader) throws {
+        self.outOfNetworkIndicator = bitReader.bit() == 1
+        let programSpliceFlag = bitReader.bit() == 1
+        let durationFlag = bitReader.bit() == 1
+        let spliceImmediateFlag = bitReader.bit() == 1
+        self.isImmediateSplice = spliceImmediateFlag
+        _ = bitReader.bits(count: 4)
+        if programSpliceFlag {
+            self.spliceMode = .programSpliceMode(
+                SpliceMode.ProgramMode(
+                    spliceTime: spliceImmediateFlag ? nil : try SpliceTime(bitReader: bitReader)
+                )
+            )
+        } else {
+            let componentCount = bitReader.byte()
+            self.spliceMode = try .componentSpliceMode(
+                (0..<componentCount).reduce(into: [SpliceMode.ComponentMode]()) { segments, _ in
+                    let componentTag = bitReader.byte()
+                    segments.append(
+                        SpliceMode.ComponentMode(
+                            componentTag: componentTag,
+                            spliceTime: spliceImmediateFlag ? nil : try SpliceTime(bitReader: bitReader)
+                        )
+                    )
+                }
+            )
+        }
+        if durationFlag {
+            self.breakDuration = try BreakDuration(bitReader: bitReader)
+        } else {
+            self.breakDuration = nil
+        }
+        self.uniqueProgramId = bitReader.uint16(fromBits: 16)
+        self.availNum = bitReader.byte()
+        self.availsExpected = bitReader.byte()
+    }
+}

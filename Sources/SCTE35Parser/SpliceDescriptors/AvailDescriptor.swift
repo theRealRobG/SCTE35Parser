@@ -31,3 +31,18 @@ public struct AvailDescriptor: Equatable {
     /// event.
     public let providerAvailId: UInt32
 }
+
+// MARK: - Parsing
+
+extension AvailDescriptor {
+    // NOTE: It is assumed that the splice_descriptor_tag has already been read.
+    init(bitReader: DataBitReader) throws {
+        let descriptorLength = bitReader.int(fromBytes: 1)
+        try bitReader.validate(
+            expectedMinimumBitsLeft: descriptorLength * 8,
+            parseDescription: "AvailDescriptor; descriptor length"
+        )
+        self.identifier = bitReader.uint32(fromBits: 32)
+        self.providerAvailId = bitReader.uint32(fromBits: 32)
+    }
+}

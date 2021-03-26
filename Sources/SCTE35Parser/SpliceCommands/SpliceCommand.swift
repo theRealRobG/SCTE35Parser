@@ -70,7 +70,7 @@ extension SpliceCommand {
         case .privateCommand:
             fatalError()
         case .spliceInsert:
-            fatalError()
+            self = .spliceInsert(try SpliceInsert(bitReader: bitReader))
         case .spliceNull:
             self = .spliceNull
         case .spliceSchedule:
