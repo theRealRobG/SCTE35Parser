@@ -151,7 +151,37 @@ extension SegmentationDescriptor.SegmentationUPID {
             self = .deprecatedISAN(bitReader.string(fromBytes: 8))
         case .isan:
             try Self.validate(upidLength: upidLength, expectedLength: 12, upidType: upidType)
-            self = .isan(bitReader.string(fromBytes: 12))
+            // The check calculation is taken from isan_check_digit_calculation_v2.0.pdf included
+            // in the repository.
+            let charArray = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            func checkChar(for isan: [String]) -> String {
+                let isan = isan.filter { $0.count > 1 }
+                let adjustedProduct = isan.joined().reduce(36) { adjustedSum, char in
+                    let decimalValue = Int(String(char), radix: 16)!
+                    var sum = adjustedSum + decimalValue
+                    if sum > 36 { sum -= 36 }
+                    var product = sum * 2
+                    if product >= 37 { product -= 37 }
+                    return product
+                }
+                if adjustedProduct == 1 {
+                    return "0"
+                } else {
+                    return String(charArray[37 - adjustedProduct])
+                }
+            }
+            let isan = (0...7).reduce(into: [String]()) { isan, index in
+                switch index {
+                case 4:
+                    isan.append(checkChar(for: isan))
+                case 7:
+                    isan.append(checkChar(for: isan))
+                default:
+                    isan.append(String(format: "%04X", bitReader.uint16(fromBits: 16)))
+                }
+            }
+            .joined(separator: "-")
+            self = .isan(isan)
         case .tid:
             try Self.validate(upidLength: upidLength, expectedLength: 12, upidType: upidType)
             self = .tid(bitReader.string(fromBytes: 12))
