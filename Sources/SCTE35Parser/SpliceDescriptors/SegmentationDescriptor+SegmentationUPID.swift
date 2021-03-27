@@ -142,7 +142,10 @@ extension SegmentationDescriptor.SegmentationUPID {
             self = .adID(bitReader.string(fromBytes: 12))
         case .umid:
             try Self.validate(upidLength: upidLength, expectedLength: 32, upidType: upidType)
-            self = .umid(bitReader.string(fromBytes: 32))
+            let umid = (0...7)
+                .map { _ in String(format: "%08X", bitReader.uint32(fromBits: 32)) }
+                .joined(separator: ".")
+            self = .umid(umid)
         case .deprecatedISAN:
             try Self.validate(upidLength: upidLength, expectedLength: 8, upidType: upidType)
             self = .deprecatedISAN(bitReader.string(fromBytes: 8))
