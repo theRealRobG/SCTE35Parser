@@ -140,16 +140,16 @@ public extension SegmentationDescriptor.ScheduledEvent.DeliveryRestrictions {
     /// independent and the groups are non-hierarchical. The delivery and format of the messaging to
     /// define the devices contained in the groups is out of the scope of this standard.
     enum DeviceRestrictions: Int, Equatable {
-        /// This Segment is restricted for a class of devices defined by an out of band message that
-        /// describes which devices are excluded.
+        /// 00 - This Segment is restricted for a class of devices defined by an out of band message
+        /// that describes which devices are excluded.
         case restrictGroup0 = 0 // 00
-        /// This Segment is restricted for a class of devices defined by an out of band message that
-        /// describes which devices are excluded.
+        /// 01 - This Segment is restricted for a class of devices defined by an out of band message
+        /// that describes which devices are excluded.
         case restrictGroup1 = 1 // 01
-        /// This Segment is restricted for a class of devices defined by an out of band message that
-        /// describes which devices are excluded.
+        /// 10 - This Segment is restricted for a class of devices defined by an out of band message
+        /// that describes which devices are excluded.
         case restrictGroup2 = 2 // 10
-        /// This Segment has no device restrictions.
+        /// 11 - This Segment has no device restrictions.
         case none = 3           // 11
     }
 }
