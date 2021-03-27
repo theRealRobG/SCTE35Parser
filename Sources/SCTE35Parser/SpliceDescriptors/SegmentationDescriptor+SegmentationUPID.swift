@@ -157,6 +157,8 @@ extension SegmentationDescriptor.SegmentationUPID {
             func checkChar(for isan: [String]) -> String {
                 let isan = isan.filter { $0.count > 1 }
                 let adjustedProduct = isan.joined().reduce(36) { adjustedSum, char in
+                    // The force unwrap should be safe here as we know that all non-check characters
+                    // in the ISAN array are formed out of hexadecimal numbers.
                     let decimalValue = Int(String(char), radix: 16)!
                     var sum = adjustedSum + decimalValue
                     if sum > 36 { sum -= 36 }
