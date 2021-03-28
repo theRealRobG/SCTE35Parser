@@ -148,30 +148,10 @@ extension SegmentationDescriptor.SegmentationUPID {
             self = .umid(umid)
         case .deprecatedISAN:
             try validate(upidLength: upidLength, expectedLength: 8, upidType: upidType)
-            let isan = (0...4)
-                .reduce(into: [String]()) { isan, index in
-                    switch index {
-                    case 4:
-                        isan.append(isanCheckChar(for: isan))
-                    default:
-                        isan.append(String(format: "%04X", bitReader.uint16(fromBits: 16)))
-                    }
-                }
-                .joined(separator: "-")
-            self = .deprecatedISAN(isan)
+            self = .deprecatedISAN(ISAN(.deprecated).read(using: bitReader))
         case .isan:
             try validate(upidLength: upidLength, expectedLength: 12, upidType: upidType)
-            let isan = (0...7)
-                .reduce(into: [String]()) { isan, index in
-                    switch index {
-                    case 4, 7:
-                        isan.append(isanCheckChar(for: isan))
-                    default:
-                        isan.append(String(format: "%04X", bitReader.uint16(fromBits: 16)))
-                    }
-                }
-                .joined(separator: "-")
-            self = .isan(isan)
+            self = .isan(ISAN(.versioned).read(using: bitReader))
         case .tid:
             try validate(upidLength: upidLength, expectedLength: 12, upidType: upidType)
             self = .tid(bitReader.string(fromBytes: 12))
@@ -224,24 +204,55 @@ private func validate(
     }
 }
 
-// The check calculation is taken from isan_check_digit_calculation_v2.0.pdf included
-// in the repository.
-private let charArray = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-private func isanCheckChar(for isan: [String]) -> String {
-    let isan = isan.filter { $0.count > 1 }
-    let adjustedProduct = isan.joined().reduce(36) { adjustedSum, char in
-        // The force unwrap should be safe here as we know that all non-check characters
-        // in the ISAN array are formed out of hexadecimal numbers.
-        let decimalValue = Int(String(char), radix: 16)!
-        var sum = adjustedSum + decimalValue
-        if sum > 36 { sum -= 36 }
-        var product = sum * 2
-        if product >= 37 { product -= 37 }
-        return product
+private struct ISAN {
+    enum Version {
+        case deprecated
+        case versioned
     }
-    if adjustedProduct == 1 {
-        return "0"
-    } else {
-        return String(charArray[37 - adjustedProduct])
+    let version: Version
+    
+    private let charArray = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    
+    init(_ version: Version) {
+        self.version = version
+    }
+    
+    func read(using bitReader: DataBitReader) -> String {
+        let indexMax: Int
+        switch version {
+        case .deprecated: indexMax = 4
+        case .versioned: indexMax = 7
+        }
+        return (0...indexMax)
+            .reduce(into: [String]()) { isan, index in
+                switch index {
+                case 4, 7:
+                    isan.append(checkChar(for: isan))
+                default:
+                    isan.append(String(format: "%04X", bitReader.uint16(fromBits: 16)))
+                }
+            }
+            .joined(separator: "-")
+    }
+    
+    // The check calculation is taken from isan_check_digit_calculation_v2.0.pdf included
+    // in the repository.
+    private func checkChar(for isan: [String]) -> String {
+        let isan = isan.filter { $0.count > 1 }
+        let adjustedProduct = isan.joined().reduce(36) { adjustedSum, char in
+            // The force unwrap should be safe here as we know that all non-check characters
+            // in the ISAN array are formed out of hexadecimal numbers.
+            let decimalValue = Int(String(char), radix: 16)!
+            var sum = adjustedSum + decimalValue
+            if sum > 36 { sum -= 36 }
+            var product = sum * 2
+            if product >= 37 { product -= 37 }
+            return product
+        }
+        if adjustedProduct == 1 {
+            return "0"
+        } else {
+            return String(charArray[37 - adjustedProduct])
+        }
     }
 }
