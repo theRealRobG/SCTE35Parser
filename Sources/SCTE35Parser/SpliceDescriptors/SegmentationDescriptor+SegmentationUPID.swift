@@ -130,65 +130,53 @@ extension SegmentationDescriptor.SegmentationUPID {
     ) throws {
         switch upidType {
         case .notUsed:
-            try Self.validate(upidLength: upidLength, expectedLength: 0, upidType: upidType)
+            try validate(upidLength: upidLength, expectedLength: 0, upidType: upidType)
             self = .notUsed
         case .userDefined:
             self = .userDefined(bitReader.string(fromBytes: UInt(upidLength)))
         case .isci:
-            try Self.validate(upidLength: upidLength, expectedLength: 8, upidType: upidType)
+            try validate(upidLength: upidLength, expectedLength: 8, upidType: upidType)
             self = .isci(bitReader.string(fromBytes: 8))
         case .adID:
-            try Self.validate(upidLength: upidLength, expectedLength: 12, upidType: upidType)
+            try validate(upidLength: upidLength, expectedLength: 12, upidType: upidType)
             self = .adID(bitReader.string(fromBytes: 12))
         case .umid:
-            try Self.validate(upidLength: upidLength, expectedLength: 32, upidType: upidType)
+            try validate(upidLength: upidLength, expectedLength: 32, upidType: upidType)
             let umid = (0...7)
                 .map { _ in String(format: "%08X", bitReader.uint32(fromBits: 32)) }
                 .joined(separator: ".")
             self = .umid(umid)
         case .deprecatedISAN:
-            try Self.validate(upidLength: upidLength, expectedLength: 8, upidType: upidType)
-            self = .deprecatedISAN(bitReader.string(fromBytes: 8))
+            try validate(upidLength: upidLength, expectedLength: 8, upidType: upidType)
+            let isan = (0...4)
+                .reduce(into: [String]()) { isan, index in
+                    switch index {
+                    case 4:
+                        isan.append(isanCheckChar(for: isan))
+                    default:
+                        isan.append(String(format: "%04X", bitReader.uint16(fromBits: 16)))
+                    }
+                }
+                .joined(separator: "-")
+            self = .deprecatedISAN(isan)
         case .isan:
-            try Self.validate(upidLength: upidLength, expectedLength: 12, upidType: upidType)
-            // The check calculation is taken from isan_check_digit_calculation_v2.0.pdf included
-            // in the repository.
-            let charArray = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-            func checkChar(for isan: [String]) -> String {
-                let isan = isan.filter { $0.count > 1 }
-                let adjustedProduct = isan.joined().reduce(36) { adjustedSum, char in
-                    // The force unwrap should be safe here as we know that all non-check characters
-                    // in the ISAN array are formed out of hexadecimal numbers.
-                    let decimalValue = Int(String(char), radix: 16)!
-                    var sum = adjustedSum + decimalValue
-                    if sum > 36 { sum -= 36 }
-                    var product = sum * 2
-                    if product >= 37 { product -= 37 }
-                    return product
+            try validate(upidLength: upidLength, expectedLength: 12, upidType: upidType)
+            let isan = (0...7)
+                .reduce(into: [String]()) { isan, index in
+                    switch index {
+                    case 4, 7:
+                        isan.append(isanCheckChar(for: isan))
+                    default:
+                        isan.append(String(format: "%04X", bitReader.uint16(fromBits: 16)))
+                    }
                 }
-                if adjustedProduct == 1 {
-                    return "0"
-                } else {
-                    return String(charArray[37 - adjustedProduct])
-                }
-            }
-            let isan = (0...7).reduce(into: [String]()) { isan, index in
-                switch index {
-                case 4:
-                    isan.append(checkChar(for: isan))
-                case 7:
-                    isan.append(checkChar(for: isan))
-                default:
-                    isan.append(String(format: "%04X", bitReader.uint16(fromBits: 16)))
-                }
-            }
-            .joined(separator: "-")
+                .joined(separator: "-")
             self = .isan(isan)
         case .tid:
-            try Self.validate(upidLength: upidLength, expectedLength: 12, upidType: upidType)
+            try validate(upidLength: upidLength, expectedLength: 12, upidType: upidType)
             self = .tid(bitReader.string(fromBytes: 12))
         case .ti:
-            try Self.validate(upidLength: upidLength, expectedLength: 8, upidType: upidType)
+            try validate(upidLength: upidLength, expectedLength: 8, upidType: upidType)
             self = .ti("0x\(bitReader.bytes(count: 8).map { String(format: "%02X", $0) }.joined())")
         case .adi:
             fatalError()
@@ -209,7 +197,7 @@ extension SegmentationDescriptor.SegmentationUPID {
             }
             self = .uri(url)
         case .uuid:
-            try Self.validate(upidLength: upidLength, expectedLength: 16, upidType: upidType)
+            try validate(upidLength: upidLength, expectedLength: 16, upidType: upidType)
             let uuidString = bitReader.string(fromBytes: 16)
             guard let uuid = UUID(uuidString: uuidString) else {
                 throw ParserError.invalidUUIDInSegmentationUPID(uuidString)
@@ -217,21 +205,43 @@ extension SegmentationDescriptor.SegmentationUPID {
             self = .uuid(uuid)
         }
     }
-    
-    private static func validate(
-        upidLength: UInt8,
-        expectedLength: Int,
-        upidType: SegmentationDescriptor.SegmentationUPIDType
-    ) throws {
-        let declaredUPIDLength = Int(upidLength)
-        guard declaredUPIDLength == expectedLength else {
-            throw ParserError.unexpectedSegmentationUPIDLength(
-                UnexpectedSegmentationUPIDLengthErrorInfo(
-                    declaredSegmentationUPIDLength: declaredUPIDLength,
-                    expectedSegmentationUPIDLength: expectedLength,
-                    segmentationUPIDType: upidType
-                )
+}
+
+private func validate(
+    upidLength: UInt8,
+    expectedLength: Int,
+    upidType: SegmentationDescriptor.SegmentationUPIDType
+) throws {
+    let declaredUPIDLength = Int(upidLength)
+    guard declaredUPIDLength == expectedLength else {
+        throw ParserError.unexpectedSegmentationUPIDLength(
+            UnexpectedSegmentationUPIDLengthErrorInfo(
+                declaredSegmentationUPIDLength: declaredUPIDLength,
+                expectedSegmentationUPIDLength: expectedLength,
+                segmentationUPIDType: upidType
             )
-        }
+        )
+    }
+}
+
+// The check calculation is taken from isan_check_digit_calculation_v2.0.pdf included
+// in the repository.
+private let charArray = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+private func isanCheckChar(for isan: [String]) -> String {
+    let isan = isan.filter { $0.count > 1 }
+    let adjustedProduct = isan.joined().reduce(36) { adjustedSum, char in
+        // The force unwrap should be safe here as we know that all non-check characters
+        // in the ISAN array are formed out of hexadecimal numbers.
+        let decimalValue = Int(String(char), radix: 16)!
+        var sum = adjustedSum + decimalValue
+        if sum > 36 { sum -= 36 }
+        var product = sum * 2
+        if product >= 37 { product -= 37 }
+        return product
+    }
+    if adjustedProduct == 1 {
+        return "0"
+    } else {
+        return String(charArray[37 - adjustedProduct])
     }
 }
