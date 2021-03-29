@@ -159,7 +159,7 @@ extension SegmentationDescriptor.SegmentationUPID {
             try validate(upidLength: upidLength, expectedLength: 8, upidType: upidType)
             self = .ti("0x\(bitReader.bytes(count: 8).map { String(format: "%02X", $0) }.joined())")
         case .adi:
-            fatalError()
+            self = .adi(bitReader.string(fromBytes: UInt(upidLength)))
         case .eidr:
             fatalError()
         case .atscContentIdentifier:
