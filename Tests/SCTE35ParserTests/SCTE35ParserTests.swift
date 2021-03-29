@@ -686,4 +686,52 @@ final class SCTE35ParserTests: XCTestCase {
         )
         try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(base64String))
     }
+    
+    func test_timeSignal_segmentationDescriptor_EIDR_programStart() {
+        let base64String = "/DA4AAAAAAAA///wBQb+AAAAAAAiAiBDVUVJAAAAA3//AAApPWwKDBR4+FrhALBoW4+xyBAAAGij1lQ="
+        let expectedSpliceInfoSection = SpliceInfoSection(
+            tableID: 252,
+            sapType: .unspecified,
+            protocolVersion: 0,
+            encryptedPacket: nil,
+            ptsAdjustment: 0,
+            tier: 0xFFF,
+            spliceCommand: .timeSignal(TimeSignal(spliceTime: SpliceTime(ptsTime: 0))),
+            spliceDescriptors: [
+                .segmentationDescriptor(
+                    SegmentationDescriptor(
+                        identifier: 1129661769,
+                        eventId: 3,
+                        scheduledEvent: SegmentationDescriptor.ScheduledEvent(
+                            deliveryRestrictions: nil,
+                            componentSegments: nil,
+                            segmentationDuration: 2702700,
+                            segmentationUPID: .eidr("10.5240/F85A-E100-B068-5B8F-B1C8-T"),
+                            segmentationTypeID: .programStart,
+                            segmentNum: 0,
+                            segmentsExpected: 0,
+                            subSegment: nil
+                        )
+                    )
+                )
+            ],
+            CRC_32: 0x68A3D654
+        )
+        try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(base64String))
+    }
+    
+    func test_timeSignal_segmentationDescriptor_invalidEIDR() {
+        let hexString = "0xFC30280000000000000000700506FF1252E9220012021043554549000000007F9F0A013050000015871049"
+        XCTAssertThrowsError(try SpliceInfoSection(hexString)) { error in
+            guard let error = error as? ParserError else { return XCTFail("Thrown error not ParserError") }
+            switch error {
+            case .unexpectedSegmentationUPIDLength(let info):
+                XCTAssertEqual(1, info.declaredSegmentationUPIDLength)
+                XCTAssertEqual(12, info.expectedSegmentationUPIDLength)
+                XCTAssertEqual(.eidr, info.segmentationUPIDType)
+            default:
+                XCTFail("Unexpected ParserError")
+            }
+        }
+    }
 }

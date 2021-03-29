@@ -148,10 +148,10 @@ extension SegmentationDescriptor.SegmentationUPID {
             self = .umid(umid)
         case .deprecatedISAN:
             try validate(upidLength: upidLength, expectedLength: 8, upidType: upidType)
-            self = .deprecatedISAN(ISAN(.deprecated).read(using: bitReader))
+            self = .deprecatedISAN(HyphenSeparatedCheckedHex(.deprecatedISAN).read(using: bitReader))
         case .isan:
             try validate(upidLength: upidLength, expectedLength: 12, upidType: upidType)
-            self = .isan(ISAN(.versioned).read(using: bitReader))
+            self = .isan(HyphenSeparatedCheckedHex(.versionedISAN).read(using: bitReader))
         case .tid:
             try validate(upidLength: upidLength, expectedLength: 12, upidType: upidType)
             self = .tid(bitReader.string(fromBytes: 12))
@@ -161,7 +161,10 @@ extension SegmentationDescriptor.SegmentationUPID {
         case .adi:
             self = .adi(bitReader.string(fromBytes: UInt(upidLength)))
         case .eidr:
-            fatalError()
+            try validate(upidLength: upidLength, expectedLength: 12, upidType: upidType)
+            let decimal = "10.\(bitReader.uint16(fromBits: 16))"
+            let hexComponents = HyphenSeparatedCheckedHex(.eidr).read(using: bitReader)
+            self = .eidr("\(decimal)/\(hexComponents)")
         case .atscContentIdentifier:
             fatalError()
         case .mpu:
@@ -204,10 +207,11 @@ private func validate(
     }
 }
 
-private struct ISAN {
+private struct HyphenSeparatedCheckedHex {
     enum Version {
-        case deprecated
-        case versioned
+        case deprecatedISAN
+        case versionedISAN
+        case eidr
     }
     let version: Version
     
@@ -218,17 +222,24 @@ private struct ISAN {
     }
     
     func read(using bitReader: DataBitReader) -> String {
+        let checkIndices: [Int]
         let indexMax: Int
         switch version {
-        case .deprecated: indexMax = 4
-        case .versioned: indexMax = 7
+        case .deprecatedISAN:
+            checkIndices = [4]
+            indexMax = 4
+        case .versionedISAN:
+            checkIndices = [4, 7]
+            indexMax = 7
+        case .eidr:
+            checkIndices = [5]
+            indexMax = 5
         }
         return (0...indexMax)
             .reduce(into: [String]()) { isan, index in
-                switch index {
-                case 4, 7:
+                if checkIndices.contains(index) {
                     isan.append(checkChar(for: isan))
-                default:
+                } else {
                     isan.append(String(format: "%04X", bitReader.uint16(fromBits: 16)))
                 }
             }
