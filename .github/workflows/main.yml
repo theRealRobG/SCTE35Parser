@@ -1,0 +1,19 @@
+name: SwiftPackageBuildTest
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: swift:latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: swift build -v --enable-test-discovery
+    - name: Run tests
+      run: swift test -v --enable-test-discovery
+      
