@@ -14,7 +14,7 @@ let package = Package(
     dependencies: [
         .package(
             name: "BitByteData",
-            url: "git@github.com:tsolomko/BitByteData.git",
+            url: "https://github.com/tsolomko/BitByteData.git",
             .exact(Version(1, 4, 3))
         )
     ],

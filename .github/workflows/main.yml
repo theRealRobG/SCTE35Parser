@@ -12,10 +12,6 @@ jobs:
     container: swift:latest
     steps:
     - uses: actions/checkout@v2
-    - name: Set up known_hosts
-      run: mkdir -p ~/.ssh && touch ~/.ssh/known_hosts
-    - name: Add GitHub to known hosts
-      run: ssh-keyscan github.com >> ~/.ssh/known_hosts
     - name: Resolve dependencies
       run: swift package resolve
     - name: Build
