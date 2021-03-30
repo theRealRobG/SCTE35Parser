@@ -12,6 +12,8 @@ jobs:
     container: swift:latest
     steps:
     - uses: actions/checkout@v2
+    - name: Resolve dependencies
+      run: swift package resolve
     - name: Build
       run: swift build -v --enable-test-discovery
     - name: Run tests
