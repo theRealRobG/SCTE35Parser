@@ -734,4 +734,84 @@ final class SCTE35ParserTests: XCTestCase {
             }
         }
     }
+    
+    func test_timeSignal_segmentationDescriptor_ATSC_content_identifier_programStart() {
+        let base64String = "/DA4AAAAAAAA///wBQb+AAAAAAAiAiBDVUVJAAAAA3//AAApPWwLDADx7/9odW1hbjAxMhAAALdaWG4="
+        let expectedSpliceInfoSection = SpliceInfoSection(
+            tableID: 252,
+            sapType: .unspecified,
+            protocolVersion: 0,
+            encryptedPacket: nil,
+            ptsAdjustment: 0,
+            tier: 0xFFF,
+            spliceCommand: .timeSignal(TimeSignal(spliceTime: SpliceTime(ptsTime: 0))),
+            spliceDescriptors: [
+                .segmentationDescriptor(
+                    SegmentationDescriptor(
+                        identifier: 1129661769,
+                        eventId: 3,
+                        scheduledEvent: SegmentationDescriptor.ScheduledEvent(
+                            deliveryRestrictions: nil,
+                            componentSegments: nil,
+                            segmentationDuration: 2702700,
+                            segmentationUPID: .atscContentIdentifier(
+                                ATSCContentIdentifier(
+                                    tsid: 241,
+                                    endOfDay: 23,
+                                    uniqueFor: 511,
+                                    contentID: "human012"
+                                )
+                            ),
+                            segmentationTypeID: .programStart,
+                            segmentNum: 0,
+                            segmentsExpected: 0,
+                            subSegment: nil
+                        )
+                    )
+                )
+            ],
+            CRC_32: 0xB75A586E
+        )
+        try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(base64String))
+    }
+    
+    func test_timeSignal_segmentationDescriptor_ATSC_content_identifier_programEnd() {
+        let base64String = "/DAzAAAAAAAA///wBQb+AAAAAAAdAhtDVUVJAAAAA3+/CwwA8e//aHVtYW4wMTIRAABAycyr"
+        let expectedSpliceInfoSection = SpliceInfoSection(
+            tableID: 252,
+            sapType: .unspecified,
+            protocolVersion: 0,
+            encryptedPacket: nil,
+            ptsAdjustment: 0,
+            tier: 0xFFF,
+            spliceCommand: .timeSignal(TimeSignal(spliceTime: SpliceTime(ptsTime: 0))),
+            spliceDescriptors: [
+                .segmentationDescriptor(
+                    SegmentationDescriptor(
+                        identifier: 1129661769,
+                        eventId: 3,
+                        scheduledEvent: SegmentationDescriptor.ScheduledEvent(
+                            deliveryRestrictions: nil,
+                            componentSegments: nil,
+                            segmentationDuration: nil,
+                            segmentationUPID: .atscContentIdentifier(
+                                ATSCContentIdentifier(
+                                    tsid: 241,
+                                    endOfDay: 23,
+                                    uniqueFor: 511,
+                                    contentID: "human012"
+                                )
+                            ),
+                            segmentationTypeID: .programEnd,
+                            segmentNum: 0,
+                            segmentsExpected: 0,
+                            subSegment: nil
+                        )
+                    )
+                )
+            ],
+            CRC_32: 0x40C9CCAB
+        )
+        try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(base64String))
+    }
 }

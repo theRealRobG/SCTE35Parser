@@ -18,5 +18,6 @@ public extension ParserError {
         case invalidURLInSegmentationUPID
         case unrecognisedSegmentationTypeID
         case invalidSegmentationDescriptorIdentifier
+        case invalidATSCContentIdentifierInUPID
     }
 }

@@ -19,6 +19,7 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
     case invalidURLInSegmentationUPID(String)
     case unrecognisedSegmentationTypeID(Int)
     case invalidSegmentationDescriptorIdentifier(Int)
+    case invalidATSCContentIdentifierInUPID(InvalidATSCContentIdentifierInUPIDInfo)
     
     public static var errorDomain: String { "SCTE35ParserError" }
     public static var invalidInputStringUserInfoKey: String { "invalidUserInputUserInfoKey" }
@@ -28,6 +29,7 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
     public static var invalidURLInSegmentationUPIDUserInfoKey: String { "invalidURLInSegmentationUPIDUserInfoKey" }
     public static var unrecognisedSegmentationTypeIDUserInfoKey: String { "unrecognisedSegmentationTypeIDUserInfoKey" }
     public static var invalidSegmentationDescriptorIdentifierUserInfoKey: String { "invalidSegmentationDescriptorIdentifierUserInfoKey" }
+    public static var invalidATSCContentIdentifierInUPIDUserInfoKey: String { "invalidATSCContentIdentifierInUPIDUserInfoKey" }
     
     public var code: Code {
         switch self {
@@ -42,6 +44,7 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
         case .invalidURLInSegmentationUPID: return .invalidURLInSegmentationUPID
         case .unrecognisedSegmentationTypeID: return .unrecognisedSegmentationTypeID
         case .invalidSegmentationDescriptorIdentifier: return .invalidSegmentationDescriptorIdentifier
+        case .invalidATSCContentIdentifierInUPID: return .invalidATSCContentIdentifierInUPID
         }
     }
     
@@ -69,6 +72,8 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
             return "\(type) is an invalid segmentation type id."
         case .invalidSegmentationDescriptorIdentifier:
             return "Invalid segmentation descriptor identifier (was not 0x43554549)."
+        case .invalidATSCContentIdentifierInUPID:
+            return "Invalid upid length defined for ATSC content identifier."
         }
     }
     
@@ -96,6 +101,8 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
             return "Value \(type) was obtained for segmentation type id and this does not match any known values."
         case .invalidSegmentationDescriptorIdentifier(let value):
             return "Value \(value) was obtained for segmentation descriptor identifier but this should be 0x43554549."
+        case .invalidATSCContentIdentifierInUPID(let info):
+            return "UPID length defined as \(info.upidLength), and \(info.staticBitsLength / 8) bytes are taken up by static fields, implying contentID has \(info.calculatedContentIDBits) bits left, which is invalid."
         }
     }
     
@@ -114,6 +121,7 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
         case .invalidURLInSegmentationUPID(let urlString): return [Self.invalidURLInSegmentationUPIDUserInfoKey: urlString]
         case .unrecognisedSegmentationTypeID(let type): return [Self.unrecognisedSegmentationTypeIDUserInfoKey: type]
         case .invalidSegmentationDescriptorIdentifier(let value): return [Self.invalidSegmentationDescriptorIdentifierUserInfoKey: value]
+        case .invalidATSCContentIdentifierInUPID(let info): return [Self.invalidATSCContentIdentifierInUPIDUserInfoKey: info]
         }
     }
 }

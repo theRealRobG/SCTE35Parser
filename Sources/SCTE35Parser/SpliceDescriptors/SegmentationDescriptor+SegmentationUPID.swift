@@ -54,7 +54,7 @@ public extension SegmentationDescriptor {
         /// EIDR ID Format (see [EIDR ID FORMAT])
         case eidr(String)
         /// `ATSC_content_identifier()` structure as defined in [ATSC A/57B].
-        case atscContentIdentifier(String)
+        case atscContentIdentifier(ATSCContentIdentifier)
         /// Managed Private UPID structure.
         case mpu(ManagedPrivateUPID)
         /// Multiple UPID types structure.
@@ -166,7 +166,7 @@ extension SegmentationDescriptor.SegmentationUPID {
             let hexComponents = HyphenSeparatedCheckedHex(.eidr).read(using: bitReader)
             self = .eidr("\(decimal)/\(hexComponents)")
         case .atscContentIdentifier:
-            fatalError()
+            self = try .atscContentIdentifier(ATSCContentIdentifier(bitReader: bitReader, upidLength: upidLength))
         case .mpu:
             fatalError()
         case .mid:
