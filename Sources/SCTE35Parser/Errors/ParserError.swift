@@ -20,6 +20,7 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
     case unrecognisedSegmentationTypeID(Int)
     case invalidSegmentationDescriptorIdentifier(Int)
     case invalidATSCContentIdentifierInUPID(InvalidATSCContentIdentifierInUPIDInfo)
+    case invalidMPUInSegmentationUPID(InvalidMPUInSegmentationUPIDInfo)
     
     public static var errorDomain: String { "SCTE35ParserError" }
     public static var invalidInputStringUserInfoKey: String { "invalidUserInputUserInfoKey" }
@@ -30,6 +31,7 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
     public static var unrecognisedSegmentationTypeIDUserInfoKey: String { "unrecognisedSegmentationTypeIDUserInfoKey" }
     public static var invalidSegmentationDescriptorIdentifierUserInfoKey: String { "invalidSegmentationDescriptorIdentifierUserInfoKey" }
     public static var invalidATSCContentIdentifierInUPIDUserInfoKey: String { "invalidATSCContentIdentifierInUPIDUserInfoKey" }
+    public static var invalidMPUInSegmentationUPIDUserInfoKey: String { "invalidMPUInSegmentationUPID" }
     
     public var code: Code {
         switch self {
@@ -45,6 +47,7 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
         case .unrecognisedSegmentationTypeID: return .unrecognisedSegmentationTypeID
         case .invalidSegmentationDescriptorIdentifier: return .invalidSegmentationDescriptorIdentifier
         case .invalidATSCContentIdentifierInUPID: return .invalidATSCContentIdentifierInUPID
+        case .invalidMPUInSegmentationUPID: return .invalidMPUInSegmentationUPID
         }
     }
     
@@ -74,6 +77,8 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
             return "Invalid segmentation descriptor identifier (was not 0x43554549)."
         case .invalidATSCContentIdentifierInUPID:
             return "Invalid upid length defined for ATSC content identifier."
+        case .invalidMPUInSegmentationUPID:
+            return "Invalid upid length defined for MPU."
         }
     }
     
@@ -102,7 +107,9 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
         case .invalidSegmentationDescriptorIdentifier(let value):
             return "Value \(value) was obtained for segmentation descriptor identifier but this should be 0x43554549."
         case .invalidATSCContentIdentifierInUPID(let info):
-            return "UPID length defined as \(info.upidLength), and \(info.staticBitsLength / 8) bytes are taken up by static fields, implying contentID has \(info.calculatedContentIDBits) bits left, which is invalid."
+            return "UPID length defined as \(info.upidLength), and \(info.staticBytesLength) bytes are taken up by static fields, implying contentID has \(info.calculatedContentIDByteCount) bytes left, which is invalid."
+        case .invalidMPUInSegmentationUPID(let info):
+            return "UPID length defined as \(info.upidLength), and \(info.staticBytesLength) bytes are taken up by static fields, implying private data has \(info.calculatedPrivateDataByteCount) bytes left, which is invalid."
         }
     }
     
@@ -122,6 +129,7 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
         case .unrecognisedSegmentationTypeID(let type): return [Self.unrecognisedSegmentationTypeIDUserInfoKey: type]
         case .invalidSegmentationDescriptorIdentifier(let value): return [Self.invalidSegmentationDescriptorIdentifierUserInfoKey: value]
         case .invalidATSCContentIdentifierInUPID(let info): return [Self.invalidATSCContentIdentifierInUPIDUserInfoKey: info]
+        case .invalidMPUInSegmentationUPID(let info): return [Self.invalidMPUInSegmentationUPIDUserInfoKey: info]
         }
     }
 }

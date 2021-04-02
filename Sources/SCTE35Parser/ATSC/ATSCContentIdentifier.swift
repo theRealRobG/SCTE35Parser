@@ -55,8 +55,8 @@ public struct ATSCContentIdentifier: Equatable {
 
 extension ATSCContentIdentifier {
     init(bitReader: DataBitReader, upidLength: UInt8) throws {
-        let contentIDLength = (upidLength) - 4
-        guard contentIDLength > 0 else {
+        let contentIDLength = Int(upidLength) - 4
+        guard contentIDLength >= 0 else {
             throw ParserError.invalidATSCContentIdentifierInUPID(
                 InvalidATSCContentIdentifierInUPIDInfo(upidLength: Int(upidLength))
             )

@@ -7,6 +7,6 @@
 
 public struct InvalidATSCContentIdentifierInUPIDInfo: Equatable {
     public let upidLength: Int
-    public let staticBitsLength = 32
-    public var calculatedContentIDBits: Int { (upidLength * 8) - staticBitsLength }
+    public let staticBytesLength = 4
+    public var calculatedContentIDByteCount: Int { upidLength - staticBytesLength }
 }
