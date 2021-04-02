@@ -68,7 +68,7 @@ extension SpliceCommand {
         case .bandwidthReservation:
             self = .bandwidthReservation
         case .privateCommand:
-            fatalError()
+            self = .privateCommand(PrivateCommand(bitReader: bitReader, spliceCommandLength: spliceCommandLength))
         case .spliceInsert:
             self = .spliceInsert(try SpliceInsert(bitReader: bitReader))
         case .spliceNull:
