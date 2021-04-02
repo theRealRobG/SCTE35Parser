@@ -170,7 +170,12 @@ extension SegmentationDescriptor.SegmentationUPID {
         case .mpu:
             self = try .mpu(SegmentationDescriptor.ManagedPrivateUPID(bitReader: bitReader, upidLength: upidLength))
         case .mid:
-            fatalError()
+            let bitsLeftAfterUPID = bitReader.bitsLeft - Int(upidLength * 8)
+            var mid = [SegmentationDescriptor.SegmentationUPID]()
+            while bitReader.bitsLeft > bitsLeftAfterUPID {
+                try mid.append(SegmentationDescriptor.SegmentationUPID(bitReader: bitReader))
+            }
+            self = .mid(mid)
         case .adsInformation:
             self = .adsInformation(bitReader.string(fromBytes: UInt(upidLength)))
         case .uri:

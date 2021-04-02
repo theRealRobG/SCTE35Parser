@@ -884,4 +884,42 @@ final class SCTE35ParserTests: XCTestCase {
         )
         try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(base64String))
     }
+    
+    func test_timeSignal_segmentationDescriptor_MID_ADS_TI() {
+        let base64String = "/DA9AAAAAAAAAACABQb+0fha8wAnAiVDVUVJSAAAv3/PAAD4+mMNEQ4FTEEzMDkICAAAAAAuU4SBNAAAPIaCPw=="
+        let expectedSpliceInfoSection = SpliceInfoSection(
+            tableID: 252,
+            sapType: .unspecified,
+            protocolVersion: 0,
+            encryptedPacket: nil,
+            ptsAdjustment: 0,
+            tier: 0x8,
+            spliceCommand: .timeSignal(TimeSignal(spliceTime: SpliceTime(ptsTime: 3522714355))),
+            spliceDescriptors: [
+                .segmentationDescriptor(
+                    SegmentationDescriptor(
+                        identifier: 1129661769,
+                        eventId: 1207959743,
+                        scheduledEvent: SegmentationDescriptor.ScheduledEvent(
+                            deliveryRestrictions: SegmentationDescriptor.ScheduledEvent.DeliveryRestrictions(
+                                webDeliveryAllowed: false,
+                                noRegionalBlackout: true,
+                                archiveAllowed: true,
+                                deviceRestrictions: .none
+                            ),
+                            componentSegments: nil,
+                            segmentationDuration: 16317027,
+                            segmentationUPID: .mid([.adsInformation("LA309"), .ti("0x000000002E538481")]),
+                            segmentationTypeID: .providerPlacementOpportunityStart,
+                            segmentNum: 0,
+                            segmentsExpected: 0,
+                            subSegment: nil
+                        )
+                    )
+                )
+            ],
+            CRC_32: 0x3C86823F
+        )
+        try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(base64String))
+    }
 }
