@@ -1136,4 +1136,69 @@ final class SCTE35ParserTests: XCTestCase {
         )
         try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(base64String))
     }
+    
+    func test_spliceInsert_hex() {
+        let hexString = "0xFC302100000000000000FFF01005000003DB7FEF7F7E0020F580C0000000000019913DA5"
+        let expectedSpliceInfoSection = SpliceInfoSection(
+            tableID: 252,
+            sapType: .unspecified,
+            protocolVersion: 0,
+            encryptedPacket: nil,
+            ptsAdjustment: 0,
+            tier: 0xFFF,
+            spliceCommand: .spliceInsert(
+                SpliceInsert(
+                    eventId: 987,
+                    scheduledEvent: SpliceInsert.ScheduledEvent(
+                        outOfNetworkIndicator: true,
+                        isImmediateSplice: false,
+                        spliceMode: .programSpliceMode(
+                            SpliceInsert.ScheduledEvent.SpliceMode.ProgramMode(spliceTime: SpliceTime(ptsTime: nil))
+                        ),
+                        breakDuration: BreakDuration(
+                            autoReturn: false,
+                            duration: 2160000
+                        ),
+                        uniqueProgramId: 49152,
+                        availNum: 0,
+                        availsExpected: 0
+                    )
+                )
+            ),
+            spliceDescriptors: [],
+            CRC_32: 0x19913DA5
+        )
+        try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(hexString))
+    }
+    
+    func test_spliceInsert_hexWithNo0x() {
+        let hexString = "fc302000000000000000fff00f0500000fa07f4ffe1faf4e1400000000000061bd0585"
+        let expectedSpliceInfoSection = SpliceInfoSection(
+            tableID: 252,
+            sapType: .unspecified,
+            protocolVersion: 0,
+            encryptedPacket: nil,
+            ptsAdjustment: 0,
+            tier: 0xFFF,
+            spliceCommand: .spliceInsert(
+                SpliceInsert(
+                    eventId: 4000,
+                    scheduledEvent: SpliceInsert.ScheduledEvent(
+                        outOfNetworkIndicator: false,
+                        isImmediateSplice: false,
+                        spliceMode: .programSpliceMode(
+                            SpliceInsert.ScheduledEvent.SpliceMode.ProgramMode(spliceTime: SpliceTime(ptsTime: 531582484))
+                        ),
+                        breakDuration: nil,
+                        uniqueProgramId: 0,
+                        availNum: 0,
+                        availsExpected: 0
+                    )
+                )
+            ),
+            spliceDescriptors: [],
+            CRC_32: 0x61BD0585
+        )
+        try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(hexString))
+    }
 }
