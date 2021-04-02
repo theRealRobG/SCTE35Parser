@@ -22,5 +22,6 @@ public extension ParserError {
         case invalidMPUInSegmentationUPID
         case invalidBitStreamMode
         case unrecognisedAudioCodingMode
+        case unrecognisedSpliceDescriptorTag
     }
 }

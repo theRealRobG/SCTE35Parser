@@ -23,6 +23,7 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
     case invalidMPUInSegmentationUPID(InvalidMPUInSegmentationUPIDInfo)
     case invalidBitStreamMode(InvalidBitStreamModeErrorInfo)
     case unrecognisedAudioCodingMode(Int)
+    case unrecognisedSpliceDescriptorTag(Int)
     
     public static var errorDomain: String { "SCTE35ParserError" }
     
@@ -39,6 +40,7 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
     public static var invalidMPUInSegmentationUPIDUserInfoKey: String { "invalidMPUInSegmentationUPIDUserInfoKey" }
     public static var invalidBitStreamModeUserInfoKey: String { "invalidBitStreamModeUserInfoKey" }
     public static var unrecognisedAudioCodingModeUserInfoKey: String { "unrecognisedAudioCodingModeUserInfoKey" }
+    public static var unrecognisedSpliceDescriptorTagUserInfoKey: String { "unrecognisedSpliceDescriptorTagUserInfoKey" }
     
     public var code: Code {
         switch self {
@@ -57,6 +59,7 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
         case .invalidMPUInSegmentationUPID: return .invalidMPUInSegmentationUPID
         case .invalidBitStreamMode: return .invalidBitStreamMode
         case .unrecognisedAudioCodingMode: return .unrecognisedAudioCodingMode
+        case .unrecognisedSpliceDescriptorTag: return .unrecognisedSpliceDescriptorTag
         }
     }
     
@@ -96,6 +99,8 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
             return "\(info.bsmod) bit stream mode and \(acmodString) audio coding mode is an invalid combination."
         case .unrecognisedAudioCodingMode(let type):
             return "\(type) is an invalid audio coding mode."
+        case .unrecognisedSpliceDescriptorTag(let type):
+            return "\(type) is an invalid splice descriptor tag."
         }
     }
     
@@ -135,6 +140,8 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
             return "Value \(info.bsmod) was obtained for bit stream mode, and \(acmodString) was obtained for audio coding mode, but this combination is not a valid BitStreamMode."
         case .unrecognisedAudioCodingMode(let type):
             return "Value \(type) was obtained for audio coding mode and this does not match any known values."
+        case .unrecognisedSpliceDescriptorTag(let type):
+            return "Value \(type) was obtained for splice descriptor tag and this does not match any known values."
         }
     }
     
@@ -157,6 +164,7 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
         case .invalidMPUInSegmentationUPID(let info): return [Self.invalidMPUInSegmentationUPIDUserInfoKey: info]
         case .invalidBitStreamMode(let info): return [Self.invalidBitStreamModeUserInfoKey: info]
         case .unrecognisedAudioCodingMode(let type): return [Self.unrecognisedAudioCodingModeUserInfoKey: type]
+        case .unrecognisedSpliceDescriptorTag(let type): return [Self.unrecognisedSpliceDescriptorTagUserInfoKey: type]
         }
     }
 }

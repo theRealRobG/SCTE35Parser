@@ -127,7 +127,7 @@ extension SpliceDescriptor {
         case.timeDescriptor:
             fatalError()
         case .none:
-            fatalError()
+            throw ParserError.unrecognisedSpliceDescriptorTag(Int(spliceDescriptorTag))
         }
     }
 }
