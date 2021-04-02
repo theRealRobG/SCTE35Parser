@@ -58,3 +58,16 @@ public struct TimeDescriptor: Equatable {
     /// ```
     public let utcOffset: UInt16
 }
+
+// MARK: - Parsing
+
+extension TimeDescriptor {
+    // NOTE: It is assumed that the splice_descriptor_tag has already been read.
+    init(bitReader: DataBitReader) throws {
+        _ = bitReader.byte()
+        self.identifier = bitReader.uint32(fromBits: 32)
+        self.taiSeconds = bitReader.uint64(fromBits: 48)
+        self.taiNS = bitReader.uint32(fromBits: 32)
+        self.utcOffset = bitReader.uint16(fromBits: 16)
+    }
+}

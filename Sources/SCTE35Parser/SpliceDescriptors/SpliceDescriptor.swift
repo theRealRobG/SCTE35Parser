@@ -125,7 +125,7 @@ extension SpliceDescriptor {
         case .segmentationDescriptor:
             self = try .segmentationDescriptor(SegmentationDescriptor(bitReader: bitReader))
         case.timeDescriptor:
-            fatalError()
+            self = try .timeDescriptor(TimeDescriptor(bitReader: bitReader))
         case .none:
             throw ParserError.unrecognisedSpliceDescriptorTag(Int(spliceDescriptorTag))
         }
