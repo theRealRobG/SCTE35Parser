@@ -291,6 +291,9 @@ public extension SpliceInfoSection {
             )
         } else {
             self.encryptedPacket = nil
+            while bitReader.bitsLeft >= 40 {
+                _ = bitReader.byte()
+            }
         }
         self.CRC_32 = bitReader.uint32(fromBits: 32)
     }

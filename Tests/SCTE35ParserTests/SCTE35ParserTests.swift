@@ -1266,4 +1266,44 @@ final class SCTE35ParserTests: XCTestCase {
         )
         try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(base64String))
     }
+    
+    // Example taken from https://github.com/futzu/threefive/blob/441ba290854f0ddc7baccc7350e25ee8148665cd/examples/dtmf/Dtmf_Descriptor.py
+    func test_dtmf_withAlignmentStuffing() {
+        let base64String = "/DAsAAAAAAAAAP/wDwUAAABef0/+zPACTQAAAAAADAEKQ1VFSbGfMTIxIxGolm3/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////"
+        let expectedSpliceInfoSection = SpliceInfoSection(
+            tableID: 252,
+            sapType: .unspecified,
+            protocolVersion: 0,
+            encryptedPacket: nil,
+            ptsAdjustment: 0,
+            tier: 0xFFF,
+            spliceCommand: .spliceInsert(
+                SpliceInsert(
+                    eventId: 94,
+                    scheduledEvent: SpliceInsert.ScheduledEvent(
+                        outOfNetworkIndicator: false,
+                        isImmediateSplice: false,
+                        spliceMode: .programSpliceMode(
+                            SpliceInsert.ScheduledEvent.SpliceMode.ProgramMode(spliceTime: SpliceTime(ptsTime: 3438281293))
+                        ),
+                        breakDuration: nil,
+                        uniqueProgramId: 0,
+                        availNum: 0,
+                        availsExpected: 0
+                    )
+                )
+            ),
+            spliceDescriptors: [
+                .dtmfDescriptor(
+                    DTMFDescriptor(
+                        identifier: 1129661769,
+                        preroll: 177,
+                        dtmfChars: "121#"
+                    )
+                )
+            ],
+            CRC_32: 0xFFFFFFFF
+        )
+        try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(base64String))
+    }
 }

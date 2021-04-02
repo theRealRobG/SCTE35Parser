@@ -37,3 +37,17 @@ public struct DTMFDescriptor: Equatable {
     /// character sent being the timing mark for the `preroll`.
     public let dtmfChars: String
 }
+
+// MARK: - Parsing
+
+extension DTMFDescriptor {
+    // NOTE: It is assumed that the splice_descriptor_tag has already been read.
+    init(bitReader: DataBitReader) throws {
+        _ = bitReader.byte()
+        self.identifier = bitReader.uint32(fromBits: 32)
+        self.preroll = bitReader.byte()
+        let dtmfCount = bitReader.byte(fromBits: 3)
+        _ = bitReader.bits(count: 5)
+        self.dtmfChars = bitReader.string(fromBytes: UInt(dtmfCount))
+    }
+}

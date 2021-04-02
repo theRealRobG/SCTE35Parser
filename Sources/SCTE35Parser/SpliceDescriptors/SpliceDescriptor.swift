@@ -121,7 +121,7 @@ extension SpliceDescriptor {
         case .availDescriptor:
             self = try .availDescriptor(AvailDescriptor(bitReader: bitReader))
         case .dtmfDescriptor:
-            fatalError()
+            self = try .dtmfDescriptor(DTMFDescriptor(bitReader: bitReader))
         case .segmentationDescriptor:
             self = try .segmentationDescriptor(SegmentationDescriptor(bitReader: bitReader))
         case.timeDescriptor:
