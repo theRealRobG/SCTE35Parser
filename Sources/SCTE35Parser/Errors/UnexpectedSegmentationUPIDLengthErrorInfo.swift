@@ -25,7 +25,3 @@ public struct UnexpectedSegmentationUPIDLengthErrorInfo: Equatable {
         self.segmentationUPIDType = segmentationUPIDType
     }
 }
-
-public extension ParserError {
-    static var unexpectedSegmentationUPIDLengthUserInfoKey: String { "unexpectedSegmentationUPIDLengthUserInfoKey" }
-}

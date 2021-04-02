@@ -21,17 +21,24 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
     case invalidSegmentationDescriptorIdentifier(Int)
     case invalidATSCContentIdentifierInUPID(InvalidATSCContentIdentifierInUPIDInfo)
     case invalidMPUInSegmentationUPID(InvalidMPUInSegmentationUPIDInfo)
+    case invalidBitStreamMode(InvalidBitStreamModeErrorInfo)
+    case unrecognisedAudioCodingMode(Int)
     
     public static var errorDomain: String { "SCTE35ParserError" }
+    
+    public static var unexpectedEndOfDataUserInfoKey: String { "unexpectedEndOfDataUserInfoKey" }
     public static var invalidInputStringUserInfoKey: String { "invalidUserInputUserInfoKey" }
     public static var unrecognisedSpliceCommandTypeUserInfoKey: String { "unrecognisedSpliceCommandTypeUserInfokey" }
     public static var unrecognisedSegmentationUPIDTypeUserInfoKey: String { "unrecognisedSegmentationUPIDTypeUserInfoKey" }
     public static var invalidUUIDInSegmentationUPIDUserInfoKey: String { "invalidUUIDInSegmentationUPIDUserInfoKey" }
     public static var invalidURLInSegmentationUPIDUserInfoKey: String { "invalidURLInSegmentationUPIDUserInfoKey" }
     public static var unrecognisedSegmentationTypeIDUserInfoKey: String { "unrecognisedSegmentationTypeIDUserInfoKey" }
+    public static var unexpectedSegmentationUPIDLengthUserInfoKey: String { "unexpectedSegmentationUPIDLengthUserInfoKey" }
     public static var invalidSegmentationDescriptorIdentifierUserInfoKey: String { "invalidSegmentationDescriptorIdentifierUserInfoKey" }
     public static var invalidATSCContentIdentifierInUPIDUserInfoKey: String { "invalidATSCContentIdentifierInUPIDUserInfoKey" }
-    public static var invalidMPUInSegmentationUPIDUserInfoKey: String { "invalidMPUInSegmentationUPID" }
+    public static var invalidMPUInSegmentationUPIDUserInfoKey: String { "invalidMPUInSegmentationUPIDUserInfoKey" }
+    public static var invalidBitStreamModeUserInfoKey: String { "invalidBitStreamModeUserInfoKey" }
+    public static var unrecognisedAudioCodingModeUserInfoKey: String { "unrecognisedAudioCodingModeUserInfoKey" }
     
     public var code: Code {
         switch self {
@@ -48,6 +55,8 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
         case .invalidSegmentationDescriptorIdentifier: return .invalidSegmentationDescriptorIdentifier
         case .invalidATSCContentIdentifierInUPID: return .invalidATSCContentIdentifierInUPID
         case .invalidMPUInSegmentationUPID: return .invalidMPUInSegmentationUPID
+        case .invalidBitStreamMode: return .invalidBitStreamMode
+        case .unrecognisedAudioCodingMode: return .unrecognisedAudioCodingMode
         }
     }
     
@@ -79,6 +88,14 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
             return "Invalid upid length defined for ATSC content identifier."
         case .invalidMPUInSegmentationUPID:
             return "Invalid upid length defined for MPU."
+        case .invalidBitStreamMode(let info):
+            var acmodString = "nil"
+            if let acmod = info.acmod {
+                acmodString = "\(acmod)"
+            }
+            return "\(info.bsmod) bit stream mode and \(acmodString) audio coding mode is an invalid combination."
+        case .unrecognisedAudioCodingMode(let type):
+            return "\(type) is an invalid audio coding mode."
         }
     }
     
@@ -110,6 +127,14 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
             return "UPID length defined as \(info.upidLength), and \(info.staticBytesLength) bytes are taken up by static fields, implying contentID has \(info.calculatedContentIDByteCount) bytes left, which is invalid."
         case .invalidMPUInSegmentationUPID(let info):
             return "UPID length defined as \(info.upidLength), and \(info.staticBytesLength) bytes are taken up by static fields, implying private data has \(info.calculatedPrivateDataByteCount) bytes left, which is invalid."
+        case .invalidBitStreamMode(let info):
+            var acmodString = "nil"
+            if let acmod = info.acmod {
+                acmodString = "\(acmod)"
+            }
+            return "Value \(info.bsmod) was obtained for bit stream mode, and \(acmodString) was obtained for audio coding mode, but this combination is not a valid BitStreamMode."
+        case .unrecognisedAudioCodingMode(let type):
+            return "Value \(type) was obtained for audio coding mode and this does not match any known values."
         }
     }
     
@@ -130,6 +155,8 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
         case .invalidSegmentationDescriptorIdentifier(let value): return [Self.invalidSegmentationDescriptorIdentifierUserInfoKey: value]
         case .invalidATSCContentIdentifierInUPID(let info): return [Self.invalidATSCContentIdentifierInUPIDUserInfoKey: info]
         case .invalidMPUInSegmentationUPID(let info): return [Self.invalidMPUInSegmentationUPIDUserInfoKey: info]
+        case .invalidBitStreamMode(let info): return [Self.invalidBitStreamModeUserInfoKey: info]
+        case .unrecognisedAudioCodingMode(let type): return [Self.unrecognisedAudioCodingModeUserInfoKey: type]
         }
     }
 }

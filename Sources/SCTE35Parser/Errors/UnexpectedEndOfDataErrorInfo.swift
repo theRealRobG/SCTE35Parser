@@ -13,7 +13,3 @@ public struct UnexpectedEndOfDataErrorInfo: Equatable {
     /// A description of what was being attempted to be parsed that resulted in error.
     public let description: String
 }
-
-public extension ParserError {
-    static var unexpectedEndOfDataUserInfoKey: String { "unexpectedEndOfDataUserInfoKey" }
-}

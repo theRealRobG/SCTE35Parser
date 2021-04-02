@@ -20,5 +20,7 @@ public extension ParserError {
         case invalidSegmentationDescriptorIdentifier
         case invalidATSCContentIdentifierInUPID
         case invalidMPUInSegmentationUPID
+        case invalidBitStreamMode
+        case unrecognisedAudioCodingMode
     }
 }
