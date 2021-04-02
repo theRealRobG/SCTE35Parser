@@ -1306,4 +1306,21 @@ final class SCTE35ParserTests: XCTestCase {
         )
         try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(base64String))
     }
+    
+    // Example taken from https://github.com/futzu/threefive/blob/8025c0f7df31a4a4f7649cb68a4b4f0e560b73f5/examples/splicenull/Splice_Null.cue
+    func test_spliceNull() {
+        let hexString = "0xFC301100000000000000FFFFFF0000004F253396"
+        let expectedSpliceInfoSection = SpliceInfoSection(
+            tableID: 252,
+            sapType: .unspecified,
+            protocolVersion: 0,
+            encryptedPacket: nil,
+            ptsAdjustment: 0,
+            tier: 0xFFF,
+            spliceCommand: .spliceNull,
+            spliceDescriptors: [],
+            CRC_32: 0x4F253396
+        )
+        try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(hexString))
+    }
 }
