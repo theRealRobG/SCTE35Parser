@@ -94,11 +94,11 @@ public extension SegmentationDescriptor {
 public extension SegmentationDescriptor {
     struct ManagedPrivateUPID: Equatable {
         public let formatSpecifier: String
-        public let privateData: String
+        public let privateData: Data
         
         public init(
             formatSpecifier: String,
-            privateData: String
+            privateData: Data
         ) {
             self.formatSpecifier = formatSpecifier
             self.privateData = privateData
@@ -168,7 +168,7 @@ extension SegmentationDescriptor.SegmentationUPID {
         case .atscContentIdentifier:
             self = try .atscContentIdentifier(ATSCContentIdentifier(bitReader: bitReader, upidLength: upidLength))
         case .mpu:
-            fatalError()
+            self = try .mpu(SegmentationDescriptor.ManagedPrivateUPID(bitReader: bitReader, upidLength: upidLength))
         case .mid:
             fatalError()
         case .adsInformation:
@@ -187,6 +187,20 @@ extension SegmentationDescriptor.SegmentationUPID {
             }
             self = .uuid(uuid)
         }
+    }
+}
+
+extension SegmentationDescriptor.ManagedPrivateUPID {
+    init(bitReader: DataBitReader, upidLength: UInt8) throws {
+        let privateDataLength = Int(upidLength) - 4
+        guard privateDataLength >= 0 else {
+            throw ParserError.invalidMPUInSegmentationUPID(
+                InvalidMPUInSegmentationUPIDInfo(upidLength: Int(upidLength))
+            )
+        }
+        let formatSpecifier = bitReader.string(fromBytes: 4)
+        let privateData = Data(bitReader.bytes(count: privateDataLength))
+        self.init(formatSpecifier: formatSpecifier, privateData: privateData)
     }
 }
 

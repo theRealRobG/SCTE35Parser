@@ -814,4 +814,74 @@ final class SCTE35ParserTests: XCTestCase {
         )
         try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(base64String))
     }
+    
+    func test_timeSignal_segmentationDescriptor_TI_MPU() {
+        let base64String = "/DB5AAAAAAAAAP/wBQb/DkfmpABjAhdDVUVJhPHPYH+/CAgAAAAABy4QajEBGAIcQ1VFSYTx71B//wAAK3NwCAgAAAAABy1cxzACGAIqQ1VFSYTx751/vwwbUlRMTjFIAQAAAAAxMzU2MTY2MjQ1NTUxQjEAAQAALL95dg=="
+        let expectedSpliceInfoSection = SpliceInfoSection(
+            tableID: 252,
+            sapType: .unspecified,
+            protocolVersion: 0,
+            encryptedPacket: nil,
+            ptsAdjustment: 0,
+            tier: 0xFFF,
+            spliceCommand: .timeSignal(TimeSignal(spliceTime: SpliceTime(ptsTime: 4534560420))),
+            spliceDescriptors: [
+                .segmentationDescriptor(
+                    SegmentationDescriptor(
+                        identifier: 1129661769,
+                        eventId: 2230439776,
+                        scheduledEvent: SegmentationDescriptor.ScheduledEvent(
+                            deliveryRestrictions: nil,
+                            componentSegments: nil,
+                            segmentationDuration: nil,
+                            segmentationUPID: .ti("0x00000000072E106A"),
+                            segmentationTypeID: .providerAdvertisementEnd,
+                            segmentNum: 1,
+                            segmentsExpected: 24,
+                            subSegment: nil
+                        )
+                    )
+                ),
+                .segmentationDescriptor(
+                    SegmentationDescriptor(
+                        identifier: 1129661769,
+                        eventId: 2230447952,
+                        scheduledEvent: SegmentationDescriptor.ScheduledEvent(
+                            deliveryRestrictions: nil,
+                            componentSegments: nil,
+                            segmentationDuration: 2847600,
+                            segmentationUPID: .ti("0x00000000072D5CC7"),
+                            segmentationTypeID: .providerAdvertisementStart,
+                            segmentNum: 2,
+                            segmentsExpected: 24,
+                            subSegment: nil
+                        )
+                    )
+                ),
+                .segmentationDescriptor(
+                    SegmentationDescriptor(
+                        identifier: 1129661769,
+                        eventId: 2230448029,
+                        scheduledEvent: SegmentationDescriptor.ScheduledEvent(
+                            deliveryRestrictions: nil,
+                            componentSegments: nil,
+                            segmentationDuration: nil,
+                            segmentationUPID: .mpu(
+                                SegmentationDescriptor.ManagedPrivateUPID(
+                                    formatSpecifier: "RTLN",
+                                    privateData: Data(base64Encoded: "MUgBAAAAADEzNTYxNjYyNDU1NTFCMQA=")!
+                                )
+                            ),
+                            segmentationTypeID: .contentIdentification,
+                            segmentNum: 0,
+                            segmentsExpected: 0,
+                            subSegment: nil
+                        )
+                    )
+                )
+            ],
+            CRC_32: 0x2CBF7976
+        )
+        try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(base64String))
+    }
 }
