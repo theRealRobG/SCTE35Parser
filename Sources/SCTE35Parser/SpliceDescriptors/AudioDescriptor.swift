@@ -52,7 +52,7 @@ public extension AudioDescriptor {
         public let isoCode: UInt32
         /// This is a 3-bit field that is set to the same value as the bsmod field in the AC-3 elementary
         /// stream.
-        public let bitStreammode: BitStreamMode
+        public let bitStreamMode: BitStreamMode
         /// This is a 4-bit field that indicates the number of channels in the AC-3 elementary stream.
         /// When the MSB is 0, the lower 3 bits are set to the same value as the acmod field in the AC-3
         /// elementary stream. When the MSB field is 1, the lower 3 bits indicate the maximum number of
@@ -83,12 +83,65 @@ public extension AudioDescriptor {
     }
     
     /// indicates the maximum number of encoded audio channels (counting the lfe channel as 1).
-    enum MaxNumberOfEncodedChannels: UInt8 {
-        case one = 1
-        case two = 2
-        case three = 3
-        case four = 4
-        case five = 5
-        case six = 6
+    enum MaxNumberOfEncodedChannels: Equatable {
+        case one
+        case two
+        case three
+        case four
+        case five
+        case six
+        case unknown(UInt8)
+        
+        public init(_ rawValue: UInt8) {
+            switch rawValue {
+            case 0: self = .one
+            case 1: self = .two
+            case 2: self = .three
+            case 3: self = .four
+            case 4: self = .five
+            case 5: self = .six
+            default: self = .unknown(rawValue)
+            }
+        }
+    }
+}
+
+// MARK: - Parsing
+
+extension AudioDescriptor {
+    // NOTE: It is assumed that the splice_descriptor_tag has already been read.
+    init(bitReader: DataBitReader) throws {
+        _ = bitReader.byte()
+        self.identifier = bitReader.uint32(fromBits: 32)
+        let audioCount = bitReader.byte(fromBits: 4)
+        _ = bitReader.bits(count: 4)
+        self.components = try (0..<audioCount).map { _ in try Component(bitReader: bitReader) }
+    }
+}
+
+extension AudioDescriptor.Component {
+    init(bitReader: DataBitReader) throws {
+        self.componentTag = bitReader.byte()
+        self.isoCode = bitReader.uint32(fromBits: 24)
+        let bsmod = bitReader.byte(fromBits: 3)
+        if bitReader.bit() == 0 {
+            let acmod = bitReader.byte(fromBits: 3)
+            guard let audioCodingMode = AudioCodingMode(rawValue: acmod) else {
+                throw ParserError.unrecognisedAudioCodingMode(Int(acmod))
+            }
+            guard let bitStreamMode = BitStreamMode(bsmod: bsmod, acmod: acmod) else {
+                throw ParserError.invalidBitStreamMode(InvalidBitStreamModeErrorInfo(bsmod: Int(bsmod), acmod: Int(acmod)))
+            }
+            self.bitStreamMode = bitStreamMode
+            self.numChannels = .audioCodingMode(audioCodingMode)
+        } else {
+            let nChannels = AudioDescriptor.MaxNumberOfEncodedChannels(bitReader.byte(fromBits: 3))
+            guard let bitStreamMode = BitStreamMode(bsmod: bsmod, acmod: nil) else {
+                throw ParserError.invalidBitStreamMode(InvalidBitStreamModeErrorInfo(bsmod: Int(bsmod), acmod: nil))
+            }
+            self.bitStreamMode = bitStreamMode
+            self.numChannels = .maxNumberOfEncodedChannels(nChannels)
+        }
+        self.fullSrvcAudio = bitReader.bit() == 1
     }
 }

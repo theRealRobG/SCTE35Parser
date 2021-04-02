@@ -31,7 +31,7 @@
  ‘111’ 3/2               5       L, C, R, SL, SR
  ```
  */
-public enum AudioCodingMode: Equatable {
+public enum AudioCodingMode: UInt8, Equatable {
     /**
      ```
      acmod Audio Coding Mode nfchans Channel Array Ordering

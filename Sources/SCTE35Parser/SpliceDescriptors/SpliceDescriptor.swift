@@ -117,7 +117,7 @@ extension SpliceDescriptor {
         let spliceDescriptorTag = bitReader.byte()
         switch SpliceDescriptorTag(rawValue: spliceDescriptorTag) {
         case .audioDescriptor:
-            fatalError()
+            self = try .audioDescriptor(AudioDescriptor(bitReader: bitReader))
         case .availDescriptor:
             self = try .availDescriptor(AvailDescriptor(bitReader: bitReader))
         case .dtmfDescriptor:

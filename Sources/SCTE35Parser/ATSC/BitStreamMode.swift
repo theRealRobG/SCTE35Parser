@@ -32,4 +32,27 @@ public enum BitStreamMode: Equatable {
     case emergeny
     case voiceOver
     case karaoke
+    
+    public init?(bsmod: UInt8, acmod: UInt8?) {
+        switch bsmod {
+        case 0: self = .completeMain
+        case 1: self = .musicAndEffects
+        case 2: self = .visuallyImpaired
+        case 3: self = .hearingImpaired
+        case 4: self = .dialogue
+        case 5: self = .commentary
+        case 6: self = .emergeny
+        case 7:
+            guard let acmod = acmod else { return nil }
+            if acmod == 1 {
+                self = .voiceOver
+            } else if acmod > 1, acmod < 8 {
+                self = .karaoke
+            } else {
+                return nil
+            }
+        default:
+            return nil
+        }
+    }
 }
