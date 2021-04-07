@@ -40,9 +40,6 @@
  ```
  */
 public struct SpliceSchedule: Equatable {
-    /// An 8-bit unsigned integer that indicates the number of splice events specified in the loop
-    /// that follows.
-    public let spliceCount: UInt8
     public let events: [SpliceSchedule.Event]
 }
 
@@ -61,8 +58,6 @@ public extension SpliceSchedule {
 
 public extension SpliceSchedule.Event {
     struct ScheduledEvent: Equatable {
-        /// A 32-bit unique splice event identifier.
-        public let eventId: UInt32
         /// When set to `true`, indicates that the splice event is an opportunity to exit from the
         /// network feed and that the value of `utcSpliceTime` shall refer to an intended out point
         /// or program out point. When set to `false`, the flag indicates that the splice event is
@@ -128,5 +123,61 @@ public extension SpliceSchedule.Event.ScheduledEvent.SpliceMode {
         /// converted to UTC without the use of the GPS_UTC_offset value provided by the System Time
         /// table. The `utcSpliceTime` field is used only in the `SpliceSchedule` command.
         public let utcSpliceTime: UInt32
+    }
+}
+
+// MARK: - Parsing
+
+extension SpliceSchedule {
+    init(bitReader: DataBitReader) throws {
+        let spliceCount = bitReader.byte()
+        self.events = try (0..<spliceCount).map { _ in try SpliceSchedule.Event(bitReader: bitReader) }
+    }
+}
+
+extension SpliceSchedule.Event {
+    init(bitReader: DataBitReader) throws {
+        self.eventId = bitReader.uint32(fromBits: 32)
+        let isCancelled = bitReader.bit() == 1
+        _ = bitReader.bits(count: 7)
+        if isCancelled {
+            self.scheduledEvent = nil
+        } else {
+            self.scheduledEvent = try SpliceSchedule.Event.ScheduledEvent(bitReader: bitReader)
+        }
+    }
+}
+
+extension SpliceSchedule.Event.ScheduledEvent {
+    init(bitReader: DataBitReader) throws {
+        self.outOfNetworkIndicator = bitReader.bit() == 1
+        let programSpliceFlag = bitReader.bit() == 1
+        let durationFlag = bitReader.bit() == 1
+        _ = bitReader.bits(count: 5)
+        if programSpliceFlag {
+            self.spliceMode = .programSpliceMode(
+                SpliceMode.ProgramMode(utcSpliceTime: bitReader.uint32(fromBits: 32))
+            )
+        } else {
+            let componentCount = bitReader.byte()
+            self.spliceMode = .componentSpliceMode(
+                (0..<componentCount).map { _ in
+                    let componentTag = bitReader.byte()
+                    let utcSpliceTime = bitReader.uint32(fromBits: 32)
+                    return SpliceMode.ComponentMode(
+                        componentTag: componentTag,
+                        utcSpliceTime: utcSpliceTime
+                    )
+                }
+            )
+        }
+        if durationFlag {
+            self.breakDuration = try BreakDuration(bitReader: bitReader)
+        } else {
+            self.breakDuration = nil
+        }
+        self.uniqueProgramId = bitReader.uint16(fromBits: 16)
+        self.availNum = bitReader.byte()
+        self.availsExpected = bitReader.byte()
     }
 }
