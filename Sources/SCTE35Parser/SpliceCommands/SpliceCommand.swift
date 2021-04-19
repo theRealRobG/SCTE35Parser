@@ -74,7 +74,7 @@ extension SpliceCommand {
         case .spliceNull:
             self = .spliceNull
         case .spliceSchedule:
-            fatalError()
+            self = try .spliceSchedule(SpliceSchedule(bitReader: bitReader))
         case .timeSignal:
             self = .timeSignal(try TimeSignal(bitReader: bitReader))
         case .none:
