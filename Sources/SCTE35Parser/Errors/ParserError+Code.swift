@@ -7,22 +7,22 @@
 
 public extension ParserError {
     enum Code: Int {
-        case unexpectedEndOfData
-        case invalidInputString
-        case invalidSectionSyntaxIndicator
-        case invalidPrivateIndicator
-        case unrecognisedSpliceCommandType
-        case unrecognisedSegmentationUPIDType
-        case unexpectedSegmentationUPIDLength
-        case invalidUUIDInSegmentationUPID
-        case invalidURLInSegmentationUPID
-        case unrecognisedSegmentationTypeID
-        case invalidSegmentationDescriptorIdentifier
-        case invalidATSCContentIdentifierInUPID
-        case invalidMPUInSegmentationUPID
-        case invalidBitStreamMode
-        case unrecognisedAudioCodingMode
-        case unrecognisedSpliceDescriptorTag
-        case encryptedMessageNotSupported
+        case encryptedMessageNotSupported = 0
+        case invalidATSCContentIdentifierInUPID = 100
+        case invalidBitStreamMode = 101
+        case invalidInputString = 102
+        case invalidMPUInSegmentationUPID = 103
+        case invalidPrivateIndicator = 104
+        case invalidSectionSyntaxIndicator = 105
+        case invalidSegmentationDescriptorIdentifier = 106
+        case invalidURLInSegmentationUPID = 107
+        case invalidUUIDInSegmentationUPID = 108
+        case unexpectedEndOfData = 200
+        case unexpectedSegmentationUPIDLength = 201
+        case unrecognisedAudioCodingMode = 300
+        case unrecognisedSegmentationTypeID = 301
+        case unrecognisedSegmentationUPIDType = 302
+        case unrecognisedSpliceCommandType = 303
+        case unrecognisedSpliceDescriptorTag = 304
     }
 }
