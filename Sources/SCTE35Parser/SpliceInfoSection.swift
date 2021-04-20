@@ -250,45 +250,18 @@ public extension SpliceInfoSection {
         self.protocolVersion = bitReader.byte()
         let isEncrypted = bitReader.bit() == 1
         if isEncrypted {
-            fatalError("Currently does not handle encrypted SCTE35")
+            throw ParserError.encryptedMessageNotSupported
         }
-        let encryptionAlgorithm = EncryptedPacket.EncryptionAlgorithm(bitReader.byte(fromBits: 6))
+        let _ /* encryptionAlgorithm */ = EncryptedPacket.EncryptionAlgorithm(bitReader.byte(fromBits: 6))
         self.ptsAdjustment = bitReader.uint64(fromBits: 33)
-        let cwIndex = bitReader.byte()
+        let _ /* cwIndex */ = bitReader.byte()
         self.tier = bitReader.uint16(fromBits: 12)
         let spliceCommandLength = bitReader.int(fromBits: 12)
         self.spliceCommand = try SpliceCommand(bitReader: bitReader, spliceCommandLength: spliceCommandLength)
         let descriptorLoopLength = bitReader.int(fromBits: 16)
         self.spliceDescriptors = try [SpliceDescriptor].init(bitReader: bitReader, descriptorLoopLength: descriptorLoopLength)
         if isEncrypted {
-            let alignmentStuffing: UInt8
-            switch encryptionAlgorithm {
-            case .desCBCMode:
-                alignmentStuffing = bitReader.byte()
-                fatalError("Enryption not handled yet")
-            case .desECBMode:
-                alignmentStuffing = bitReader.byte()
-                fatalError("Enryption not handled yet")
-            case .noEncryption:
-                alignmentStuffing = bitReader.byte()
-                fatalError("Enryption not handled yet")
-            case .none:
-                alignmentStuffing = bitReader.byte()
-                fatalError("Enryption not handled yet")
-            case .tripleDES:
-                alignmentStuffing = bitReader.byte()
-                fatalError("Enryption not handled yet")
-            case .userPrivate:
-                alignmentStuffing = bitReader.byte()
-                fatalError("Enryption not handled yet")
-            }
-            let E_CRC_32 = bitReader.uint32(fromBits: 32)
-            self.encryptedPacket = EncryptedPacket(
-                encryptionAlgorithm: encryptionAlgorithm,
-                cwIndex: cwIndex,
-                alignmentStuffing: alignmentStuffing,
-                E_CRC_32: E_CRC_32
-            )
+            throw ParserError.encryptedMessageNotSupported
         } else {
             self.encryptedPacket = nil
             while bitReader.bitsLeft >= 40 {

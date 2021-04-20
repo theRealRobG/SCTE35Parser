@@ -23,5 +23,6 @@ public extension ParserError {
         case invalidBitStreamMode
         case unrecognisedAudioCodingMode
         case unrecognisedSpliceDescriptorTag
+        case encryptedMessageNotSupported
     }
 }

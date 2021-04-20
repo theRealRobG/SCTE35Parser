@@ -24,23 +24,25 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
     case invalidBitStreamMode(InvalidBitStreamModeErrorInfo)
     case unrecognisedAudioCodingMode(Int)
     case unrecognisedSpliceDescriptorTag(Int)
+    case encryptedMessageNotSupported
     
     public static var errorDomain: String { "SCTE35ParserError" }
     
-    public static var unexpectedEndOfDataUserInfoKey: String { "unexpectedEndOfDataUserInfoKey" }
-    public static var invalidInputStringUserInfoKey: String { "invalidUserInputUserInfoKey" }
-    public static var unrecognisedSpliceCommandTypeUserInfoKey: String { "unrecognisedSpliceCommandTypeUserInfokey" }
-    public static var unrecognisedSegmentationUPIDTypeUserInfoKey: String { "unrecognisedSegmentationUPIDTypeUserInfoKey" }
-    public static var invalidUUIDInSegmentationUPIDUserInfoKey: String { "invalidUUIDInSegmentationUPIDUserInfoKey" }
-    public static var invalidURLInSegmentationUPIDUserInfoKey: String { "invalidURLInSegmentationUPIDUserInfoKey" }
-    public static var unrecognisedSegmentationTypeIDUserInfoKey: String { "unrecognisedSegmentationTypeIDUserInfoKey" }
-    public static var unexpectedSegmentationUPIDLengthUserInfoKey: String { "unexpectedSegmentationUPIDLengthUserInfoKey" }
-    public static var invalidSegmentationDescriptorIdentifierUserInfoKey: String { "invalidSegmentationDescriptorIdentifierUserInfoKey" }
-    public static var invalidATSCContentIdentifierInUPIDUserInfoKey: String { "invalidATSCContentIdentifierInUPIDUserInfoKey" }
-    public static var invalidMPUInSegmentationUPIDUserInfoKey: String { "invalidMPUInSegmentationUPIDUserInfoKey" }
-    public static var invalidBitStreamModeUserInfoKey: String { "invalidBitStreamModeUserInfoKey" }
-    public static var unrecognisedAudioCodingModeUserInfoKey: String { "unrecognisedAudioCodingModeUserInfoKey" }
-    public static var unrecognisedSpliceDescriptorTagUserInfoKey: String { "unrecognisedSpliceDescriptorTagUserInfoKey" }
+    public static let unexpectedEndOfDataUserInfoKey = "unexpectedEndOfDataUserInfoKey"
+    public static let invalidInputStringUserInfoKey = "invalidUserInputUserInfoKey"
+    public static let unrecognisedSpliceCommandTypeUserInfoKey = "unrecognisedSpliceCommandTypeUserInfokey"
+    public static let unrecognisedSegmentationUPIDTypeUserInfoKey = "unrecognisedSegmentationUPIDTypeUserInfoKey"
+    public static let invalidUUIDInSegmentationUPIDUserInfoKey = "invalidUUIDInSegmentationUPIDUserInfoKey"
+    public static let invalidURLInSegmentationUPIDUserInfoKey = "invalidURLInSegmentationUPIDUserInfoKey"
+    public static let unrecognisedSegmentationTypeIDUserInfoKey = "unrecognisedSegmentationTypeIDUserInfoKey"
+    public static let unexpectedSegmentationUPIDLengthUserInfoKey = "unexpectedSegmentationUPIDLengthUserInfoKey"
+    public static let invalidSegmentationDescriptorIdentifierUserInfoKey = "invalidSegmentationDescriptorIdentifierUserInfoKey"
+    public static let invalidATSCContentIdentifierInUPIDUserInfoKey = "invalidATSCContentIdentifierInUPIDUserInfoKey"
+    public static let invalidMPUInSegmentationUPIDUserInfoKey = "invalidMPUInSegmentationUPIDUserInfoKey"
+    public static let invalidBitStreamModeUserInfoKey = "invalidBitStreamModeUserInfoKey"
+    public static let unrecognisedAudioCodingModeUserInfoKey = "unrecognisedAudioCodingModeUserInfoKey"
+    public static let unrecognisedSpliceDescriptorTagUserInfoKey = "unrecognisedSpliceDescriptorTagUserInfoKey"
+    public static let encryptedMessageNotSupportedUserInfoKey = "encryptedMessageNotSupportedUserInfoKey"
     
     public var code: Code {
         switch self {
@@ -60,6 +62,7 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
         case .invalidBitStreamMode: return .invalidBitStreamMode
         case .unrecognisedAudioCodingMode: return .unrecognisedAudioCodingMode
         case .unrecognisedSpliceDescriptorTag: return .unrecognisedSpliceDescriptorTag
+        case .encryptedMessageNotSupported: return .encryptedMessageNotSupported
         }
     }
     
@@ -101,6 +104,8 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
             return "\(type) is an invalid audio coding mode."
         case .unrecognisedSpliceDescriptorTag(let type):
             return "\(type) is an invalid splice descriptor tag."
+        case .encryptedMessageNotSupported:
+            return "Encrypted message is not supported."
         }
     }
     
@@ -142,6 +147,8 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
             return "Value \(type) was obtained for audio coding mode and this does not match any known values."
         case .unrecognisedSpliceDescriptorTag(let type):
             return "Value \(type) was obtained for splice descriptor tag and this does not match any known values."
+        case .encryptedMessageNotSupported:
+            return "The SpliceInfoSection was determined to be encrypted and this is not currently supported"
         }
     }
     
@@ -165,6 +172,7 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
         case .invalidBitStreamMode(let info): return [Self.invalidBitStreamModeUserInfoKey: info]
         case .unrecognisedAudioCodingMode(let type): return [Self.unrecognisedAudioCodingModeUserInfoKey: type]
         case .unrecognisedSpliceDescriptorTag(let type): return [Self.unrecognisedSpliceDescriptorTagUserInfoKey: type]
+        case .encryptedMessageNotSupported: return [:]
         }
     }
 }
