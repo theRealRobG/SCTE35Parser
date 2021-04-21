@@ -12,4 +12,14 @@ public struct UnexpectedEndOfDataErrorInfo: Equatable {
     public let actualBitsLeft: Int
     /// A description of what was being attempted to be parsed that resulted in error.
     public let description: String
+    
+    public init(
+        expectedMinimumBitsLeft: Int,
+        actualBitsLeft: Int,
+        description: String
+    ) {
+        self.expectedMinimumBitsLeft = expectedMinimumBitsLeft
+        self.actualBitsLeft = actualBitsLeft
+        self.description = description
+    }
 }

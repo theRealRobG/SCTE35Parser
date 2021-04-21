@@ -175,4 +175,60 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
         case .encryptedMessageNotSupported: return [:]
         }
     }
+    
+    public init?(fromNSError nsError: NSError) {
+        guard nsError.domain == ParserError.errorDomain, let code = Code(rawValue: nsError.code) else {
+            return nil
+        }
+        switch code {
+        case .encryptedMessageNotSupported:
+            self = .encryptedMessageNotSupported
+        case .invalidATSCContentIdentifierInUPID:
+            guard let info = nsError.userInfo[Self.invalidATSCContentIdentifierInUPIDUserInfoKey] as? InvalidATSCContentIdentifierInUPIDInfo else { return nil }
+            self = .invalidATSCContentIdentifierInUPID(info)
+        case .invalidBitStreamMode:
+            guard let info = nsError.userInfo[Self.invalidBitStreamModeUserInfoKey] as? InvalidBitStreamModeErrorInfo else { return nil }
+            self = .invalidBitStreamMode(info)
+        case .invalidInputString:
+            guard let string = nsError.userInfo[Self.invalidInputStringUserInfoKey] as? String else { return nil }
+            self = .invalidInputString(string)
+        case .invalidMPUInSegmentationUPID:
+            guard let info = nsError.userInfo[Self.invalidMPUInSegmentationUPIDUserInfoKey] as? InvalidMPUInSegmentationUPIDInfo else { return nil }
+            self = .invalidMPUInSegmentationUPID(info)
+        case .invalidPrivateIndicator:
+            self = .invalidPrivateIndicator
+        case .invalidSectionSyntaxIndicator:
+            self = .invalidSectionSyntaxIndicator
+        case .invalidSegmentationDescriptorIdentifier:
+            guard let id = nsError.userInfo[Self.invalidSegmentationDescriptorIdentifierUserInfoKey] as? Int else { return nil }
+            self = .invalidSegmentationDescriptorIdentifier(id)
+        case .invalidURLInSegmentationUPID:
+            guard let string = nsError.userInfo[Self.invalidURLInSegmentationUPIDUserInfoKey] as? String else { return nil }
+            self = .invalidURLInSegmentationUPID(string)
+        case .invalidUUIDInSegmentationUPID:
+            guard let string = nsError.userInfo[Self.invalidUUIDInSegmentationUPIDUserInfoKey] as? String else { return nil }
+            self = .invalidUUIDInSegmentationUPID(string)
+        case .unexpectedEndOfData:
+            guard let info = nsError.userInfo[Self.unexpectedEndOfDataUserInfoKey] as? UnexpectedEndOfDataErrorInfo else { return nil }
+            self = .unexpectedEndOfData(info)
+        case .unexpectedSegmentationUPIDLength:
+            guard let info = nsError.userInfo[Self.unexpectedSegmentationUPIDLengthUserInfoKey] as? UnexpectedSegmentationUPIDLengthErrorInfo else { return nil }
+            self = .unexpectedSegmentationUPIDLength(info)
+        case .unrecognisedAudioCodingMode:
+            guard let mode = nsError.userInfo[Self.unrecognisedAudioCodingModeUserInfoKey] as? Int else { return nil }
+            self = .unrecognisedAudioCodingMode(mode)
+        case .unrecognisedSegmentationTypeID:
+            guard let id = nsError.userInfo[Self.unrecognisedSegmentationTypeIDUserInfoKey] as? Int else { return nil }
+            self = .unrecognisedSegmentationTypeID(id)
+        case .unrecognisedSegmentationUPIDType:
+            guard let id = nsError.userInfo[Self.unrecognisedSegmentationUPIDTypeUserInfoKey] as? Int else { return nil }
+            self = .unrecognisedSegmentationUPIDType(id)
+        case .unrecognisedSpliceCommandType:
+            guard let id = nsError.userInfo[Self.unrecognisedSpliceCommandTypeUserInfoKey] as? Int else { return nil }
+            self = .unrecognisedSpliceCommandType(id)
+        case .unrecognisedSpliceDescriptorTag:
+            guard let id = nsError.userInfo[Self.unrecognisedSpliceDescriptorTagUserInfoKey] as? Int else { return nil }
+            self = .unrecognisedSpliceDescriptorTag(id)
+        }
+    }
 }
