@@ -43,11 +43,24 @@ public struct DTMFDescriptor: Equatable {
 extension DTMFDescriptor {
     // NOTE: It is assumed that the splice_descriptor_tag has already been read.
     init(bitReader: DataBitReader) throws {
-        _ = bitReader.byte()
+        let descriptorLength = bitReader.byte()
+        let bitsReadBeforeDescriptor = bitReader.bitsRead
+        let expectedBitsReadAtEndOfDescriptor = bitReader.bitsRead + Int(descriptorLength * 8)
         self.identifier = bitReader.uint32(fromBits: 32)
         self.preroll = bitReader.byte()
         let dtmfCount = bitReader.byte(fromBits: 3)
         _ = bitReader.bits(count: 5)
         self.dtmfChars = bitReader.string(fromBytes: UInt(dtmfCount))
+        if bitReader.bitsRead != expectedBitsReadAtEndOfDescriptor {
+            bitReader.nonFatalErrors.append(
+                .unexpectedSpliceDescriptorLength(
+                    UnexpectedSpliceDescriptorLengthErrorInfo(
+                        declaredSpliceDescriptorLengthInBits: Int(descriptorLength * 8),
+                        actualSpliceDescriptorLengthInBits: bitReader.bitsRead - bitsReadBeforeDescriptor,
+                        spliceDescriptorTag: .dtmfDescriptor
+                    )
+                )
+            )
+        }
     }
 }

@@ -26,6 +26,8 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
     case unrecognisedSpliceDescriptorTag(Int)
     case encryptedMessageNotSupported
     case unexpectedSpliceCommandLength(UnexpectedSpliceCommandLengthErrorInfo)
+    case unexpectedDescriptorLoopLength(UnexpectedDescriptorLoopLengthErrorInfo)
+    case unexpectedSpliceDescriptorLength(UnexpectedSpliceDescriptorLengthErrorInfo)
     
     public static var errorDomain: String { "SCTE35ParserError" }
     
@@ -45,6 +47,8 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
     public static let unrecognisedSpliceDescriptorTagUserInfoKey = "unrecognisedSpliceDescriptorTagUserInfoKey"
     public static let encryptedMessageNotSupportedUserInfoKey = "encryptedMessageNotSupportedUserInfoKey"
     public static let unexpectedSpliceCommandLengthUserInfoKey = "unexpectedSpliceCommandLengthUserInfoKey"
+    public static let unexpectedDescriptorLoopLengthUserInfoKey = "unexpectedDescriptorLoopLengthUserInfoKey"
+    public static let unexpectedSpliceDescriptorLengthUserInfoKey = "unexpectedSpliceDescriptorLengthUserInfoKey"
     
     public var code: Code {
         switch self {
@@ -66,6 +70,8 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
         case .unrecognisedSpliceDescriptorTag: return .unrecognisedSpliceDescriptorTag
         case .encryptedMessageNotSupported: return .encryptedMessageNotSupported
         case .unexpectedSpliceCommandLength: return .unexpectedSpliceCommandLength
+        case .unexpectedDescriptorLoopLength: return .unexpectedDescriptorLoopLength
+        case .unexpectedSpliceDescriptorLength: return .unexpectedSpliceDescriptorLength
         }
     }
     
@@ -111,6 +117,10 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
             return "Encrypted message is not supported."
         case .unexpectedSpliceCommandLength:
             return "Unexpected mis-match between declared splice command length and number of bits required to parse the command."
+        case .unexpectedDescriptorLoopLength:
+            return "Unexpected mis-match between declared descriptor loop length and number of bits required to parse the array of splice descriptors."
+        case .unexpectedSpliceDescriptorLength:
+            return "Unexpected mis-match between declared splice descriptor length and number of bits required to parse the descriptor."
         }
     }
     
@@ -155,7 +165,11 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
         case .encryptedMessageNotSupported:
             return "The SpliceInfoSection was determined to be encrypted and this is not currently supported"
         case .unexpectedSpliceCommandLength(let info):
-            return "Declared splice command length was \(info.declaredSpliceCommandLengthInBits) bits; however, number of bits needed to parse the section was \(info.actualSpliceCommandLengthInBits)."
+            return "Declared splice command (\(info.spliceCommandType.rawValue)) length was \(info.declaredSpliceCommandLengthInBits) bits; however, number of bits needed to parse the section was \(info.actualSpliceCommandLengthInBits)."
+        case .unexpectedDescriptorLoopLength(let info):
+            return "Declared descriptor loop length was \(info.declaredDescriptorLoopLengthInBits) bits; however, number of bits needed to parse the array was \(info.actualDescriptorLoopLengthInBits)."
+        case .unexpectedSpliceDescriptorLength(let info):
+            return "Declared splice descriptor (\(info.spliceDescriptorTag.rawValue)) length was \(info.declaredSpliceDescriptorLengthInBits) bits; however, number of bits needed to parse the descriptor was \(info.actualSpliceDescriptorLengthInBits)."
         }
     }
     
@@ -181,6 +195,8 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
         case .unrecognisedSpliceDescriptorTag(let type): return [Self.unrecognisedSpliceDescriptorTagUserInfoKey: type]
         case .encryptedMessageNotSupported: return [:]
         case .unexpectedSpliceCommandLength(let info): return [Self.unexpectedSpliceCommandLengthUserInfoKey: info]
+        case .unexpectedDescriptorLoopLength(let info): return [Self.unexpectedDescriptorLoopLengthUserInfoKey: info]
+        case .unexpectedSpliceDescriptorLength(let info): return [Self.unexpectedSpliceDescriptorLengthUserInfoKey: info]
         }
     }
     
@@ -240,6 +256,12 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
         case .unexpectedSpliceCommandLength:
             guard let info = nsError.userInfo[Self.unexpectedSpliceCommandLengthUserInfoKey] as? UnexpectedSpliceCommandLengthErrorInfo else { return nil }
             self = .unexpectedSpliceCommandLength(info)
+        case .unexpectedDescriptorLoopLength:
+            guard let info = nsError.userInfo[Self.unexpectedDescriptorLoopLengthUserInfoKey] as? UnexpectedDescriptorLoopLengthErrorInfo else { return nil }
+            self = .unexpectedDescriptorLoopLength(info)
+        case .unexpectedSpliceDescriptorLength:
+            guard let info = nsError.userInfo[Self.unexpectedSpliceDescriptorLengthUserInfoKey] as? UnexpectedSpliceDescriptorLengthErrorInfo else { return nil }
+            self = .unexpectedSpliceDescriptorLength(info)
         }
     }
 }

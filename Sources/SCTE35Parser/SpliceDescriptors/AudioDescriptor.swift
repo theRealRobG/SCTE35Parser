@@ -111,11 +111,24 @@ public extension AudioDescriptor {
 extension AudioDescriptor {
     // NOTE: It is assumed that the splice_descriptor_tag has already been read.
     init(bitReader: DataBitReader) throws {
-        _ = bitReader.byte()
+        let descriptorLength = bitReader.byte()
+        let bitsReadBeforeDescriptor = bitReader.bitsRead
+        let expectedBitsReadAtEndOfDescriptor = bitReader.bitsRead + Int(descriptorLength * 8)
         self.identifier = bitReader.uint32(fromBits: 32)
         let audioCount = bitReader.byte(fromBits: 4)
         _ = bitReader.bits(count: 4)
         self.components = try (0..<audioCount).map { _ in try Component(bitReader: bitReader) }
+        if bitReader.bitsRead != expectedBitsReadAtEndOfDescriptor {
+            bitReader.nonFatalErrors.append(
+                .unexpectedSpliceDescriptorLength(
+                    UnexpectedSpliceDescriptorLengthErrorInfo(
+                        declaredSpliceDescriptorLengthInBits: Int(descriptorLength * 8),
+                        actualSpliceDescriptorLengthInBits: bitReader.bitsRead - bitsReadBeforeDescriptor,
+                        spliceDescriptorTag: .audioDescriptor
+                    )
+                )
+            )
+        }
     }
 }
 

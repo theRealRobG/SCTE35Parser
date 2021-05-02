@@ -64,10 +64,23 @@ public struct TimeDescriptor: Equatable {
 extension TimeDescriptor {
     // NOTE: It is assumed that the splice_descriptor_tag has already been read.
     init(bitReader: DataBitReader) throws {
-        _ = bitReader.byte()
+        let descriptorLength = bitReader.byte()
+        let bitsReadBeforeDescriptor = bitReader.bitsRead
+        let expectedBitsReadAtEndOfDescriptor = bitReader.bitsRead + Int(descriptorLength * 8)
         self.identifier = bitReader.uint32(fromBits: 32)
         self.taiSeconds = bitReader.uint64(fromBits: 48)
         self.taiNS = bitReader.uint32(fromBits: 32)
         self.utcOffset = bitReader.uint16(fromBits: 16)
+        if bitReader.bitsRead != expectedBitsReadAtEndOfDescriptor {
+            bitReader.nonFatalErrors.append(
+                .unexpectedSpliceDescriptorLength(
+                    UnexpectedSpliceDescriptorLengthErrorInfo(
+                        declaredSpliceDescriptorLengthInBits: Int(descriptorLength * 8),
+                        actualSpliceDescriptorLengthInBits: bitReader.bitsRead - bitsReadBeforeDescriptor,
+                        spliceDescriptorTag: .timeDescriptor
+                    )
+                )
+            )
+        }
     }
 }

@@ -110,4 +110,36 @@ class ParserErrorTests: XCTestCase {
         expectedError = .unrecognisedSpliceDescriptorTag(0x10)
         XCTAssertEqual(expectedError, ParserError(fromNSError: expectedError as NSError))
     }
+    
+    func test_initFromNSError_unexpectedSpliceCommandLength() {
+        expectedError = .unexpectedSpliceCommandLength(
+            UnexpectedSpliceCommandLengthErrorInfo(
+                declaredSpliceCommandLengthInBits: 16,
+                actualSpliceCommandLengthInBits: 32,
+                spliceCommandType: .timeSignal
+            )
+        )
+        XCTAssertEqual(expectedError, ParserError(fromNSError: expectedError as NSError))
+    }
+    
+    func test_initFromNSError_unexpectedDescriptorLoopLength() {
+        expectedError = .unexpectedDescriptorLoopLength(
+            UnexpectedDescriptorLoopLengthErrorInfo(
+                declaredDescriptorLoopLengthInBits: 32,
+                actualDescriptorLoopLengthInBits: 64
+            )
+        )
+        XCTAssertEqual(expectedError, ParserError(fromNSError: expectedError as NSError))
+    }
+    
+    func test_initFromNSError_unexpectedSpliceDescriptorLength() {
+        expectedError = .unexpectedSpliceDescriptorLength(
+            UnexpectedSpliceDescriptorLengthErrorInfo(
+                declaredSpliceDescriptorLengthInBits: 16,
+                actualSpliceDescriptorLengthInBits: 32,
+                spliceDescriptorTag: .availDescriptor
+            )
+        )
+        XCTAssertEqual(expectedError, ParserError(fromNSError: expectedError as NSError))
+    }
 }

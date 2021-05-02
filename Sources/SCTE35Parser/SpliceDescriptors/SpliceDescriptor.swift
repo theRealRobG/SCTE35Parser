@@ -102,13 +102,23 @@ extension Array where Element == SpliceDescriptor {
             expectedMinimumBitsLeft: descriptorLoopLength * 8,
             parseDescription: "SpliceDescriptor; reading loop"
         )
-        
+        let bitsReadBeforeDescriptorLoop = bitReader.bitsRead
         let expectedEnd = bitReader.bitsRead + (descriptorLoopLength * 8)
         var spliceDescriptors = [SpliceDescriptor]()
         while bitReader.bitsRead < expectedEnd {
             try spliceDescriptors.append(SpliceDescriptor(bitReader: bitReader))
         }
         self = spliceDescriptors
+        if bitReader.bitsRead != expectedEnd {
+            bitReader.nonFatalErrors.append(
+                .unexpectedDescriptorLoopLength(
+                    UnexpectedDescriptorLoopLengthErrorInfo(
+                        declaredDescriptorLoopLengthInBits: descriptorLoopLength * 8,
+                        actualDescriptorLoopLengthInBits: bitReader.bitsRead - bitsReadBeforeDescriptorLoop
+                    )
+                )
+            )
+        }
     }
 }
 

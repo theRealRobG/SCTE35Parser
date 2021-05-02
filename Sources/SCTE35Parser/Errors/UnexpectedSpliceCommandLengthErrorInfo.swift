@@ -11,12 +11,16 @@ public struct UnexpectedSpliceCommandLengthErrorInfo: Equatable {
     public let declaredSpliceCommandLengthInBits: Int
     /// This is the number of bits that the SpliceCommand actually had after parsing had completed.
     public let actualSpliceCommandLengthInBits: Int
+    /// The type of the splice command
+    public let spliceCommandType: SpliceCommandType
     
     public init(
         declaredSpliceCommandLengthInBits: Int,
-        actualSpliceCommandLengthInBits: Int
+        actualSpliceCommandLengthInBits: Int,
+        spliceCommandType: SpliceCommandType
     ) {
         self.declaredSpliceCommandLengthInBits = declaredSpliceCommandLengthInBits
         self.actualSpliceCommandLengthInBits = actualSpliceCommandLengthInBits
+        self.spliceCommandType = spliceCommandType
     }
 }

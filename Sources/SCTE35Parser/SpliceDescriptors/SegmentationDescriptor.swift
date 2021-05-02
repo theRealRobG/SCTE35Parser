@@ -191,10 +191,8 @@ extension SegmentationDescriptor {
     // NOTE: It is assumed that the splice_descriptor_tag has already been read.
     init(bitReader: DataBitReader) throws {
         let descriptorLength = bitReader.int(fromBytes: 1)
-        try bitReader.validate(
-            expectedMinimumBitsLeft: descriptorLength * 8,
-            parseDescription: "SegmentationDescriptor; descriptor length"
-        )
+        let bitsReadBeforeDescriptor = bitReader.bitsRead
+        let expectedBitsReadAtEndOfDescriptor = bitReader.bitsRead + descriptorLength * 8
         let bitsLeftAfterDescriptor = bitReader.bitsLeft - (descriptorLength * 8)
         self.identifier = bitReader.uint32(fromBits: 32)
         guard self.identifier == 1129661769 else {
@@ -207,6 +205,17 @@ extension SegmentationDescriptor {
             self.scheduledEvent = nil
         } else {
             self.scheduledEvent = try ScheduledEvent(bitReader: bitReader, bitsLeftAfterDescriptor: bitsLeftAfterDescriptor)
+        }
+        if bitReader.bitsRead != expectedBitsReadAtEndOfDescriptor {
+            bitReader.nonFatalErrors.append(
+                .unexpectedSpliceDescriptorLength(
+                    UnexpectedSpliceDescriptorLengthErrorInfo(
+                        declaredSpliceDescriptorLengthInBits: Int(descriptorLength * 8),
+                        actualSpliceDescriptorLengthInBits: bitReader.bitsRead - bitsReadBeforeDescriptor,
+                        spliceDescriptorTag: .segmentationDescriptor
+                    )
+                )
+            )
         }
     }
 }

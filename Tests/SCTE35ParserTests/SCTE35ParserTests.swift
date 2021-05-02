@@ -1137,7 +1137,8 @@ final class SCTE35ParserTests: XCTestCase {
                 .unexpectedSpliceCommandLength(
                     UnexpectedSpliceCommandLengthErrorInfo(
                         declaredSpliceCommandLengthInBits: 32760,
-                        actualSpliceCommandLengthInBits: 160
+                        actualSpliceCommandLengthInBits: 160,
+                        spliceCommandType: .spliceInsert
                     )
                 )
             ]
@@ -1332,7 +1333,8 @@ final class SCTE35ParserTests: XCTestCase {
                 .unexpectedSpliceCommandLength(
                     UnexpectedSpliceCommandLengthErrorInfo(
                         declaredSpliceCommandLengthInBits: 32760,
-                        actualSpliceCommandLengthInBits: 0
+                        actualSpliceCommandLengthInBits: 0,
+                        spliceCommandType: .spliceNull
                     )
                 )
             ]
