@@ -30,6 +30,14 @@ public struct BreakDuration: Equatable {
     /// A 33-bit field that indicates elapsed time in terms of ticks of the program's 90 kHz
     /// clock.
     public let duration: UInt64
+    
+    public init(
+        autoReturn: Bool,
+        duration: UInt64
+    ) {
+        self.autoReturn = autoReturn
+        self.duration = duration
+    }
 }
 
 // MARK: - Parsing

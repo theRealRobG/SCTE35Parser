@@ -1,5 +1,5 @@
 import XCTest
-@testable import SCTE35Parser
+import SCTE35Parser
 
 final class SCTE35ParserTests: XCTestCase {
     // MARK: - SCTE-35 2020 - 14. Sample SCTE 35 Messages (Informative)

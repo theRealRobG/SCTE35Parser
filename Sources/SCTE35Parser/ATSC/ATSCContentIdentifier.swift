@@ -49,6 +49,18 @@ public struct ATSCContentIdentifier: Equatable {
     /// readable and/or binary values and need not exactly match the form of a house number, not
     /// to exceed 242 bytes.
     public let contentID: String
+    
+    public init(
+        tsid: UInt16,
+        endOfDay: UInt8,
+        uniqueFor: UInt16,
+        contentID: String
+    ) {
+        self.tsid = tsid
+        self.endOfDay = endOfDay
+        self.uniqueFor = uniqueFor
+        self.contentID = contentID
+    }
 }
 
 // MARK: - Parsing

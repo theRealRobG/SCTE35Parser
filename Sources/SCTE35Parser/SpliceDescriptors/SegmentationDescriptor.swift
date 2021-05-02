@@ -72,6 +72,16 @@ public struct SegmentationDescriptor: Equatable {
     /// When set to `true` indicates that a previously sent segmentation descriptor, identified by
     /// `eventId`, has been cancelled.
     public var isCancelled: Bool { scheduledEvent == nil }
+    
+    public init(
+        identifier: UInt32,
+        eventId: UInt32,
+        scheduledEvent: ScheduledEvent?
+    ) {
+        self.identifier = identifier
+        self.eventId = eventId
+        self.scheduledEvent = scheduledEvent
+    }
 }
 
 public extension SegmentationDescriptor {
@@ -109,6 +119,26 @@ public extension SegmentationDescriptor {
         public let segmentsExpected: UInt8
         /// Provides information for a collection of sub-Segments.
         public let subSegment: SubSegment?
+        
+        public init(
+            deliveryRestrictions: DeliveryRestrictions?,
+            componentSegments: [ComponentSegmentation]?,
+            segmentationDuration: UInt64?,
+            segmentationUPID: SegmentationUPID,
+            segmentationTypeID: SegmentationTypeID,
+            segmentNum: UInt8,
+            segmentsExpected: UInt8,
+            subSegment: SubSegment?
+        ) {
+            self.deliveryRestrictions = deliveryRestrictions
+            self.componentSegments = componentSegments
+            self.segmentationDuration = segmentationDuration
+            self.segmentationUPID = segmentationUPID
+            self.segmentationTypeID = segmentationTypeID
+            self.segmentNum = segmentNum
+            self.segmentsExpected = segmentsExpected
+            self.subSegment = subSegment
+        }
     }
 }
 
@@ -132,6 +162,18 @@ public extension SegmentationDescriptor.ScheduledEvent {
         /// independent and the groups are non-hierarchical. The delivery and format of the messaging to
         /// define the devices contained in the groups is out of the scope of this standard.
         public let deviceRestrictions: DeviceRestrictions
+        
+        public init(
+            webDeliveryAllowed: Bool,
+            noRegionalBlackout: Bool,
+            archiveAllowed: Bool,
+            deviceRestrictions: DeviceRestrictions
+        ) {
+            self.webDeliveryAllowed = webDeliveryAllowed
+            self.noRegionalBlackout = noRegionalBlackout
+            self.archiveAllowed = archiveAllowed
+            self.deviceRestrictions = deviceRestrictions
+        }
     }
 }
 
@@ -169,6 +211,14 @@ public extension SegmentationDescriptor.ScheduledEvent {
         /// is carried with does not have a `SpliceTime` field, this field shall be used to offset the
         /// derived immediate splice time.
         public let ptsOffset: UInt64
+        
+        public init(
+            componentTag: UInt8,
+            ptsOffset: UInt64
+        ) {
+            self.componentTag = componentTag
+            self.ptsOffset = ptsOffset
+        }
     }
 }
 
@@ -182,6 +232,14 @@ public extension SegmentationDescriptor.ScheduledEvent {
         /// If specified, this field provides a count of the expected number of individual sub-Segments
         /// within the collection of sub-Segments.
         public let subSegmentsExpected: UInt8
+        
+        public init(
+            subSegmentNum: UInt8,
+            subSegmentsExpected: UInt8
+        ) {
+            self.subSegmentNum = subSegmentNum
+            self.subSegmentsExpected = subSegmentsExpected
+        }
     }
 }
 

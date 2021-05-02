@@ -41,6 +41,10 @@
  */
 public struct SpliceSchedule: Equatable {
     public let events: [SpliceSchedule.Event]
+    
+    public init(events: [SpliceSchedule.Event]) {
+        self.events = events
+    }
 }
 
 public extension SpliceSchedule {
@@ -53,6 +57,14 @@ public extension SpliceSchedule {
         /// When set to `true` indicates that a previously sent splice event, identified by `eventId`,
         /// has been cancelled.
         public var isCancelled: Bool { scheduledEvent == nil }
+        
+        public init(
+            eventId: UInt32,
+            scheduledEvent: ScheduledEvent?
+        ) {
+            self.eventId = eventId
+            self.scheduledEvent = scheduledEvent
+        }
     }
 }
 
@@ -82,6 +94,22 @@ public extension SpliceSchedule.Event {
         /// current viewing event. When this field is zero, it indicates that the `availNum` field
         /// has no meaning.
         public let availsExpected: UInt8
+        
+        public init(
+            outOfNetworkIndicator: Bool,
+            spliceMode: SpliceMode,
+            breakDuration: BreakDuration?,
+            uniqueProgramId: UInt16,
+            availNum: UInt8,
+            availsExpected: UInt8
+        ) {
+            self.outOfNetworkIndicator = outOfNetworkIndicator
+            self.spliceMode = spliceMode
+            self.breakDuration = breakDuration
+            self.uniqueProgramId = uniqueProgramId
+            self.availNum = availNum
+            self.availsExpected = availsExpected
+        }
     }
 }
 
@@ -107,6 +135,10 @@ public extension SpliceSchedule.Event.ScheduledEvent.SpliceMode {
         /// converted to UTC without the use of the GPS_UTC_offset value provided by the System Time
         /// table. The `utcSpliceTime` field is used only in the `SpliceSchedule` command.
         public let utcSpliceTime: UInt32
+        
+        public init(utcSpliceTime: UInt32) {
+            self.utcSpliceTime = utcSpliceTime
+        }
     }
     
     /// Indicates that the mode is the Component Splice Mode whereby each component that is
@@ -123,6 +155,14 @@ public extension SpliceSchedule.Event.ScheduledEvent.SpliceMode {
         /// converted to UTC without the use of the GPS_UTC_offset value provided by the System Time
         /// table. The `utcSpliceTime` field is used only in the `SpliceSchedule` command.
         public let utcSpliceTime: UInt32
+        
+        public init(
+            componentTag: UInt8,
+            utcSpliceTime: UInt32
+        ) {
+            self.componentTag = componentTag
+            self.utcSpliceTime = utcSpliceTime
+        }
     }
 }
 

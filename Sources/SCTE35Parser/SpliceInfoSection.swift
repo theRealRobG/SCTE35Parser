@@ -214,6 +214,18 @@ public extension SpliceInfoSection {
         /// performed successfully. Hence, the zero output is obtained following decryption and by
         /// processing the fields `SpliceCommandType` through `E_CRC_32`.
         public let E_CRC_32: UInt32
+        
+        public init(
+            encryptionAlgorithm: EncryptionAlgorithm?,
+            cwIndex: UInt8,
+            alignmentStuffing: UInt8,
+            E_CRC_32: UInt32
+        ) {
+            self.encryptionAlgorithm = encryptionAlgorithm
+            self.cwIndex = cwIndex
+            self.alignmentStuffing = alignmentStuffing
+            self.E_CRC_32 = E_CRC_32
+        }
     }
 }
 

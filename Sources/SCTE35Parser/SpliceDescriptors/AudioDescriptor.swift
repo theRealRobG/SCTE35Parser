@@ -37,6 +37,14 @@ public struct AudioDescriptor: Equatable {
     public let identifier: UInt32
     /// The audio PIDs in the program.
     public let components: [Component]
+    
+    public init(
+        identifier: UInt32,
+        components: [Component]
+    ) {
+        self.identifier = identifier
+        self.components = components
+    }
 }
 
 public extension AudioDescriptor {
@@ -69,6 +77,20 @@ public extension AudioDescriptor {
         /// description of the visual Program content and which needs to be combined with another audio
         /// service which contains music, effects, and dialogue).”
         public let fullSrvcAudio: Bool
+        
+        public init(
+            componentTag: UInt8,
+            isoCode: UInt32,
+            bitStreamMode: BitStreamMode,
+            numChannels: NumChannels,
+            fullSrvcAudio: Bool
+        ) {
+            self.componentTag = componentTag
+            self.isoCode = isoCode
+            self.bitStreamMode = bitStreamMode
+            self.numChannels = numChannels
+            self.fullSrvcAudio = fullSrvcAudio
+        }
     }
 }
 

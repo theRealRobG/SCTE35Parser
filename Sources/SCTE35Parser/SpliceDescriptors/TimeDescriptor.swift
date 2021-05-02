@@ -57,6 +57,18 @@ public struct TimeDescriptor: Equatable {
     /// NTP seconds = TAI seconds - UTC_offset + 2,208,988,800
     /// ```
     public let utcOffset: UInt16
+    
+    public init(
+        identifier: UInt32,
+        taiSeconds: UInt64,
+        taiNS: UInt32,
+        utcOffset: UInt16
+    ) {
+        self.identifier = identifier
+        self.taiSeconds = taiSeconds
+        self.taiNS = taiNS
+        self.utcOffset = utcOffset
+    }
 }
 
 // MARK: - Parsing

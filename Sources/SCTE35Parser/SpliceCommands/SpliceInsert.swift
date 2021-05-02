@@ -46,6 +46,14 @@ public struct SpliceInsert: Equatable {
     /// When set to `true` indicates that a previously sent splice event, identified by `eventId`,
     /// has been cancelled.
     public var isCancelled: Bool { scheduledEvent == nil }
+    
+    public init(
+        eventId: UInt32,
+        scheduledEvent: ScheduledEvent?
+    ) {
+        self.eventId = eventId
+        self.scheduledEvent = scheduledEvent
+    }
 }
 
 public extension SpliceInsert {
@@ -84,6 +92,24 @@ public extension SpliceInsert {
         /// current viewing event. When this field is zero, it indicates that the `availNum` field
         /// has no meaning.
         public let availsExpected: UInt8
+        
+        public init(
+            outOfNetworkIndicator: Bool,
+            isImmediateSplice: Bool,
+            spliceMode: SpliceMode,
+            breakDuration: BreakDuration?,
+            uniqueProgramId: UInt16,
+            availNum: UInt8,
+            availsExpected: UInt8
+        ) {
+            self.outOfNetworkIndicator = outOfNetworkIndicator
+            self.isImmediateSplice = isImmediateSplice
+            self.spliceMode = spliceMode
+            self.breakDuration = breakDuration
+            self.uniqueProgramId = uniqueProgramId
+            self.availNum = availNum
+            self.availsExpected = availsExpected
+        }
     }
 }
 
@@ -106,6 +132,10 @@ public extension SpliceInsert.ScheduledEvent.SpliceMode {
         /// The `SpliceTime` structure, when modified by `ptsAdjustment`, specifies the time of the
         /// splice event.
         public let spliceTime: SpliceTime?
+        
+        public init(spliceTime: SpliceTime?) {
+            self.spliceTime = spliceTime
+        }
     }
     
     /// Indicates that the mode is the Component Splice Mode whereby each component that is
@@ -119,6 +149,14 @@ public extension SpliceInsert.ScheduledEvent.SpliceMode {
         /// The `SpliceTime` structure, when modified by `ptsAdjustment`, specifies the time of the
         /// splice event.
         public let spliceTime: SpliceTime?
+        
+        public init(
+            componentTag: UInt8,
+            spliceTime: SpliceTime?
+        ) {
+            self.componentTag = componentTag
+            self.spliceTime = spliceTime
+        }
     }
 }
 

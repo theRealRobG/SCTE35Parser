@@ -36,6 +36,16 @@ public struct DTMFDescriptor: Equatable {
     /// DTMF sequence to be output on an analogue output. The string shall complete with the last
     /// character sent being the timing mark for the `preroll`.
     public let dtmfChars: String
+    
+    public init(
+        identifier: UInt32,
+        preroll: UInt8,
+        dtmfChars: String
+    ) {
+        self.identifier = identifier
+        self.preroll = preroll
+        self.dtmfChars = dtmfChars
+    }
 }
 
 // MARK: - Parsing

@@ -30,6 +30,14 @@ public struct AvailDescriptor: Equatable {
     /// tones. An example would be a network directing an affiliate or a head-end to black out a sporting
     /// event.
     public let providerAvailId: UInt32
+    
+    public init(
+        identifier: UInt32,
+        providerAvailId: UInt32
+    ) {
+        self.identifier = identifier
+        self.providerAvailId = providerAvailId
+    }
 }
 
 // MARK: - Parsing

@@ -32,6 +32,10 @@ public struct TimeSignal: Equatable {
     /// In this specific case, this is a computed property, that is `true` when
     /// `spliceTime.ptsTime == nil`
     public var isImmediate: Bool { spliceTime.ptsTime == nil }
+    
+    public init(spliceTime: SpliceTime) {
+        self.spliceTime = spliceTime
+    }
 }
 
 // MARK: - Parsing

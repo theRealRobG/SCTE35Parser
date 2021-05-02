@@ -31,6 +31,14 @@ public struct PrivateCommand: Equatable {
     /// The remainder of the descriptor is dedicated to data fields as required by the descriptor being
     /// defined.
     public let privateBytes: [UInt8]
+    
+    public init(
+        identifier: String,
+        privateBytes: [UInt8]
+    ) {
+        self.identifier = identifier
+        self.privateBytes = privateBytes
+    }
 }
 
 // MARK: - Parsing
