@@ -25,6 +25,7 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
     case unrecognisedAudioCodingMode(Int)
     case unrecognisedSpliceDescriptorTag(Int)
     case encryptedMessageNotSupported
+    case unexpectedSpliceCommandLength(UnexpectedSpliceCommandLengthErrorInfo)
     
     public static var errorDomain: String { "SCTE35ParserError" }
     
@@ -43,6 +44,7 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
     public static let unrecognisedAudioCodingModeUserInfoKey = "unrecognisedAudioCodingModeUserInfoKey"
     public static let unrecognisedSpliceDescriptorTagUserInfoKey = "unrecognisedSpliceDescriptorTagUserInfoKey"
     public static let encryptedMessageNotSupportedUserInfoKey = "encryptedMessageNotSupportedUserInfoKey"
+    public static let unexpectedSpliceCommandLengthUserInfoKey = "unexpectedSpliceCommandLengthUserInfoKey"
     
     public var code: Code {
         switch self {
@@ -63,6 +65,7 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
         case .unrecognisedAudioCodingMode: return .unrecognisedAudioCodingMode
         case .unrecognisedSpliceDescriptorTag: return .unrecognisedSpliceDescriptorTag
         case .encryptedMessageNotSupported: return .encryptedMessageNotSupported
+        case .unexpectedSpliceCommandLength: return .unexpectedSpliceCommandLength
         }
     }
     
@@ -106,6 +109,8 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
             return "\(type) is an invalid splice descriptor tag."
         case .encryptedMessageNotSupported:
             return "Encrypted message is not supported."
+        case .unexpectedSpliceCommandLength:
+            return "Unexpected mis-match between declared splice command length and number of bits required to parse the command."
         }
     }
     
@@ -149,6 +154,8 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
             return "Value \(type) was obtained for splice descriptor tag and this does not match any known values."
         case .encryptedMessageNotSupported:
             return "The SpliceInfoSection was determined to be encrypted and this is not currently supported"
+        case .unexpectedSpliceCommandLength(let info):
+            return "Declared splice command length was \(info.declaredSpliceCommandLengthInBits) bits; however, number of bits needed to parse the section was \(info.actualSpliceCommandLengthInBits)."
         }
     }
     
@@ -173,6 +180,7 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
         case .unrecognisedAudioCodingMode(let type): return [Self.unrecognisedAudioCodingModeUserInfoKey: type]
         case .unrecognisedSpliceDescriptorTag(let type): return [Self.unrecognisedSpliceDescriptorTagUserInfoKey: type]
         case .encryptedMessageNotSupported: return [:]
+        case .unexpectedSpliceCommandLength(let info): return [Self.unexpectedSpliceCommandLengthUserInfoKey: info]
         }
     }
     
@@ -229,6 +237,9 @@ public enum ParserError: Equatable, LocalizedError, CustomNSError {
         case .unrecognisedSpliceDescriptorTag:
             guard let id = nsError.userInfo[Self.unrecognisedSpliceDescriptorTagUserInfoKey] as? Int else { return nil }
             self = .unrecognisedSpliceDescriptorTag(id)
+        case .unexpectedSpliceCommandLength:
+            guard let info = nsError.userInfo[Self.unexpectedSpliceCommandLengthUserInfoKey] as? UnexpectedSpliceCommandLengthErrorInfo else { return nil }
+            self = .unexpectedSpliceCommandLength(info)
         }
     }
 }

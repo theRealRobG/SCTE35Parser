@@ -19,6 +19,7 @@ public extension ParserError {
         case invalidUUIDInSegmentationUPID = 108
         case unexpectedEndOfData = 200
         case unexpectedSegmentationUPIDLength = 201
+        case unexpectedSpliceCommandLength = 202
         case unrecognisedAudioCodingMode = 300
         case unrecognisedSegmentationTypeID = 301
         case unrecognisedSegmentationUPIDType = 302

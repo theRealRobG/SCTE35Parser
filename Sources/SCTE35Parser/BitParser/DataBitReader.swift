@@ -8,6 +8,10 @@
 import BitByteData
 
 protocol DataBitReader: BitReader {
+    /// A list of errors that have not caused the message to be un-parsable, but are inconsistent with the
+    /// specification. An example of this could be a splice command who's computed length after parsing did
+    /// not match the indicated length of the command.
+    var nonFatalErrors: [ParserError] { get set }
     /// Validate that at least the expected minimum number of bits are left to read from the data.
     /// - Parameters:
     ///   - expectedMinimumBitsLeft: The minimum expected bits left to read from the data.
@@ -33,5 +37,3 @@ extension DataBitReader {
         return String(self.bytes(count: Int(bytes)).map { Character(UnicodeScalar($0)) })
     }
 }
-
-extension MsbBitReader: DataBitReader {}

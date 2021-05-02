@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import BitByteData
 
 /**
  ```
@@ -104,6 +103,10 @@ public struct SpliceInfoSection: Equatable {
     /// prior to decryption of the encrypted fields and shall utilize the encrypted fields in their
     /// encrypted state.
     public let CRC_32: UInt32
+    /// A list of errors that have not caused the message to be un-parsable, but are inconsistent with the
+    /// specification. An example of this could be a splice command who's computed length after parsing did
+    /// not match the indicated length of the command.
+    public let nonFatalErrors: [ParserError]
     
     public init(
         tableID: UInt8,
@@ -114,7 +117,8 @@ public struct SpliceInfoSection: Equatable {
         tier: UInt16,
         spliceCommand: SpliceCommand,
         spliceDescriptors: [SpliceDescriptor],
-        CRC_32: UInt32
+        CRC_32: UInt32,
+        nonFatalErrors: [ParserError] = []
     ) {
         self.tableID = tableID
         self.sapType = sapType
@@ -125,8 +129,12 @@ public struct SpliceInfoSection: Equatable {
         self.spliceCommand = spliceCommand
         self.spliceDescriptors = spliceDescriptors
         self.CRC_32 = CRC_32
+        self.nonFatalErrors = nonFatalErrors
     }
     
+    /// Creates a `SpliceInfoSection` using the provided base64 encoded string.
+    /// - Parameter base64String: A string of base64 encoded SCTE-35 data.
+    /// - Throws: `SCTE35ParserError`
     public init(base64String: String) throws {
         guard let data = Data(base64Encoded: base64String) else {
             throw ParserError.invalidInputString(base64String)
@@ -134,6 +142,9 @@ public struct SpliceInfoSection: Equatable {
         try self.init(data: data)
     }
     
+    /// Creates a `SpliceInfoSection` using the provided hex encoded string.
+    /// - Parameter hexString: A string of hex encoded SCTE-35 data.
+    /// - Throws: `SCTE35ParserError`
     public init(hexString: String) throws {
         guard let data = Data(hexString: hexString) else {
             throw ParserError.invalidInputString(hexString)
@@ -141,6 +152,12 @@ public struct SpliceInfoSection: Equatable {
         try self.init(data: data)
     }
     
+    /// Creates a `SpliceInfoSection` using the provided string formatted data.
+    /// - Parameter string: Should either be base64 encoded or hex encoded SCTE-35 data. The check will determine if the
+    /// string "looks hex" by checking that it has a `0x` prefix, and assuming that attempt to convert to `Data` using hex format first
+    /// and failing that trying with `Data.init?(base64Encoded base64String: String)` (and vice-versa where the string
+    /// does not "look hex").
+    /// - Throws: `SCTE35ParserError`
     public init(_ string: String) throws {
         let looksHex = string.hasPrefix("0x")
         if looksHex {
@@ -232,42 +249,51 @@ public extension SpliceInfoSection.EncryptedPacket {
 // MARK: - Parsing
 
 public extension SpliceInfoSection {
+    /// Creates a `SpliceInfoSection` from the provided `Data`.
+    /// - Parameter data: `Data` representing SCTE-35 information.
+    /// - Throws: `SCTE35ParserError`
     init(data: Data) throws {
-        let bitReader = MsbBitReader(data: data)
-        try bitReader.validate(
-            expectedMinimumBitsLeft: 24,
-            parseDescription: "SpliceInfoSection; need at least 24 bits to get to end of section_length field"
-        )
-        self.tableID = bitReader.byte()
-        guard bitReader.bit() == 0 else { throw ParserError.invalidSectionSyntaxIndicator }
-        guard bitReader.bit() == 0 else { throw ParserError.invalidPrivateIndicator }
-        self.sapType = SAPType(rawValue: bitReader.byte(fromBits: 2)) ?? .unspecified
-        let sectionLengthInBytes = bitReader.int(fromBits: 12)
-        try bitReader.validate(
-            expectedMinimumBitsLeft: sectionLengthInBytes * 8,
-            parseDescription: "SpliceInfoSection; section_length defined as \(sectionLengthInBytes)"
-        )
-        self.protocolVersion = bitReader.byte()
-        let isEncrypted = bitReader.bit() == 1
-        if isEncrypted {
-            throw ParserError.encryptedMessageNotSupported
-        }
-        let _ /* encryptionAlgorithm */ = EncryptedPacket.EncryptionAlgorithm(bitReader.byte(fromBits: 6))
-        self.ptsAdjustment = bitReader.uint64(fromBits: 33)
-        let _ /* cwIndex */ = bitReader.byte()
-        self.tier = bitReader.uint16(fromBits: 12)
-        let spliceCommandLength = bitReader.int(fromBits: 12)
-        self.spliceCommand = try SpliceCommand(bitReader: bitReader, spliceCommandLength: spliceCommandLength)
-        let descriptorLoopLength = bitReader.int(fromBits: 16)
-        self.spliceDescriptors = try [SpliceDescriptor].init(bitReader: bitReader, descriptorLoopLength: descriptorLoopLength)
-        if isEncrypted {
-            throw ParserError.encryptedMessageNotSupported
-        } else {
-            self.encryptedPacket = nil
-            while bitReader.bitsLeft >= 40 {
-                _ = bitReader.byte()
+        let bitReader = DataReader(data: data)
+        do {
+            try bitReader.validate(
+                expectedMinimumBitsLeft: 24,
+                parseDescription: "SpliceInfoSection; need at least 24 bits to get to end of section_length field"
+            )
+            self.tableID = bitReader.byte()
+            guard bitReader.bit() == 0 else { throw ParserError.invalidSectionSyntaxIndicator }
+            guard bitReader.bit() == 0 else { throw ParserError.invalidPrivateIndicator }
+            self.sapType = SAPType(rawValue: bitReader.byte(fromBits: 2)) ?? .unspecified
+            let sectionLengthInBytes = bitReader.int(fromBits: 12)
+            try bitReader.validate(
+                expectedMinimumBitsLeft: sectionLengthInBytes * 8,
+                parseDescription: "SpliceInfoSection; section_length defined as \(sectionLengthInBytes)"
+            )
+            self.protocolVersion = bitReader.byte()
+            let isEncrypted = bitReader.bit() == 1
+            if isEncrypted {
+                throw ParserError.encryptedMessageNotSupported
             }
+            let _ /* encryptionAlgorithm */ = EncryptedPacket.EncryptionAlgorithm(bitReader.byte(fromBits: 6))
+            self.ptsAdjustment = bitReader.uint64(fromBits: 33)
+            let _ /* cwIndex */ = bitReader.byte()
+            self.tier = bitReader.uint16(fromBits: 12)
+            let spliceCommandLength = bitReader.int(fromBits: 12)
+            self.spliceCommand = try SpliceCommand(bitReader: bitReader, spliceCommandLength: spliceCommandLength)
+            let descriptorLoopLength = bitReader.int(fromBits: 16)
+            self.spliceDescriptors = try [SpliceDescriptor].init(bitReader: bitReader, descriptorLoopLength: descriptorLoopLength)
+            if isEncrypted {
+                throw ParserError.encryptedMessageNotSupported
+            } else {
+                self.encryptedPacket = nil
+                while bitReader.bitsLeft >= 40 {
+                    _ = bitReader.byte()
+                }
+            }
+            self.CRC_32 = bitReader.uint32(fromBits: 32)
+            self.nonFatalErrors = bitReader.nonFatalErrors
+        } catch {
+            guard let error = error as? ParserError else { throw error }
+            throw SCTE35ParserError(error: error, underlyingError: bitReader.nonFatalErrors.first)
         }
-        self.CRC_32 = bitReader.uint32(fromBits: 32)
     }
 }

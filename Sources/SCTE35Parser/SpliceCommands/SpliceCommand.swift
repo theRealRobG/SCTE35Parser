@@ -64,6 +64,8 @@ extension SpliceCommand {
     /// - Throws: `ParserError`
     init(bitReader: DataBitReader, spliceCommandLength: Int) throws {
         let spliceCommandType = bitReader.byte()
+        let bitsReadBeforeSpliceCommand = bitReader.bitsRead
+        let expectedBitsReadAtEndOfSpliceCommand = bitReader.bitsRead + (spliceCommandLength * 8)
         switch SpliceCommandType(rawValue: spliceCommandType) {
         case .bandwidthReservation:
             self = .bandwidthReservation
@@ -79,6 +81,16 @@ extension SpliceCommand {
             self = .timeSignal(try TimeSignal(bitReader: bitReader))
         case .none:
             throw ParserError.unrecognisedSpliceCommandType(Int(spliceCommandType))
+        }
+        if bitReader.bitsRead != expectedBitsReadAtEndOfSpliceCommand {
+            bitReader.nonFatalErrors.append(
+                ParserError.unexpectedSpliceCommandLength(
+                    UnexpectedSpliceCommandLengthErrorInfo(
+                        declaredSpliceCommandLengthInBits: spliceCommandLength * 8,
+                        actualSpliceCommandLengthInBits: bitReader.bitsRead - bitsReadBeforeSpliceCommand
+                    )
+                )
+            )
         }
     }
 }

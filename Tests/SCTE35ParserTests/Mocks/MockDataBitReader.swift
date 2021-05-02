@@ -56,6 +56,8 @@ class MockDataBitReader: DataBitReader {
     
     // MARK: - Property listeners
     
+    var nonFatalErrorsGetListener: (() -> Void)?
+    var nonFatalErrorsSetListener: (([ParserError]) -> Void)?
     var isAlignedGetListener: (() -> Void)?
     var isAlignedSetListener: ((Bool) -> Void)?
     var bitsLeftGetListener: (() -> Void)?
@@ -65,6 +67,7 @@ class MockDataBitReader: DataBitReader {
     
     // MARK: - Fake properties
     
+    var fakeNonFatalErrors = [ParserError]()
     var fakeIsAligned = true
     var fakeBitsLeft = 0
     var fakeBitsRead = 0
@@ -72,6 +75,16 @@ class MockDataBitReader: DataBitReader {
     let initByteReader: ByteReader?
     
     // MARK: - Protocol implementation
+    
+    var nonFatalErrors: [ParserError] {
+        get {
+            nonFatalErrorsGetListener?()
+            return fakeNonFatalErrors
+        }
+        set {
+            nonFatalErrorsSetListener?(newValue)
+        }
+    }
     
     var isAligned: Bool {
         get {

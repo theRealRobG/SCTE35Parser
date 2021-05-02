@@ -15,7 +15,9 @@ let base64String = "/DA0AAAAAAAA///wBQb+cr0AUAAeAhxDVUVJSAAAjn/PAAGlmbAICAAAAAAs
 let spliceInfoSection = try SpliceInfoSection(base64String: base64String)
 ```
 
-Errors can be thrown if there are some issues with the provided SCTE-35 message that invalidate the parsing. If an error is thrown it will be a [`ParserError`](./Sources/SCTE35Parser/Errors/ParserError.swift).
+Errors can be thrown if there are some issues with the provided SCTE-35 message that invalidate the parsing. If an error is thrown it will be a [`SCTE35ParserError`](./Sources/SCTE35Parser/Errors/SCTE35ParserError.swift). This is a wrapper `struct` that includes the thrown `error`, as well as the first "non-fatal" error that was stored during parsing. When using the `SCTE35ParserError` as `NSError`, the `underlyingError` will be stored in `userInfo[NSUnderlyingErrorKey]`.
+
+The parser also keeps a storage of `nonFatalErrors`. The idea here is that there may be some inconsistencies in the SCTE-35 message (e.g. mis-match between declared `SpliceCommand` length and parsed length), but the message on the whole is still parsable, and so instead of killing the whole parse by throwing, the error is just logged to the `nonFatalErrors` instead.
 
 There is also an initialiser provided for hex encoded strings `init(hexString: String) throws`, as exampled below.
 ```swift

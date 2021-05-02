@@ -723,8 +723,8 @@ final class SCTE35ParserTests: XCTestCase {
     func test_timeSignal_segmentationDescriptor_invalidEIDR() {
         let hexString = "0xFC30280000000000000000700506FF1252E9220012021043554549000000007F9F0A013050000015871049"
         XCTAssertThrowsError(try SpliceInfoSection(hexString)) { error in
-            guard let error = error as? ParserError else { return XCTFail("Thrown error not ParserError") }
-            switch error {
+            guard let error = error as? SCTE35ParserError else { return XCTFail("Thrown error not ParserError") }
+            switch error.error {
             case .unexpectedSegmentationUPIDLength(let info):
                 XCTAssertEqual(1, info.declaredSegmentationUPIDLength)
                 XCTAssertEqual(12, info.expectedSegmentationUPIDLength)
@@ -1132,7 +1132,15 @@ final class SCTE35ParserTests: XCTestCase {
                     )
                 )
             ],
-            CRC_32: 0x62EF73F8
+            CRC_32: 0x62EF73F8,
+            nonFatalErrors: [
+                .unexpectedSpliceCommandLength(
+                    UnexpectedSpliceCommandLengthErrorInfo(
+                        declaredSpliceCommandLengthInBits: 32760,
+                        actualSpliceCommandLengthInBits: 160
+                    )
+                )
+            ]
         )
         try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(base64String))
     }
@@ -1319,7 +1327,15 @@ final class SCTE35ParserTests: XCTestCase {
             tier: 0xFFF,
             spliceCommand: .spliceNull,
             spliceDescriptors: [],
-            CRC_32: 0x4F253396
+            CRC_32: 0x4F253396,
+            nonFatalErrors: [
+                .unexpectedSpliceCommandLength(
+                    UnexpectedSpliceCommandLengthErrorInfo(
+                        declaredSpliceCommandLengthInBits: 32760,
+                        actualSpliceCommandLengthInBits: 0
+                    )
+                )
+            ]
         )
         try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(hexString))
     }
