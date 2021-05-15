@@ -8,8 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    container: swift:latest
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
     - name: Resolve dependencies
