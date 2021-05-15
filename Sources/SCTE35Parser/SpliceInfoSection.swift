@@ -304,8 +304,8 @@ public extension SpliceInfoSection {
             self.CRC_32 = bitReader.uint32(fromBits: 32)
             self.nonFatalErrors = bitReader.nonFatalErrors
         } catch {
-            guard let error = error as? ParserError else { throw error }
-            throw SCTE35ParserError(error: error, underlyingError: bitReader.nonFatalErrors.first)
+            guard let parserError = error as? ParserError else { throw error }
+            throw SCTE35ParserError(error: parserError, underlyingError: bitReader.nonFatalErrors.first)
         }
     }
 }
