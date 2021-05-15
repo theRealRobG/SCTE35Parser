@@ -1,0 +1,1387 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		"SCTE35Parser::SCTE35ParserPackageTests::ProductTarget" /* SCTE35ParserPackageTests */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = OBJ_135 /* Build configuration list for PBXAggregateTarget "SCTE35ParserPackageTests" */;
+			buildPhases = (
+			);
+			dependencies = (
+				OBJ_138 /* PBXTargetDependency */,
+			);
+			name = SCTE35ParserPackageTests;
+			productName = SCTE35ParserPackageTests;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		E801367826502C3100EA6FBF /* Data+hexString.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* Data+hexString.swift */; };
+		E801367926502C3100EA6FBF /* SpliceInfoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_57 /* SpliceInfoSection.swift */; };
+		E801367A26502C3200EA6FBF /* Data+hexString.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* Data+hexString.swift */; };
+		E801367B26502C3200EA6FBF /* SpliceInfoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_57 /* SpliceInfoSection.swift */; };
+		E801367C26502C3900EA6FBF /* BitStreamMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* BitStreamMode.swift */; };
+		E801367D26502C3900EA6FBF /* ATSCContentIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* ATSCContentIdentifier.swift */; };
+		E801367E26502C3900EA6FBF /* AudioCodingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* AudioCodingMode.swift */; };
+		E801367F26502C3900EA6FBF /* BitStreamMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* BitStreamMode.swift */; };
+		E801368026502C3900EA6FBF /* ATSCContentIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* ATSCContentIdentifier.swift */; };
+		E801368126502C3900EA6FBF /* AudioCodingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* AudioCodingMode.swift */; };
+		E801368226502C4500EA6FBF /* InvalidBitStreamModeErrorInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_29 /* InvalidBitStreamModeErrorInfo.swift */; };
+		E801368326502C4500EA6FBF /* InvalidMPUInSegmentationUPIDInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_30 /* InvalidMPUInSegmentationUPIDInfo.swift */; };
+		E801368426502C4500EA6FBF /* UnexpectedSegmentationUPIDLengthErrorInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_36 /* UnexpectedSegmentationUPIDLengthErrorInfo.swift */; };
+		E801368526502C4500EA6FBF /* SpliceDescriptorTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_55 /* SpliceDescriptorTag.swift */; };
+		E801368626502C4500EA6FBF /* SegmentationDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_53 /* SegmentationDescriptor.swift */; };
+		E801368726502C4500EA6FBF /* SpliceSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_44 /* SpliceSchedule.swift */; };
+		E801368826502C4500EA6FBF /* SegmentationDescriptor+SegmentationTypeID.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_50 /* SegmentationDescriptor+SegmentationTypeID.swift */; };
+		E801368926502C4500EA6FBF /* SpliceInsert.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_43 /* SpliceInsert.swift */; };
+		E801368A26502C4500EA6FBF /* AvailDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_48 /* AvailDescriptor.swift */; };
+		E801368B26502C4500EA6FBF /* InvalidATSCContentIdentifierInUPIDInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* InvalidATSCContentIdentifierInUPIDInfo.swift */; };
+		E801368C26502C4500EA6FBF /* DataBitReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* DataBitReader.swift */; };
+		E801368D26502C4500EA6FBF /* SCTE35ParserError.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_33 /* SCTE35ParserError.swift */; };
+		E801368E26502C4500EA6FBF /* SpliceCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_41 /* SpliceCommand.swift */; };
+		E801368F26502C4500EA6FBF /* DTMFDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_49 /* DTMFDescriptor.swift */; };
+		E801369026502C4500EA6FBF /* SpliceTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_60 /* SpliceTime.swift */; };
+		E801369126502C4500EA6FBF /* TimeDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_56 /* TimeDescriptor.swift */; };
+		E801369226502C4500EA6FBF /* AudioDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_47 /* AudioDescriptor.swift */; };
+		E801369326502C4500EA6FBF /* UnexpectedEndOfDataErrorInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_35 /* UnexpectedEndOfDataErrorInfo.swift */; };
+		E801369426502C4500EA6FBF /* ParserError+Code.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_31 /* ParserError+Code.swift */; };
+		E801369526502C4500EA6FBF /* TimeSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_45 /* TimeSignal.swift */; };
+		E801369626502C4500EA6FBF /* SpliceCommandType.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_42 /* SpliceCommandType.swift */; };
+		E801369726502C4600EA6FBF /* DataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* DataReader.swift */; };
+		E801369826502C4600EA6FBF /* BreakDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_59 /* BreakDuration.swift */; };
+		E801369926502C4600EA6FBF /* UnexpectedSpliceCommandLengthErrorInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_37 /* UnexpectedSpliceCommandLengthErrorInfo.swift */; };
+		E801369A26502C4600EA6FBF /* SpliceDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_54 /* SpliceDescriptor.swift */; };
+		E801369B26502C4600EA6FBF /* ParserError.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_32 /* ParserError.swift */; };
+		E801369C26502C4600EA6FBF /* PrivateCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_40 /* PrivateCommand.swift */; };
+		E801369D26502C4600EA6FBF /* UnexpectedDescriptorLoopLengthErrorInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_34 /* UnexpectedDescriptorLoopLengthErrorInfo.swift */; };
+		E801369E26502C4600EA6FBF /* SegmentationDescriptor+SegmentationUPID.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_51 /* SegmentationDescriptor+SegmentationUPID.swift */; };
+		E801369F26502C4600EA6FBF /* UnexpectedSpliceDescriptorLengthErrorInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_38 /* UnexpectedSpliceDescriptorLengthErrorInfo.swift */; };
+		E80136A026502C4600EA6FBF /* SegmentationDescriptor+SegmentationUPIDType.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_52 /* SegmentationDescriptor+SegmentationUPIDType.swift */; };
+		E80136A126502C4600EA6FBF /* InvalidBitStreamModeErrorInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_29 /* InvalidBitStreamModeErrorInfo.swift */; };
+		E80136A226502C4600EA6FBF /* InvalidMPUInSegmentationUPIDInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_30 /* InvalidMPUInSegmentationUPIDInfo.swift */; };
+		E80136A326502C4600EA6FBF /* UnexpectedSegmentationUPIDLengthErrorInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_36 /* UnexpectedSegmentationUPIDLengthErrorInfo.swift */; };
+		E80136A426502C4600EA6FBF /* SpliceDescriptorTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_55 /* SpliceDescriptorTag.swift */; };
+		E80136A526502C4600EA6FBF /* SegmentationDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_53 /* SegmentationDescriptor.swift */; };
+		E80136A626502C4600EA6FBF /* SpliceSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_44 /* SpliceSchedule.swift */; };
+		E80136A726502C4600EA6FBF /* SegmentationDescriptor+SegmentationTypeID.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_50 /* SegmentationDescriptor+SegmentationTypeID.swift */; };
+		E80136A826502C4600EA6FBF /* SpliceInsert.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_43 /* SpliceInsert.swift */; };
+		E80136A926502C4600EA6FBF /* AvailDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_48 /* AvailDescriptor.swift */; };
+		E80136AA26502C4600EA6FBF /* InvalidATSCContentIdentifierInUPIDInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* InvalidATSCContentIdentifierInUPIDInfo.swift */; };
+		E80136AB26502C4600EA6FBF /* DataBitReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* DataBitReader.swift */; };
+		E80136AC26502C4600EA6FBF /* SCTE35ParserError.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_33 /* SCTE35ParserError.swift */; };
+		E80136AD26502C4600EA6FBF /* SpliceCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_41 /* SpliceCommand.swift */; };
+		E80136AE26502C4600EA6FBF /* DTMFDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_49 /* DTMFDescriptor.swift */; };
+		E80136AF26502C4600EA6FBF /* SpliceTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_60 /* SpliceTime.swift */; };
+		E80136B026502C4700EA6FBF /* TimeDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_56 /* TimeDescriptor.swift */; };
+		E80136B126502C4700EA6FBF /* AudioDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_47 /* AudioDescriptor.swift */; };
+		E80136B226502C4700EA6FBF /* UnexpectedEndOfDataErrorInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_35 /* UnexpectedEndOfDataErrorInfo.swift */; };
+		E80136B326502C4700EA6FBF /* ParserError+Code.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_31 /* ParserError+Code.swift */; };
+		E80136B426502C4700EA6FBF /* TimeSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_45 /* TimeSignal.swift */; };
+		E80136B526502C4700EA6FBF /* SpliceCommandType.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_42 /* SpliceCommandType.swift */; };
+		E80136B626502C4700EA6FBF /* DataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* DataReader.swift */; };
+		E80136B726502C4700EA6FBF /* BreakDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_59 /* BreakDuration.swift */; };
+		E80136B826502C4700EA6FBF /* UnexpectedSpliceCommandLengthErrorInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_37 /* UnexpectedSpliceCommandLengthErrorInfo.swift */; };
+		E80136B926502C4700EA6FBF /* SpliceDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_54 /* SpliceDescriptor.swift */; };
+		E80136BA26502C4700EA6FBF /* ParserError.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_32 /* ParserError.swift */; };
+		E80136BB26502C4700EA6FBF /* PrivateCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_40 /* PrivateCommand.swift */; };
+		E80136BC26502C4700EA6FBF /* UnexpectedDescriptorLoopLengthErrorInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_34 /* UnexpectedDescriptorLoopLengthErrorInfo.swift */; };
+		E80136BD26502C4700EA6FBF /* SegmentationDescriptor+SegmentationUPID.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_51 /* SegmentationDescriptor+SegmentationUPID.swift */; };
+		E80136BE26502C4700EA6FBF /* UnexpectedSpliceDescriptorLengthErrorInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_38 /* UnexpectedSpliceDescriptorLengthErrorInfo.swift */; };
+		E80136BF26502C4700EA6FBF /* SegmentationDescriptor+SegmentationUPIDType.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_52 /* SegmentationDescriptor+SegmentationUPIDType.swift */; };
+		E80136C026502C5500EA6FBF /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* Extensions.swift */; };
+		E80136C126502C5500EA6FBF /* LsbBitReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* LsbBitReader.swift */; };
+		E80136C226502C5500EA6FBF /* LsbBitWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* LsbBitWriter.swift */; };
+		E80136C326502C5500EA6FBF /* MsbBitReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_22 /* MsbBitReader.swift */; };
+		E80136C426502C5500EA6FBF /* MsbBitWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* MsbBitWriter.swift */; };
+		E80136C526502C5500EA6FBF /* BitWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* BitWriter.swift */; };
+		E80136C626502C5500EA6FBF /* BitReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* BitReader.swift */; };
+		E80136C726502C5500EA6FBF /* ByteReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* ByteReader.swift */; };
+		E80136C826502C5600EA6FBF /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* Extensions.swift */; };
+		E80136C926502C5600EA6FBF /* LsbBitReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* LsbBitReader.swift */; };
+		E80136CA26502C5600EA6FBF /* LsbBitWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* LsbBitWriter.swift */; };
+		E80136CB26502C5600EA6FBF /* MsbBitReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_22 /* MsbBitReader.swift */; };
+		E80136CC26502C5600EA6FBF /* MsbBitWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* MsbBitWriter.swift */; };
+		E80136CD26502C5600EA6FBF /* BitWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* BitWriter.swift */; };
+		E80136CE26502C5600EA6FBF /* BitReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* BitReader.swift */; };
+		E80136CF26502C5600EA6FBF /* ByteReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* ByteReader.swift */; };
+		OBJ_100 /* ParserError+Code.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_31 /* ParserError+Code.swift */; };
+		OBJ_101 /* ParserError.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_32 /* ParserError.swift */; };
+		OBJ_102 /* SCTE35ParserError.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_33 /* SCTE35ParserError.swift */; };
+		OBJ_103 /* UnexpectedDescriptorLoopLengthErrorInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_34 /* UnexpectedDescriptorLoopLengthErrorInfo.swift */; };
+		OBJ_104 /* UnexpectedEndOfDataErrorInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_35 /* UnexpectedEndOfDataErrorInfo.swift */; };
+		OBJ_105 /* UnexpectedSegmentationUPIDLengthErrorInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_36 /* UnexpectedSegmentationUPIDLengthErrorInfo.swift */; };
+		OBJ_106 /* UnexpectedSpliceCommandLengthErrorInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_37 /* UnexpectedSpliceCommandLengthErrorInfo.swift */; };
+		OBJ_107 /* UnexpectedSpliceDescriptorLengthErrorInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_38 /* UnexpectedSpliceDescriptorLengthErrorInfo.swift */; };
+		OBJ_108 /* PrivateCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_40 /* PrivateCommand.swift */; };
+		OBJ_109 /* SpliceCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_41 /* SpliceCommand.swift */; };
+		OBJ_110 /* SpliceCommandType.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_42 /* SpliceCommandType.swift */; };
+		OBJ_111 /* SpliceInsert.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_43 /* SpliceInsert.swift */; };
+		OBJ_112 /* SpliceSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_44 /* SpliceSchedule.swift */; };
+		OBJ_113 /* TimeSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_45 /* TimeSignal.swift */; };
+		OBJ_114 /* AudioDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_47 /* AudioDescriptor.swift */; };
+		OBJ_115 /* AvailDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_48 /* AvailDescriptor.swift */; };
+		OBJ_116 /* DTMFDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_49 /* DTMFDescriptor.swift */; };
+		OBJ_117 /* SegmentationDescriptor+SegmentationTypeID.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_50 /* SegmentationDescriptor+SegmentationTypeID.swift */; };
+		OBJ_118 /* SegmentationDescriptor+SegmentationUPID.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_51 /* SegmentationDescriptor+SegmentationUPID.swift */; };
+		OBJ_119 /* SegmentationDescriptor+SegmentationUPIDType.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_52 /* SegmentationDescriptor+SegmentationUPIDType.swift */; };
+		OBJ_120 /* SegmentationDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_53 /* SegmentationDescriptor.swift */; };
+		OBJ_121 /* SpliceDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_54 /* SpliceDescriptor.swift */; };
+		OBJ_122 /* SpliceDescriptorTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_55 /* SpliceDescriptorTag.swift */; };
+		OBJ_123 /* TimeDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_56 /* TimeDescriptor.swift */; };
+		OBJ_124 /* SpliceInfoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_57 /* SpliceInfoSection.swift */; };
+		OBJ_125 /* BreakDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_59 /* BreakDuration.swift */; };
+		OBJ_126 /* SpliceTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_60 /* SpliceTime.swift */; };
+		OBJ_133 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
+		OBJ_144 /* ParserErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_64 /* ParserErrorTests.swift */; };
+		OBJ_145 /* MockDataBitReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_66 /* MockDataBitReader.swift */; };
+		OBJ_146 /* SCTE35ParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_67 /* SCTE35ParserTests.swift */; };
+		OBJ_147 /* UnexpectedEndOfDataErrorInfo+stub.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_69 /* UnexpectedEndOfDataErrorInfo+stub.swift */; };
+		OBJ_148 /* BreakDurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_71 /* BreakDurationTests.swift */; };
+		OBJ_149 /* SpliceTimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_72 /* SpliceTimeTests.swift */; };
+		OBJ_151 /* SCTE35Parser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SCTE35Parser::SCTE35Parser::Product" /* SCTE35Parser.framework */; };
+		OBJ_83 /* ATSCContentIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* ATSCContentIdentifier.swift */; };
+		OBJ_84 /* AudioCodingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* AudioCodingMode.swift */; };
+		OBJ_85 /* BitStreamMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* BitStreamMode.swift */; };
+		OBJ_86 /* BitReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* BitReader.swift */; };
+		OBJ_87 /* BitWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* BitWriter.swift */; };
+		OBJ_88 /* ByteReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* ByteReader.swift */; };
+		OBJ_89 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* Extensions.swift */; };
+		OBJ_90 /* LsbBitReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* LsbBitReader.swift */; };
+		OBJ_91 /* LsbBitWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* LsbBitWriter.swift */; };
+		OBJ_92 /* MsbBitReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_22 /* MsbBitReader.swift */; };
+		OBJ_93 /* MsbBitWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* MsbBitWriter.swift */; };
+		OBJ_94 /* DataBitReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* DataBitReader.swift */; };
+		OBJ_95 /* DataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* DataReader.swift */; };
+		OBJ_96 /* Data+hexString.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* Data+hexString.swift */; };
+		OBJ_97 /* InvalidATSCContentIdentifierInUPIDInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* InvalidATSCContentIdentifierInUPIDInfo.swift */; };
+		OBJ_98 /* InvalidBitStreamModeErrorInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_29 /* InvalidBitStreamModeErrorInfo.swift */; };
+		OBJ_99 /* InvalidMPUInSegmentationUPIDInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_30 /* InvalidMPUInSegmentationUPIDInfo.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E801365C265026FA00EA6FBF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "SCTE35Parser::SCTE35Parser";
+			remoteInfo = SCTE35Parser;
+		};
+		E801366A2650282100EA6FBF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "SCTE35Parser::SCTE35ParserTests";
+			remoteInfo = SCTE35ParserTests;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		E80136622650282100EA6FBF /* SCTE35Parser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SCTE35Parser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E801367026502B6800EA6FBF /* SCTE35Parser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SCTE35Parser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_10 /* ATSCContentIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ATSCContentIdentifier.swift; sourceTree = "<group>"; };
+		OBJ_11 /* AudioCodingMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioCodingMode.swift; sourceTree = "<group>"; };
+		OBJ_12 /* BitStreamMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitStreamMode.swift; sourceTree = "<group>"; };
+		OBJ_16 /* BitReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitReader.swift; sourceTree = "<group>"; };
+		OBJ_17 /* BitWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitWriter.swift; sourceTree = "<group>"; };
+		OBJ_18 /* ByteReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ByteReader.swift; sourceTree = "<group>"; };
+		OBJ_19 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		OBJ_20 /* LsbBitReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LsbBitReader.swift; sourceTree = "<group>"; };
+		OBJ_21 /* LsbBitWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LsbBitWriter.swift; sourceTree = "<group>"; };
+		OBJ_22 /* MsbBitReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MsbBitReader.swift; sourceTree = "<group>"; };
+		OBJ_23 /* MsbBitWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MsbBitWriter.swift; sourceTree = "<group>"; };
+		OBJ_24 /* DataBitReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBitReader.swift; sourceTree = "<group>"; };
+		OBJ_25 /* DataReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataReader.swift; sourceTree = "<group>"; };
+		OBJ_26 /* Data+hexString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+hexString.swift"; sourceTree = "<group>"; };
+		OBJ_28 /* InvalidATSCContentIdentifierInUPIDInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvalidATSCContentIdentifierInUPIDInfo.swift; sourceTree = "<group>"; };
+		OBJ_29 /* InvalidBitStreamModeErrorInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvalidBitStreamModeErrorInfo.swift; sourceTree = "<group>"; };
+		OBJ_30 /* InvalidMPUInSegmentationUPIDInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvalidMPUInSegmentationUPIDInfo.swift; sourceTree = "<group>"; };
+		OBJ_31 /* ParserError+Code.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ParserError+Code.swift"; sourceTree = "<group>"; };
+		OBJ_32 /* ParserError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserError.swift; sourceTree = "<group>"; };
+		OBJ_33 /* SCTE35ParserError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCTE35ParserError.swift; sourceTree = "<group>"; };
+		OBJ_34 /* UnexpectedDescriptorLoopLengthErrorInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnexpectedDescriptorLoopLengthErrorInfo.swift; sourceTree = "<group>"; };
+		OBJ_35 /* UnexpectedEndOfDataErrorInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnexpectedEndOfDataErrorInfo.swift; sourceTree = "<group>"; };
+		OBJ_36 /* UnexpectedSegmentationUPIDLengthErrorInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnexpectedSegmentationUPIDLengthErrorInfo.swift; sourceTree = "<group>"; };
+		OBJ_37 /* UnexpectedSpliceCommandLengthErrorInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnexpectedSpliceCommandLengthErrorInfo.swift; sourceTree = "<group>"; };
+		OBJ_38 /* UnexpectedSpliceDescriptorLengthErrorInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnexpectedSpliceDescriptorLengthErrorInfo.swift; sourceTree = "<group>"; };
+		OBJ_40 /* PrivateCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateCommand.swift; sourceTree = "<group>"; };
+		OBJ_41 /* SpliceCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpliceCommand.swift; sourceTree = "<group>"; };
+		OBJ_42 /* SpliceCommandType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpliceCommandType.swift; sourceTree = "<group>"; };
+		OBJ_43 /* SpliceInsert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpliceInsert.swift; sourceTree = "<group>"; };
+		OBJ_44 /* SpliceSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpliceSchedule.swift; sourceTree = "<group>"; };
+		OBJ_45 /* TimeSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSignal.swift; sourceTree = "<group>"; };
+		OBJ_47 /* AudioDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioDescriptor.swift; sourceTree = "<group>"; };
+		OBJ_48 /* AvailDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailDescriptor.swift; sourceTree = "<group>"; };
+		OBJ_49 /* DTMFDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTMFDescriptor.swift; sourceTree = "<group>"; };
+		OBJ_50 /* SegmentationDescriptor+SegmentationTypeID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SegmentationDescriptor+SegmentationTypeID.swift"; sourceTree = "<group>"; };
+		OBJ_51 /* SegmentationDescriptor+SegmentationUPID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SegmentationDescriptor+SegmentationUPID.swift"; sourceTree = "<group>"; };
+		OBJ_52 /* SegmentationDescriptor+SegmentationUPIDType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SegmentationDescriptor+SegmentationUPIDType.swift"; sourceTree = "<group>"; };
+		OBJ_53 /* SegmentationDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentationDescriptor.swift; sourceTree = "<group>"; };
+		OBJ_54 /* SpliceDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpliceDescriptor.swift; sourceTree = "<group>"; };
+		OBJ_55 /* SpliceDescriptorTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpliceDescriptorTag.swift; sourceTree = "<group>"; };
+		OBJ_56 /* TimeDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeDescriptor.swift; sourceTree = "<group>"; };
+		OBJ_57 /* SpliceInfoSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpliceInfoSection.swift; sourceTree = "<group>"; };
+		OBJ_59 /* BreakDuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakDuration.swift; sourceTree = "<group>"; };
+		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		OBJ_60 /* SpliceTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpliceTime.swift; sourceTree = "<group>"; };
+		OBJ_64 /* ParserErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserErrorTests.swift; sourceTree = "<group>"; };
+		OBJ_66 /* MockDataBitReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataBitReader.swift; sourceTree = "<group>"; };
+		OBJ_67 /* SCTE35ParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCTE35ParserTests.swift; sourceTree = "<group>"; };
+		OBJ_69 /* UnexpectedEndOfDataErrorInfo+stub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UnexpectedEndOfDataErrorInfo+stub.swift"; sourceTree = "<group>"; };
+		OBJ_71 /* BreakDurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakDurationTests.swift; sourceTree = "<group>"; };
+		OBJ_72 /* SpliceTimeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpliceTimeTests.swift; sourceTree = "<group>"; };
+		OBJ_76 /* Specification */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Specification; sourceTree = SOURCE_ROOT; };
+		OBJ_77 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		"SCTE35Parser::SCTE35Parser::Product" /* SCTE35Parser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SCTE35Parser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		"SCTE35Parser::SCTE35ParserTests::Product" /* SCTE35ParserTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = SCTE35ParserTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E801365F2650282100EA6FBF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E801366D26502B6800EA6FBF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_127 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_150 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_151 /* SCTE35Parser.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		OBJ_13 /* BitParser */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_24 /* DataBitReader.swift */,
+				OBJ_25 /* DataReader.swift */,
+				OBJ_14 /* BitByteData */,
+			);
+			path = BitParser;
+			sourceTree = "<group>";
+		};
+		OBJ_14 /* BitByteData */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_15 /* Sources */,
+			);
+			path = BitByteData;
+			sourceTree = "<group>";
+		};
+		OBJ_15 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_16 /* BitReader.swift */,
+				OBJ_17 /* BitWriter.swift */,
+				OBJ_18 /* ByteReader.swift */,
+				OBJ_19 /* Extensions.swift */,
+				OBJ_20 /* LsbBitReader.swift */,
+				OBJ_21 /* LsbBitWriter.swift */,
+				OBJ_22 /* MsbBitReader.swift */,
+				OBJ_23 /* MsbBitWriter.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		OBJ_27 /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_28 /* InvalidATSCContentIdentifierInUPIDInfo.swift */,
+				OBJ_29 /* InvalidBitStreamModeErrorInfo.swift */,
+				OBJ_30 /* InvalidMPUInSegmentationUPIDInfo.swift */,
+				OBJ_31 /* ParserError+Code.swift */,
+				OBJ_32 /* ParserError.swift */,
+				OBJ_33 /* SCTE35ParserError.swift */,
+				OBJ_34 /* UnexpectedDescriptorLoopLengthErrorInfo.swift */,
+				OBJ_35 /* UnexpectedEndOfDataErrorInfo.swift */,
+				OBJ_36 /* UnexpectedSegmentationUPIDLengthErrorInfo.swift */,
+				OBJ_37 /* UnexpectedSpliceCommandLengthErrorInfo.swift */,
+				OBJ_38 /* UnexpectedSpliceDescriptorLengthErrorInfo.swift */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
+		OBJ_39 /* SpliceCommands */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_40 /* PrivateCommand.swift */,
+				OBJ_41 /* SpliceCommand.swift */,
+				OBJ_42 /* SpliceCommandType.swift */,
+				OBJ_43 /* SpliceInsert.swift */,
+				OBJ_44 /* SpliceSchedule.swift */,
+				OBJ_45 /* TimeSignal.swift */,
+			);
+			path = SpliceCommands;
+			sourceTree = "<group>";
+		};
+		OBJ_46 /* SpliceDescriptors */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_47 /* AudioDescriptor.swift */,
+				OBJ_48 /* AvailDescriptor.swift */,
+				OBJ_49 /* DTMFDescriptor.swift */,
+				OBJ_50 /* SegmentationDescriptor+SegmentationTypeID.swift */,
+				OBJ_51 /* SegmentationDescriptor+SegmentationUPID.swift */,
+				OBJ_52 /* SegmentationDescriptor+SegmentationUPIDType.swift */,
+				OBJ_53 /* SegmentationDescriptor.swift */,
+				OBJ_54 /* SpliceDescriptor.swift */,
+				OBJ_55 /* SpliceDescriptorTag.swift */,
+				OBJ_56 /* TimeDescriptor.swift */,
+			);
+			path = SpliceDescriptors;
+			sourceTree = "<group>";
+		};
+		OBJ_5 /*  */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_6 /* Package.swift */,
+				OBJ_7 /* Sources */,
+				OBJ_61 /* Tests */,
+				OBJ_73 /* Products */,
+				OBJ_76 /* Specification */,
+				OBJ_77 /* README.md */,
+			);
+			name = "";
+			sourceTree = "<group>";
+		};
+		OBJ_58 /* Time */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_59 /* BreakDuration.swift */,
+				OBJ_60 /* SpliceTime.swift */,
+			);
+			path = Time;
+			sourceTree = "<group>";
+		};
+		OBJ_61 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_62 /* SCTE35ParserTests */,
+			);
+			name = Tests;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_62 /* SCTE35ParserTests */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_67 /* SCTE35ParserTests.swift */,
+				OBJ_63 /* Errors */,
+				OBJ_65 /* Mocks */,
+				OBJ_68 /* Stubs */,
+				OBJ_70 /* Time */,
+			);
+			name = SCTE35ParserTests;
+			path = Tests/SCTE35ParserTests;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_63 /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_64 /* ParserErrorTests.swift */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
+		OBJ_65 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_66 /* MockDataBitReader.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
+		OBJ_68 /* Stubs */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_69 /* UnexpectedEndOfDataErrorInfo+stub.swift */,
+			);
+			path = Stubs;
+			sourceTree = "<group>";
+		};
+		OBJ_7 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_8 /* SCTE35Parser */,
+			);
+			name = Sources;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_70 /* Time */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_71 /* BreakDurationTests.swift */,
+				OBJ_72 /* SpliceTimeTests.swift */,
+			);
+			path = Time;
+			sourceTree = "<group>";
+		};
+		OBJ_73 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				"SCTE35Parser::SCTE35Parser::Product" /* SCTE35Parser.framework */,
+				"SCTE35Parser::SCTE35ParserTests::Product" /* SCTE35ParserTests.xctest */,
+				E80136622650282100EA6FBF /* SCTE35Parser.framework */,
+				E801367026502B6800EA6FBF /* SCTE35Parser.framework */,
+			);
+			name = Products;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		OBJ_8 /* SCTE35Parser */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_26 /* Data+hexString.swift */,
+				OBJ_57 /* SpliceInfoSection.swift */,
+				OBJ_9 /* ATSC */,
+				OBJ_13 /* BitParser */,
+				OBJ_27 /* Errors */,
+				OBJ_39 /* SpliceCommands */,
+				OBJ_46 /* SpliceDescriptors */,
+				OBJ_58 /* Time */,
+			);
+			name = SCTE35Parser;
+			path = Sources/SCTE35Parser;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_9 /* ATSC */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_10 /* ATSCContentIdentifier.swift */,
+				OBJ_11 /* AudioCodingMode.swift */,
+				OBJ_12 /* BitStreamMode.swift */,
+			);
+			path = ATSC;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		E801365D2650282100EA6FBF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E801366B26502B6800EA6FBF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		E80136612650282100EA6FBF /* SCTE35Parser_iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E80136672650282100EA6FBF /* Build configuration list for PBXNativeTarget "SCTE35Parser_iOS" */;
+			buildPhases = (
+				E801365D2650282100EA6FBF /* Headers */,
+				E801365E2650282100EA6FBF /* Sources */,
+				E801365F2650282100EA6FBF /* Frameworks */,
+				E80136602650282100EA6FBF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SCTE35Parser_iOS;
+			productName = SCTE35Parser;
+			productReference = E80136622650282100EA6FBF /* SCTE35Parser.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		E801366F26502B6800EA6FBF /* SCTE35Parser_tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E801367526502B6800EA6FBF /* Build configuration list for PBXNativeTarget "SCTE35Parser_tvOS" */;
+			buildPhases = (
+				E801366B26502B6800EA6FBF /* Headers */,
+				E801366C26502B6800EA6FBF /* Sources */,
+				E801366D26502B6800EA6FBF /* Frameworks */,
+				E801366E26502B6800EA6FBF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SCTE35Parser_tvOS;
+			productName = SCTE35Parser;
+			productReference = E801367026502B6800EA6FBF /* SCTE35Parser.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		"SCTE35Parser::SCTE35Parser" /* SCTE35Parser_macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_79 /* Build configuration list for PBXNativeTarget "SCTE35Parser_macOS" */;
+			buildPhases = (
+				OBJ_82 /* Sources */,
+				OBJ_127 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SCTE35Parser_macOS;
+			productName = SCTE35Parser;
+			productReference = "SCTE35Parser::SCTE35Parser::Product" /* SCTE35Parser.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		"SCTE35Parser::SCTE35ParserTests" /* SCTE35ParserTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_140 /* Build configuration list for PBXNativeTarget "SCTE35ParserTests" */;
+			buildPhases = (
+				OBJ_143 /* Sources */,
+				OBJ_150 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_152 /* PBXTargetDependency */,
+			);
+			name = SCTE35ParserTests;
+			productName = SCTE35ParserTests;
+			productReference = "SCTE35Parser::SCTE35ParserTests::Product" /* SCTE35ParserTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		"SCTE35Parser::SwiftPMPackageDescription" /* SCTE35ParserPackageDescription */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_129 /* Build configuration list for PBXNativeTarget "SCTE35ParserPackageDescription" */;
+			buildPhases = (
+				OBJ_132 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SCTE35ParserPackageDescription;
+			productName = SCTE35ParserPackageDescription;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		OBJ_1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftMigration = 9999;
+				LastUpgradeCheck = 9999;
+				TargetAttributes = {
+					E80136612650282100EA6FBF = {
+						CreatedOnToolsVersion = 12.5;
+						ProvisioningStyle = Automatic;
+					};
+					E801366F26502B6800EA6FBF = {
+						CreatedOnToolsVersion = 12.5;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "SCTE35Parser" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = OBJ_5 /*  */;
+			productRefGroup = OBJ_73 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E80136612650282100EA6FBF /* SCTE35Parser_iOS */,
+				"SCTE35Parser::SCTE35Parser" /* SCTE35Parser_macOS */,
+				E801366F26502B6800EA6FBF /* SCTE35Parser_tvOS */,
+				"SCTE35Parser::SwiftPMPackageDescription" /* SCTE35ParserPackageDescription */,
+				"SCTE35Parser::SCTE35ParserPackageTests::ProductTarget" /* SCTE35ParserPackageTests */,
+				"SCTE35Parser::SCTE35ParserTests" /* SCTE35ParserTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E80136602650282100EA6FBF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E801366E26502B6800EA6FBF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E801365E2650282100EA6FBF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E801369D26502C4600EA6FBF /* UnexpectedDescriptorLoopLengthErrorInfo.swift in Sources */,
+				E80136C326502C5500EA6FBF /* MsbBitReader.swift in Sources */,
+				E801367826502C3100EA6FBF /* Data+hexString.swift in Sources */,
+				E801368B26502C4500EA6FBF /* InvalidATSCContentIdentifierInUPIDInfo.swift in Sources */,
+				E801369B26502C4600EA6FBF /* ParserError.swift in Sources */,
+				E801369926502C4600EA6FBF /* UnexpectedSpliceCommandLengthErrorInfo.swift in Sources */,
+				E801369026502C4500EA6FBF /* SpliceTime.swift in Sources */,
+				E80136A026502C4600EA6FBF /* SegmentationDescriptor+SegmentationUPIDType.swift in Sources */,
+				E801369226502C4500EA6FBF /* AudioDescriptor.swift in Sources */,
+				E801368526502C4500EA6FBF /* SpliceDescriptorTag.swift in Sources */,
+				E80136C726502C5500EA6FBF /* ByteReader.swift in Sources */,
+				E801369826502C4600EA6FBF /* BreakDuration.swift in Sources */,
+				E801367C26502C3900EA6FBF /* BitStreamMode.swift in Sources */,
+				E801369C26502C4600EA6FBF /* PrivateCommand.swift in Sources */,
+				E801367926502C3100EA6FBF /* SpliceInfoSection.swift in Sources */,
+				E801368226502C4500EA6FBF /* InvalidBitStreamModeErrorInfo.swift in Sources */,
+				E80136C026502C5500EA6FBF /* Extensions.swift in Sources */,
+				E80136C426502C5500EA6FBF /* MsbBitWriter.swift in Sources */,
+				E801368926502C4500EA6FBF /* SpliceInsert.swift in Sources */,
+				E801369526502C4500EA6FBF /* TimeSignal.swift in Sources */,
+				E801368A26502C4500EA6FBF /* AvailDescriptor.swift in Sources */,
+				E801369626502C4500EA6FBF /* SpliceCommandType.swift in Sources */,
+				E801367E26502C3900EA6FBF /* AudioCodingMode.swift in Sources */,
+				E80136C226502C5500EA6FBF /* LsbBitWriter.swift in Sources */,
+				E801367D26502C3900EA6FBF /* ATSCContentIdentifier.swift in Sources */,
+				E801368F26502C4500EA6FBF /* DTMFDescriptor.swift in Sources */,
+				E801368C26502C4500EA6FBF /* DataBitReader.swift in Sources */,
+				E801369A26502C4600EA6FBF /* SpliceDescriptor.swift in Sources */,
+				E801369426502C4500EA6FBF /* ParserError+Code.swift in Sources */,
+				E801368326502C4500EA6FBF /* InvalidMPUInSegmentationUPIDInfo.swift in Sources */,
+				E801368726502C4500EA6FBF /* SpliceSchedule.swift in Sources */,
+				E80136C526502C5500EA6FBF /* BitWriter.swift in Sources */,
+				E801368626502C4500EA6FBF /* SegmentationDescriptor.swift in Sources */,
+				E801369126502C4500EA6FBF /* TimeDescriptor.swift in Sources */,
+				E801368426502C4500EA6FBF /* UnexpectedSegmentationUPIDLengthErrorInfo.swift in Sources */,
+				E80136C126502C5500EA6FBF /* LsbBitReader.swift in Sources */,
+				E801369E26502C4600EA6FBF /* SegmentationDescriptor+SegmentationUPID.swift in Sources */,
+				E801368D26502C4500EA6FBF /* SCTE35ParserError.swift in Sources */,
+				E801368826502C4500EA6FBF /* SegmentationDescriptor+SegmentationTypeID.swift in Sources */,
+				E80136C626502C5500EA6FBF /* BitReader.swift in Sources */,
+				E801368E26502C4500EA6FBF /* SpliceCommand.swift in Sources */,
+				E801369726502C4600EA6FBF /* DataReader.swift in Sources */,
+				E801369F26502C4600EA6FBF /* UnexpectedSpliceDescriptorLengthErrorInfo.swift in Sources */,
+				E801369326502C4500EA6FBF /* UnexpectedEndOfDataErrorInfo.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E801366C26502B6800EA6FBF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E80136BC26502C4700EA6FBF /* UnexpectedDescriptorLoopLengthErrorInfo.swift in Sources */,
+				E80136CB26502C5600EA6FBF /* MsbBitReader.swift in Sources */,
+				E801367A26502C3200EA6FBF /* Data+hexString.swift in Sources */,
+				E80136AA26502C4600EA6FBF /* InvalidATSCContentIdentifierInUPIDInfo.swift in Sources */,
+				E80136BA26502C4700EA6FBF /* ParserError.swift in Sources */,
+				E80136B826502C4700EA6FBF /* UnexpectedSpliceCommandLengthErrorInfo.swift in Sources */,
+				E80136AF26502C4600EA6FBF /* SpliceTime.swift in Sources */,
+				E80136BF26502C4700EA6FBF /* SegmentationDescriptor+SegmentationUPIDType.swift in Sources */,
+				E80136B126502C4700EA6FBF /* AudioDescriptor.swift in Sources */,
+				E80136A426502C4600EA6FBF /* SpliceDescriptorTag.swift in Sources */,
+				E80136CF26502C5600EA6FBF /* ByteReader.swift in Sources */,
+				E80136B726502C4700EA6FBF /* BreakDuration.swift in Sources */,
+				E801367F26502C3900EA6FBF /* BitStreamMode.swift in Sources */,
+				E80136BB26502C4700EA6FBF /* PrivateCommand.swift in Sources */,
+				E801367B26502C3200EA6FBF /* SpliceInfoSection.swift in Sources */,
+				E80136A126502C4600EA6FBF /* InvalidBitStreamModeErrorInfo.swift in Sources */,
+				E80136C826502C5600EA6FBF /* Extensions.swift in Sources */,
+				E80136CC26502C5600EA6FBF /* MsbBitWriter.swift in Sources */,
+				E80136A826502C4600EA6FBF /* SpliceInsert.swift in Sources */,
+				E80136B426502C4700EA6FBF /* TimeSignal.swift in Sources */,
+				E80136A926502C4600EA6FBF /* AvailDescriptor.swift in Sources */,
+				E80136B526502C4700EA6FBF /* SpliceCommandType.swift in Sources */,
+				E801368126502C3900EA6FBF /* AudioCodingMode.swift in Sources */,
+				E80136CA26502C5600EA6FBF /* LsbBitWriter.swift in Sources */,
+				E801368026502C3900EA6FBF /* ATSCContentIdentifier.swift in Sources */,
+				E80136AE26502C4600EA6FBF /* DTMFDescriptor.swift in Sources */,
+				E80136AB26502C4600EA6FBF /* DataBitReader.swift in Sources */,
+				E80136B926502C4700EA6FBF /* SpliceDescriptor.swift in Sources */,
+				E80136B326502C4700EA6FBF /* ParserError+Code.swift in Sources */,
+				E80136A226502C4600EA6FBF /* InvalidMPUInSegmentationUPIDInfo.swift in Sources */,
+				E80136A626502C4600EA6FBF /* SpliceSchedule.swift in Sources */,
+				E80136CD26502C5600EA6FBF /* BitWriter.swift in Sources */,
+				E80136A526502C4600EA6FBF /* SegmentationDescriptor.swift in Sources */,
+				E80136B026502C4700EA6FBF /* TimeDescriptor.swift in Sources */,
+				E80136A326502C4600EA6FBF /* UnexpectedSegmentationUPIDLengthErrorInfo.swift in Sources */,
+				E80136C926502C5600EA6FBF /* LsbBitReader.swift in Sources */,
+				E80136BD26502C4700EA6FBF /* SegmentationDescriptor+SegmentationUPID.swift in Sources */,
+				E80136AC26502C4600EA6FBF /* SCTE35ParserError.swift in Sources */,
+				E80136A726502C4600EA6FBF /* SegmentationDescriptor+SegmentationTypeID.swift in Sources */,
+				E80136CE26502C5600EA6FBF /* BitReader.swift in Sources */,
+				E80136AD26502C4600EA6FBF /* SpliceCommand.swift in Sources */,
+				E80136B626502C4700EA6FBF /* DataReader.swift in Sources */,
+				E80136BE26502C4700EA6FBF /* UnexpectedSpliceDescriptorLengthErrorInfo.swift in Sources */,
+				E80136B226502C4700EA6FBF /* UnexpectedEndOfDataErrorInfo.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_132 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_133 /* Package.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_143 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_144 /* ParserErrorTests.swift in Sources */,
+				OBJ_145 /* MockDataBitReader.swift in Sources */,
+				OBJ_146 /* SCTE35ParserTests.swift in Sources */,
+				OBJ_147 /* UnexpectedEndOfDataErrorInfo+stub.swift in Sources */,
+				OBJ_148 /* BreakDurationTests.swift in Sources */,
+				OBJ_149 /* SpliceTimeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_82 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_83 /* ATSCContentIdentifier.swift in Sources */,
+				OBJ_84 /* AudioCodingMode.swift in Sources */,
+				OBJ_85 /* BitStreamMode.swift in Sources */,
+				OBJ_86 /* BitReader.swift in Sources */,
+				OBJ_87 /* BitWriter.swift in Sources */,
+				OBJ_88 /* ByteReader.swift in Sources */,
+				OBJ_89 /* Extensions.swift in Sources */,
+				OBJ_90 /* LsbBitReader.swift in Sources */,
+				OBJ_91 /* LsbBitWriter.swift in Sources */,
+				OBJ_92 /* MsbBitReader.swift in Sources */,
+				OBJ_93 /* MsbBitWriter.swift in Sources */,
+				OBJ_94 /* DataBitReader.swift in Sources */,
+				OBJ_95 /* DataReader.swift in Sources */,
+				OBJ_96 /* Data+hexString.swift in Sources */,
+				OBJ_97 /* InvalidATSCContentIdentifierInUPIDInfo.swift in Sources */,
+				OBJ_98 /* InvalidBitStreamModeErrorInfo.swift in Sources */,
+				OBJ_99 /* InvalidMPUInSegmentationUPIDInfo.swift in Sources */,
+				OBJ_100 /* ParserError+Code.swift in Sources */,
+				OBJ_101 /* ParserError.swift in Sources */,
+				OBJ_102 /* SCTE35ParserError.swift in Sources */,
+				OBJ_103 /* UnexpectedDescriptorLoopLengthErrorInfo.swift in Sources */,
+				OBJ_104 /* UnexpectedEndOfDataErrorInfo.swift in Sources */,
+				OBJ_105 /* UnexpectedSegmentationUPIDLengthErrorInfo.swift in Sources */,
+				OBJ_106 /* UnexpectedSpliceCommandLengthErrorInfo.swift in Sources */,
+				OBJ_107 /* UnexpectedSpliceDescriptorLengthErrorInfo.swift in Sources */,
+				OBJ_108 /* PrivateCommand.swift in Sources */,
+				OBJ_109 /* SpliceCommand.swift in Sources */,
+				OBJ_110 /* SpliceCommandType.swift in Sources */,
+				OBJ_111 /* SpliceInsert.swift in Sources */,
+				OBJ_112 /* SpliceSchedule.swift in Sources */,
+				OBJ_113 /* TimeSignal.swift in Sources */,
+				OBJ_114 /* AudioDescriptor.swift in Sources */,
+				OBJ_115 /* AvailDescriptor.swift in Sources */,
+				OBJ_116 /* DTMFDescriptor.swift in Sources */,
+				OBJ_117 /* SegmentationDescriptor+SegmentationTypeID.swift in Sources */,
+				OBJ_118 /* SegmentationDescriptor+SegmentationUPID.swift in Sources */,
+				OBJ_119 /* SegmentationDescriptor+SegmentationUPIDType.swift in Sources */,
+				OBJ_120 /* SegmentationDescriptor.swift in Sources */,
+				OBJ_121 /* SpliceDescriptor.swift in Sources */,
+				OBJ_122 /* SpliceDescriptorTag.swift in Sources */,
+				OBJ_123 /* TimeDescriptor.swift in Sources */,
+				OBJ_124 /* SpliceInfoSection.swift in Sources */,
+				OBJ_125 /* BreakDuration.swift in Sources */,
+				OBJ_126 /* SpliceTime.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		OBJ_138 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "SCTE35Parser::SCTE35ParserTests" /* SCTE35ParserTests */;
+			targetProxy = E801366A2650282100EA6FBF /* PBXContainerItemProxy */;
+		};
+		OBJ_152 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "SCTE35Parser::SCTE35Parser" /* SCTE35Parser_macOS */;
+			targetProxy = E801365C265026FA00EA6FBF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		E80136682650282100EA6FBF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = SCTE35Parser.xcodeproj/SCTE35Parser_Info.plist;
+				INFOPLIST_OUTPUT_FORMAT = "same-as-input";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 0.3.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = SCTE35Parser;
+				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGET_NAME = SCTE35Parser;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		E80136692650282100EA6FBF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = SCTE35Parser.xcodeproj/SCTE35Parser_Info.plist;
+				INFOPLIST_OUTPUT_FORMAT = "same-as-input";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 0.3.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = SCTE35Parser;
+				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGET_NAME = SCTE35Parser;
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		E801367626502B6800EA6FBF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = SCTE35Parser.xcodeproj/SCTE35Parser_Info.plist;
+				INFOPLIST_OUTPUT_FORMAT = "same-as-input";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 0.3.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = SCTE35Parser;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TARGET_NAME = SCTE35Parser;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		E801367726502B6800EA6FBF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = SCTE35Parser.xcodeproj/SCTE35Parser_Info.plist;
+				INFOPLIST_OUTPUT_FORMAT = "same-as-input";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 0.3.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = SCTE35Parser;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TARGET_NAME = SCTE35Parser;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		OBJ_130 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -sdk /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk -package-description-version 5.3.0";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		OBJ_131 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -sdk /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk -package-description-version 5.3.0";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		OBJ_136 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		OBJ_137 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		OBJ_141 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = SCTE35Parser.xcodeproj/SCTE35ParserTests_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = SCTE35ParserTests;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 7.0;
+			};
+			name = Debug;
+		};
+		OBJ_142 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = SCTE35Parser.xcodeproj/SCTE35ParserTests_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = SCTE35ParserTests;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 7.0;
+			};
+			name = Release;
+		};
+		OBJ_3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"SWIFT_PACKAGE=1",
+					"DEBUG=1",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "$(inherited) -DXcode";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "$(AVAILABLE_PLATFORMS)";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SWIFT_PACKAGE DEBUG";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				USE_HEADERMAP = NO;
+			};
+			name = Debug;
+		};
+		OBJ_4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"SWIFT_PACKAGE=1",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				OTHER_SWIFT_FLAGS = "$(inherited) -DXcode";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "$(AVAILABLE_PLATFORMS)";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SWIFT_PACKAGE";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				USE_HEADERMAP = NO;
+			};
+			name = Release;
+		};
+		OBJ_80 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = SCTE35Parser.xcodeproj/SCTE35Parser_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MARKETING_VERSION = 0.3.0;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = SCTE35Parser;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = SCTE35Parser;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		OBJ_81 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = SCTE35Parser.xcodeproj/SCTE35Parser_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MARKETING_VERSION = 0.3.0;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = SCTE35Parser;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = SCTE35Parser;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E80136672650282100EA6FBF /* Build configuration list for PBXNativeTarget "SCTE35Parser_iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E80136682650282100EA6FBF /* Debug */,
+				E80136692650282100EA6FBF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E801367526502B6800EA6FBF /* Build configuration list for PBXNativeTarget "SCTE35Parser_tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E801367626502B6800EA6FBF /* Debug */,
+				E801367726502B6800EA6FBF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_129 /* Build configuration list for PBXNativeTarget "SCTE35ParserPackageDescription" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_130 /* Debug */,
+				OBJ_131 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_135 /* Build configuration list for PBXAggregateTarget "SCTE35ParserPackageTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_136 /* Debug */,
+				OBJ_137 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_140 /* Build configuration list for PBXNativeTarget "SCTE35ParserTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_141 /* Debug */,
+				OBJ_142 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_2 /* Build configuration list for PBXProject "SCTE35Parser" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_3 /* Debug */,
+				OBJ_4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_79 /* Build configuration list for PBXNativeTarget "SCTE35Parser_macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_80 /* Debug */,
+				OBJ_81 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = OBJ_1 /* Project object */;
+}
