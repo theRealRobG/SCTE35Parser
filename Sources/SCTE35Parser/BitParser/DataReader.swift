@@ -5,7 +5,6 @@
 //  Created by Robert Galluccio on 01/05/2021.
 //
 
-import BitByteData
 import Foundation
 
 class DataReader: DataBitReader, Equatable {
