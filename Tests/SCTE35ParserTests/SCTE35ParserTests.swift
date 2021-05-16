@@ -1341,4 +1341,48 @@ final class SCTE35ParserTests: XCTestCase {
         )
         try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(hexString))
     }
+    
+    // MARK: - Further examples
+    
+    func test_timeSignal_segmentationDescriptor_mid() {
+        let base64String = "/DBwAAAAAAAAAP/wBQb/AAAAAABaAlhDVUVJAAAAAn//AABSZcANRAoMFHeL5eP2AAAAAAAACgwUd4vl4/YAAAAAAAAJJlNJR05BTDpMeTlFTUd4S1IwaEZaVXRwTUhkQ1VWWm5SVUZuWnowNgEB1Dao2g=="
+        let expectedSpliceInfoSection = SpliceInfoSection(
+            tableID: 252,
+            sapType: .unspecified,
+            protocolVersion: 0,
+            encryptedPacket: nil,
+            ptsAdjustment: 0,
+            tier: 0xFFF,
+            spliceCommand: .timeSignal(TimeSignal(spliceTime: SpliceTime(ptsTime: 4294967296))),
+            spliceDescriptors: [
+                .segmentationDescriptor(
+                    SegmentationDescriptor(
+                        identifier: 1129661769,
+                        eventId: 2,
+                        scheduledEvent: SegmentationDescriptor.ScheduledEvent(
+                            deliveryRestrictions: nil,
+                            componentSegments: nil,
+                            segmentationDuration: 5400000,
+                            segmentationUPID: .mid(
+                                [
+                                    // TODO - EIDR DOI suffix is not always ISAN, as demonstrated here.
+                                    // It may be worth creating a struct for the EIDR so as not to force
+                                    // an unexpected format (the below examples should be "10.5239/8BE5-E3F6").
+                                    .eidr("10.5239/8BE5-E3F6-0000-0000-0000-B"),
+                                    .eidr("10.5239/8BE5-E3F6-0000-0000-0000-B"),
+                                    .adi("SIGNAL:Ly9EMGxKR0hFZUtpMHdCUVZnRUFnZz0")
+                                ]
+                            ),
+                            segmentationTypeID: .distributorPlacementOpportunityStart,
+                            segmentNum: 1,
+                            segmentsExpected: 1,
+                            subSegment: nil
+                        )
+                    )
+                )
+            ],
+            CRC_32: 0xD436A8DA
+        )
+        try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(base64String))
+    }
 }

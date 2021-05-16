@@ -135,7 +135,7 @@ extension AudioDescriptor {
     init(bitReader: DataBitReader) throws {
         let descriptorLength = bitReader.byte()
         let bitsReadBeforeDescriptor = bitReader.bitsRead
-        let expectedBitsReadAtEndOfDescriptor = bitReader.bitsRead + Int(descriptorLength * 8)
+        let expectedBitsReadAtEndOfDescriptor = bitReader.bitsRead + (Int(descriptorLength) * 8)
         self.identifier = bitReader.uint32(fromBits: 32)
         let audioCount = bitReader.byte(fromBits: 4)
         _ = bitReader.bits(count: 4)
@@ -144,7 +144,7 @@ extension AudioDescriptor {
             bitReader.nonFatalErrors.append(
                 .unexpectedSpliceDescriptorLength(
                     UnexpectedSpliceDescriptorLengthErrorInfo(
-                        declaredSpliceDescriptorLengthInBits: Int(descriptorLength * 8),
+                        declaredSpliceDescriptorLengthInBits: (Int(descriptorLength) * 8),
                         actualSpliceDescriptorLengthInBits: bitReader.bitsRead - bitsReadBeforeDescriptor,
                         spliceDescriptorTag: .audioDescriptor
                     )

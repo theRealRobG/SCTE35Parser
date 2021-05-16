@@ -47,14 +47,14 @@ extension AvailDescriptor {
     init(bitReader: DataBitReader) throws {
         let descriptorLength = bitReader.byte()
         let bitsReadBeforeDescriptor = bitReader.bitsRead
-        let expectedBitsReadAtEndOfDescriptor = bitReader.bitsRead + Int(descriptorLength * 8)
+        let expectedBitsReadAtEndOfDescriptor = bitReader.bitsRead + (Int(descriptorLength) * 8)
         self.identifier = bitReader.uint32(fromBits: 32)
         self.providerAvailId = bitReader.uint32(fromBits: 32)
         if bitReader.bitsRead != expectedBitsReadAtEndOfDescriptor {
             bitReader.nonFatalErrors.append(
                 .unexpectedSpliceDescriptorLength(
                     UnexpectedSpliceDescriptorLengthErrorInfo(
-                        declaredSpliceDescriptorLengthInBits: Int(descriptorLength * 8),
+                        declaredSpliceDescriptorLengthInBits: (Int(descriptorLength) * 8),
                         actualSpliceDescriptorLengthInBits: bitReader.bitsRead - bitsReadBeforeDescriptor,
                         spliceDescriptorTag: .availDescriptor
                     )

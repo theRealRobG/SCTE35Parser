@@ -268,7 +268,7 @@ extension SegmentationDescriptor {
             bitReader.nonFatalErrors.append(
                 .unexpectedSpliceDescriptorLength(
                     UnexpectedSpliceDescriptorLengthErrorInfo(
-                        declaredSpliceDescriptorLengthInBits: Int(descriptorLength * 8),
+                        declaredSpliceDescriptorLengthInBits: descriptorLength * 8,
                         actualSpliceDescriptorLengthInBits: bitReader.bitsRead - bitsReadBeforeDescriptor,
                         spliceDescriptorTag: .segmentationDescriptor
                     )
