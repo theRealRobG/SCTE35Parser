@@ -78,7 +78,7 @@ extension TimeDescriptor {
     init(bitReader: DataBitReader) throws {
         let descriptorLength = bitReader.byte()
         let bitsReadBeforeDescriptor = bitReader.bitsRead
-        let expectedBitsReadAtEndOfDescriptor = bitReader.bitsRead + Int(descriptorLength * 8)
+        let expectedBitsReadAtEndOfDescriptor = bitReader.bitsRead + (Int(descriptorLength) * 8)
         self.identifier = bitReader.uint32(fromBits: 32)
         self.taiSeconds = bitReader.uint64(fromBits: 48)
         self.taiNS = bitReader.uint32(fromBits: 32)
@@ -87,7 +87,7 @@ extension TimeDescriptor {
             bitReader.nonFatalErrors.append(
                 .unexpectedSpliceDescriptorLength(
                     UnexpectedSpliceDescriptorLengthErrorInfo(
-                        declaredSpliceDescriptorLengthInBits: Int(descriptorLength * 8),
+                        declaredSpliceDescriptorLengthInBits: (Int(descriptorLength) * 8),
                         actualSpliceDescriptorLengthInBits: bitReader.bitsRead - bitsReadBeforeDescriptor,
                         spliceDescriptorTag: .timeDescriptor
                     )
