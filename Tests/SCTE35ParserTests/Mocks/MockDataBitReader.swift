@@ -6,7 +6,6 @@
 //
 
 @testable import SCTE35Parser
-import BitByteData
 import Foundation
 
 class MockDataBitReader: DataBitReader {

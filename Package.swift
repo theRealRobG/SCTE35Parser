@@ -11,17 +11,13 @@ let package = Package(
             targets: ["SCTE35Parser"]
         )
     ],
-    dependencies: [
-        .package(
-            name: "BitByteData",
-            url: "https://github.com/tsolomko/BitByteData.git",
-            .exact(Version(1, 4, 3))
-        )
-    ],
     targets: [
         .target(
             name: "SCTE35Parser",
-            dependencies: ["BitByteData"]
+            exclude: [
+                "BitParser/BitByteData/LICENCE",
+                "BitParser/BitByteData/README.md"
+            ]
         ),
         .testTarget(
             name: "SCTE35ParserTests",

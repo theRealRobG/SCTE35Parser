@@ -5,8 +5,6 @@
 //  Created by Robert Galluccio on 06/02/2021.
 //
 
-import BitByteData
-
 protocol DataBitReader: BitReader {
     /// A list of errors that have not caused the message to be un-parsable, but are inconsistent with the
     /// specification. An example of this could be a splice command who's computed length after parsing did
