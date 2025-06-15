@@ -49,12 +49,12 @@ extension PrivateCommand {
             expectedMinimumBitsLeft: spliceCommandLength * 8,
             parseDescription: "PrivateCommand; validating spliceCommandLength"
         )
-        self.identifier = bitReader.string(fromBytes: 4)
+        self.identifier = try bitReader.string(fromBytes: 4)
         var bytesLeft = spliceCommandLength - 4
         var privateBytes = [UInt8]()
         while bytesLeft > 0 {
             bytesLeft -= 1
-            privateBytes.append(bitReader.byte())
+            try privateBytes.append(bitReader.byte())
         }
         self.privateBytes = privateBytes
     }

@@ -111,11 +111,11 @@ public extension SegmentationDescriptor {
 extension SegmentationDescriptor.SegmentationUPID {
     // NOTE: It is assumed that this is starting reading from segmentation_upid_type
     init(bitReader: DataBitReader) throws {
-        let upidTypeRawValue = bitReader.byte()
+        let upidTypeRawValue = try bitReader.byte()
         guard let upidType = SegmentationDescriptor.SegmentationUPIDType(rawValue: upidTypeRawValue) else {
             throw ParserError.unrecognisedSegmentationUPIDType(Int(upidTypeRawValue))
         }
-        let upidLength = bitReader.byte()
+        let upidLength = try bitReader.byte()
         try bitReader.validate(
             expectedMinimumBitsLeft: Int(upidLength) * 8,
             parseDescription: "SegmentationUPID; reading loop"
@@ -133,37 +133,37 @@ extension SegmentationDescriptor.SegmentationUPID {
             try validate(upidLength: upidLength, expectedLength: 0, upidType: upidType)
             self = .notUsed
         case .userDefined:
-            self = .userDefined(bitReader.string(fromBytes: UInt(upidLength)))
+            self = .userDefined(try bitReader.string(fromBytes: UInt(upidLength)))
         case .isci:
             try validate(upidLength: upidLength, expectedLength: 8, upidType: upidType)
-            self = .isci(bitReader.string(fromBytes: 8))
+            self = .isci(try bitReader.string(fromBytes: 8))
         case .adID:
             try validate(upidLength: upidLength, expectedLength: 12, upidType: upidType)
-            self = .adID(bitReader.string(fromBytes: 12))
+            self = .adID(try bitReader.string(fromBytes: 12))
         case .umid:
             try validate(upidLength: upidLength, expectedLength: 32, upidType: upidType)
-            let umid = (0...7)
-                .map { _ in String(format: "%08X", bitReader.uint32(fromBits: 32)) }
+            let umid = try (0...7)
+                .map { _ in String(format: "%08X", try bitReader.uint32(fromBits: 32)) }
                 .joined(separator: ".")
             self = .umid(umid)
         case .deprecatedISAN:
             try validate(upidLength: upidLength, expectedLength: 8, upidType: upidType)
-            self = .deprecatedISAN(HyphenSeparatedCheckedHex(.deprecatedISAN).read(using: bitReader))
+            self = .deprecatedISAN(try HyphenSeparatedCheckedHex(.deprecatedISAN).read(using: bitReader))
         case .isan:
             try validate(upidLength: upidLength, expectedLength: 12, upidType: upidType)
-            self = .isan(HyphenSeparatedCheckedHex(.versionedISAN).read(using: bitReader))
+            self = .isan(try HyphenSeparatedCheckedHex(.versionedISAN).read(using: bitReader))
         case .tid:
             try validate(upidLength: upidLength, expectedLength: 12, upidType: upidType)
-            self = .tid(bitReader.string(fromBytes: 12))
+            self = .tid(try bitReader.string(fromBytes: 12))
         case .ti:
             try validate(upidLength: upidLength, expectedLength: 8, upidType: upidType)
-            self = .ti("0x\(bitReader.bytes(count: 8).map { String(format: "%02X", $0) }.joined())")
+            self = .ti("0x\(try bitReader.bytes(count: 8).map { String(format: "%02X", $0) }.joined())")
         case .adi:
-            self = .adi(bitReader.string(fromBytes: UInt(upidLength)))
+            self = .adi(try bitReader.string(fromBytes: UInt(upidLength)))
         case .eidr:
             try validate(upidLength: upidLength, expectedLength: 12, upidType: upidType)
-            let decimal = "10.\(bitReader.uint16(fromBits: 16))"
-            let hexComponents = HyphenSeparatedCheckedHex(.eidr).read(using: bitReader)
+            let decimal = "10.\(try bitReader.uint16(fromBits: 16))"
+            let hexComponents = try HyphenSeparatedCheckedHex(.eidr).read(using: bitReader)
             self = .eidr("\(decimal)/\(hexComponents)")
         case .atscContentIdentifier:
             self = try .atscContentIdentifier(ATSCContentIdentifier(bitReader: bitReader, upidLength: upidLength))
@@ -177,16 +177,16 @@ extension SegmentationDescriptor.SegmentationUPID {
             }
             self = .mid(mid)
         case .adsInformation:
-            self = .adsInformation(bitReader.string(fromBytes: UInt(upidLength)))
+            self = .adsInformation(try bitReader.string(fromBytes: UInt(upidLength)))
         case .uri:
-            let urlString = bitReader.string(fromBytes: UInt(upidLength))
+            let urlString = try bitReader.string(fromBytes: UInt(upidLength))
             guard let url = URL(string: urlString) else {
                 throw ParserError.invalidURLInSegmentationUPID(urlString)
             }
             self = .uri(url)
         case .uuid:
             try validate(upidLength: upidLength, expectedLength: 16, upidType: upidType)
-            let uuidString = bitReader.string(fromBytes: 16)
+            let uuidString = try bitReader.string(fromBytes: 16)
             guard let uuid = UUID(uuidString: uuidString) else {
                 throw ParserError.invalidUUIDInSegmentationUPID(uuidString)
             }
@@ -203,8 +203,8 @@ extension SegmentationDescriptor.ManagedPrivateUPID {
                 InvalidMPUInSegmentationUPIDInfo(upidLength: Int(upidLength))
             )
         }
-        let formatSpecifier = bitReader.string(fromBytes: 4)
-        let privateData = Data(bitReader.bytes(count: privateDataLength))
+        let formatSpecifier = try bitReader.string(fromBytes: 4)
+        let privateData = Data(try bitReader.bytes(count: privateDataLength))
         self.init(formatSpecifier: formatSpecifier, privateData: privateData)
     }
 }
@@ -240,7 +240,7 @@ private struct HyphenSeparatedCheckedHex {
         self.version = version
     }
     
-    func read(using bitReader: DataBitReader) -> String {
+    func read(using bitReader: DataBitReader) throws -> String {
         let checkIndices: [Int]
         let indexMax: Int
         switch version {
@@ -254,12 +254,12 @@ private struct HyphenSeparatedCheckedHex {
             checkIndices = [5]
             indexMax = 5
         }
-        return (0...indexMax)
+        return try (0...indexMax)
             .reduce(into: [String]()) { isan, index in
                 if checkIndices.contains(index) {
                     isan.append(checkChar(for: isan))
                 } else {
-                    isan.append(String(format: "%04X", bitReader.uint16(fromBits: 16)))
+                    isan.append(String(format: "%04X", try bitReader.uint16(fromBits: 16)))
                 }
             }
             .joined(separator: "-")

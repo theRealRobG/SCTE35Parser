@@ -2,6 +2,23 @@ import XCTest
 import SCTE35Parser
 
 final class SCTE35ParserTests: XCTestCase {
+    func test_invalid_avail_descriptor_should_throw() throws {
+        // This test has been added as we found crashing in the wild due to badly formatted SCTE35 messages and no
+        // defensiveness on checking that enough bits were left to read.
+        let hexString = "0xfc306000000000000000fff00506ff0549ee4f004a022243554549000000687fff00012064200e0e736b796e6577735f6c696e656172220000022443554549000000687fff00012064200e0e736b796e6577735f6c696e6561723000000000102e7fb8"
+        XCTAssertThrowsError(try SpliceInfoSection(hexString: hexString)) { error in
+            guard let error = error as? SCTE35ParserError else {
+                return XCTFail("Unexpected error type")
+            }
+            XCTAssertEqual("Unexpected end of data during parsing.", error.errorDescription)
+            switch error.error {
+            case .unexpectedEndOfData(let unexpectedEndOfDataErrorInfo):
+                XCTAssertEqual(unexpectedEndOfDataErrorInfo.description, "Trying to read UInt32")
+            default: XCTFail("Unexpected error case")
+            }
+        }
+    }
+
     // MARK: - SCTE-35 2020 - 14. Sample SCTE 35 Messages (Informative)
     
     // 14.1. time_signal – Placement Opportunity Start

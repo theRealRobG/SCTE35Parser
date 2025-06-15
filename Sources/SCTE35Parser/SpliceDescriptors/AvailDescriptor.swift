@@ -45,11 +45,11 @@ public struct AvailDescriptor: Equatable {
 extension AvailDescriptor {
     // NOTE: It is assumed that the splice_descriptor_tag has already been read.
     init(bitReader: DataBitReader) throws {
-        let descriptorLength = bitReader.byte()
+        let descriptorLength = try bitReader.byte()
         let bitsReadBeforeDescriptor = bitReader.bitsRead
         let expectedBitsReadAtEndOfDescriptor = bitReader.bitsRead + (Int(descriptorLength) * 8)
-        self.identifier = bitReader.uint32(fromBits: 32)
-        self.providerAvailId = bitReader.uint32(fromBits: 32)
+        self.identifier = try bitReader.uint32(fromBits: 32)
+        self.providerAvailId = try bitReader.uint32(fromBits: 32)
         if bitReader.bitsRead != expectedBitsReadAtEndOfDescriptor {
             bitReader.nonFatalErrors.append(
                 .unexpectedSpliceDescriptorLength(

@@ -164,9 +164,9 @@ public extension SpliceInsert.ScheduledEvent.SpliceMode {
 
 extension SpliceInsert {
     init(bitReader: DataBitReader) throws {
-        self.eventId = bitReader.uint32(fromBits: 32)
-        let isSpliceEventCancelled = bitReader.bit() == 1
-        _ = bitReader.bits(count: 7)
+        self.eventId = try bitReader.uint32(fromBits: 32)
+        let isSpliceEventCancelled = try bitReader.bit() == 1
+        _ = try bitReader.bits(count: 7)
         if isSpliceEventCancelled {
             self.scheduledEvent = nil
         } else {
@@ -177,12 +177,12 @@ extension SpliceInsert {
 
 private extension SpliceInsert.ScheduledEvent {
     init(bitReader: DataBitReader) throws {
-        self.outOfNetworkIndicator = bitReader.bit() == 1
-        let programSpliceFlag = bitReader.bit() == 1
-        let durationFlag = bitReader.bit() == 1
-        let spliceImmediateFlag = bitReader.bit() == 1
+        self.outOfNetworkIndicator = try bitReader.bit() == 1
+        let programSpliceFlag = try bitReader.bit() == 1
+        let durationFlag = try bitReader.bit() == 1
+        let spliceImmediateFlag = try bitReader.bit() == 1
         self.isImmediateSplice = spliceImmediateFlag
-        _ = bitReader.bits(count: 4)
+        _ = try bitReader.bits(count: 4)
         if programSpliceFlag {
             self.spliceMode = .programSpliceMode(
                 SpliceMode.ProgramMode(
@@ -190,10 +190,10 @@ private extension SpliceInsert.ScheduledEvent {
                 )
             )
         } else {
-            let componentCount = bitReader.byte()
+            let componentCount = try bitReader.byte()
             self.spliceMode = try .componentSpliceMode(
                 (0..<componentCount).reduce(into: [SpliceMode.ComponentMode]()) { segments, _ in
-                    let componentTag = bitReader.byte()
+                    let componentTag = try bitReader.byte()
                     segments.append(
                         SpliceMode.ComponentMode(
                             componentTag: componentTag,
@@ -208,8 +208,8 @@ private extension SpliceInsert.ScheduledEvent {
         } else {
             self.breakDuration = nil
         }
-        self.uniqueProgramId = bitReader.uint16(fromBits: 16)
-        self.availNum = bitReader.byte()
-        self.availsExpected = bitReader.byte()
+        self.uniqueProgramId = try bitReader.uint16(fromBits: 16)
+        self.availNum = try bitReader.byte()
+        self.availsExpected = try bitReader.byte()
     }
 }

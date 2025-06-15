@@ -38,20 +38,20 @@ extension SpliceTime {
             expectedMinimumBitsLeft: 1,
             parseDescription: "SpliceTime; reading timeSpecifiedFlag"
         )
-        let timeSpecifiedFlag = bitReader.bit() == 1
+        let timeSpecifiedFlag = try bitReader.bit() == 1
         if timeSpecifiedFlag {
             try bitReader.validate(
                 expectedMinimumBitsLeft: 39,
                 parseDescription: "SpliceTime; timeSpecifiedFlag == 1"
             )
-            _ = bitReader.bits(count: 6)
-            ptsTime = bitReader.uint64(fromBits: 33)
+            _ = try bitReader.bits(count: 6)
+            ptsTime = try bitReader.uint64(fromBits: 33)
         } else {
             try bitReader.validate(
                 expectedMinimumBitsLeft: 7,
                 parseDescription: "SpliceTime; timeSpecifiedFlag == 0"
             )
-            _ = bitReader.bits(count: 7)
+            _ = try bitReader.bits(count: 7)
             ptsTime = nil
         }
     }

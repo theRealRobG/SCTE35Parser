@@ -124,7 +124,7 @@ extension Array where Element == SpliceDescriptor {
 
 extension SpliceDescriptor {
     init(bitReader: DataBitReader) throws {
-        let spliceDescriptorTag = bitReader.byte()
+        let spliceDescriptorTag = try bitReader.byte()
         switch SpliceDescriptorTag(rawValue: spliceDescriptorTag) {
         case .audioDescriptor:
             self = try .audioDescriptor(AudioDescriptor(bitReader: bitReader))

@@ -63,7 +63,7 @@ extension SpliceCommand {
     ///   starts _after_ the `spliceCommandType`).
     /// - Throws: `ParserError`
     init(bitReader: DataBitReader, spliceCommandLength: Int) throws {
-        let spliceCommandTypeRawValue = bitReader.byte()
+        let spliceCommandTypeRawValue = try bitReader.byte()
         let bitsReadBeforeSpliceCommand = bitReader.bitsRead
         let expectedBitsReadAtEndOfSpliceCommand = bitReader.bitsRead + (spliceCommandLength * 8)
         guard let spliceCommandType = SpliceCommandType(rawValue: spliceCommandTypeRawValue) else {

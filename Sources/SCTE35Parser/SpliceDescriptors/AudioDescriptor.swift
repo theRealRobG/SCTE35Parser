@@ -133,12 +133,12 @@ public extension AudioDescriptor {
 extension AudioDescriptor {
     // NOTE: It is assumed that the splice_descriptor_tag has already been read.
     init(bitReader: DataBitReader) throws {
-        let descriptorLength = bitReader.byte()
+        let descriptorLength = try bitReader.byte()
         let bitsReadBeforeDescriptor = bitReader.bitsRead
         let expectedBitsReadAtEndOfDescriptor = bitReader.bitsRead + (Int(descriptorLength) * 8)
-        self.identifier = bitReader.uint32(fromBits: 32)
-        let audioCount = bitReader.byte(fromBits: 4)
-        _ = bitReader.bits(count: 4)
+        self.identifier = try bitReader.uint32(fromBits: 32)
+        let audioCount = try bitReader.byte(fromBits: 4)
+        _ = try bitReader.bits(count: 4)
         self.components = try (0..<audioCount).map { _ in try Component(bitReader: bitReader) }
         if bitReader.bitsRead != expectedBitsReadAtEndOfDescriptor {
             bitReader.nonFatalErrors.append(
@@ -156,11 +156,11 @@ extension AudioDescriptor {
 
 extension AudioDescriptor.Component {
     init(bitReader: DataBitReader) throws {
-        self.componentTag = bitReader.byte()
-        self.isoCode = bitReader.uint32(fromBits: 24)
-        let bsmod = bitReader.byte(fromBits: 3)
-        if bitReader.bit() == 0 {
-            let acmod = bitReader.byte(fromBits: 3)
+        self.componentTag = try bitReader.byte()
+        self.isoCode = try bitReader.uint32(fromBits: 24)
+        let bsmod = try bitReader.byte(fromBits: 3)
+        if try bitReader.bit() == 0 {
+            let acmod = try bitReader.byte(fromBits: 3)
             guard let audioCodingMode = AudioCodingMode(rawValue: acmod) else {
                 throw ParserError.unrecognisedAudioCodingMode(Int(acmod))
             }
@@ -170,13 +170,13 @@ extension AudioDescriptor.Component {
             self.bitStreamMode = bitStreamMode
             self.numChannels = .audioCodingMode(audioCodingMode)
         } else {
-            let nChannels = AudioDescriptor.MaxNumberOfEncodedChannels(bitReader.byte(fromBits: 3))
+            let nChannels = try AudioDescriptor.MaxNumberOfEncodedChannels(bitReader.byte(fromBits: 3))
             guard let bitStreamMode = BitStreamMode(bsmod: bsmod, acmod: nil) else {
                 throw ParserError.invalidBitStreamMode(InvalidBitStreamModeErrorInfo(bsmod: Int(bsmod), acmod: nil))
             }
             self.bitStreamMode = bitStreamMode
             self.numChannels = .maxNumberOfEncodedChannels(nChannels)
         }
-        self.fullSrvcAudio = bitReader.bit() == 1
+        self.fullSrvcAudio = try bitReader.bit() == 1
     }
 }
