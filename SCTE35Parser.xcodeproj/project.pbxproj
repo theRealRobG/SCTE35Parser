@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		8262471B2DFF7CB20019E31D /* SCTE35ParserMeasurements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8262471A2DFF7CA20019E31D /* SCTE35ParserMeasurements.swift */; };
 		E801367826502C3100EA6FBF /* Data+hexString.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* Data+hexString.swift */; };
 		E801367926502C3100EA6FBF /* SpliceInfoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_57 /* SpliceInfoSection.swift */; };
 		E801367A26502C3200EA6FBF /* Data+hexString.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* Data+hexString.swift */; };
@@ -181,6 +182,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8262471A2DFF7CA20019E31D /* SCTE35ParserMeasurements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCTE35ParserMeasurements.swift; sourceTree = "<group>"; };
 		E80136622650282100EA6FBF /* SCTE35Parser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SCTE35Parser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E801367026502B6800EA6FBF /* SCTE35Parser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SCTE35Parser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_10 /* ATSCContentIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ATSCContentIdentifier.swift; sourceTree = "<group>"; };
@@ -387,6 +389,7 @@
 			isa = PBXGroup;
 			children = (
 				OBJ_67 /* SCTE35ParserTests.swift */,
+				8262471A2DFF7CA20019E31D /* SCTE35ParserMeasurements.swift */,
 				OBJ_63 /* Errors */,
 				OBJ_65 /* Mocks */,
 				OBJ_68 /* Stubs */,
@@ -756,6 +759,7 @@
 				OBJ_147 /* UnexpectedEndOfDataErrorInfo+stub.swift in Sources */,
 				OBJ_148 /* BreakDurationTests.swift in Sources */,
 				OBJ_149 /* SpliceTimeTests.swift in Sources */,
+				8262471B2DFF7CB20019E31D /* SCTE35ParserMeasurements.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
