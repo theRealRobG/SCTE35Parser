@@ -48,8 +48,8 @@ extension BreakDuration {
             expectedMinimumBitsLeft: 40,
             parseDescription: "BreakDuration"
         )
-        autoReturn = bitReader.bit() == 1
-        _ = bitReader.bits(count: 6)
-        duration = bitReader.uint64(fromBits: 33)
+        autoReturn = try bitReader.bit() == 1
+        _ = try bitReader.bits(count: 6)
+        duration = try bitReader.uint64(fromBits: 33)
     }
 }

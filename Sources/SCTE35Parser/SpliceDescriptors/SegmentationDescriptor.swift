@@ -248,17 +248,17 @@ public extension SegmentationDescriptor.ScheduledEvent {
 extension SegmentationDescriptor {
     // NOTE: It is assumed that the splice_descriptor_tag has already been read.
     init(bitReader: DataBitReader) throws {
-        let descriptorLength = bitReader.int(fromBytes: 1)
+        let descriptorLength = try bitReader.int(fromBytes: 1)
         let bitsReadBeforeDescriptor = bitReader.bitsRead
         let expectedBitsReadAtEndOfDescriptor = bitReader.bitsRead + descriptorLength * 8
         let bitsLeftAfterDescriptor = bitReader.bitsLeft - (descriptorLength * 8)
-        self.identifier = bitReader.uint32(fromBits: 32)
+        self.identifier = try bitReader.uint32(fromBits: 32)
         guard self.identifier == 1129661769 else {
             throw ParserError.invalidSegmentationDescriptorIdentifier(Int(self.identifier))
         }
-        self.eventId = bitReader.uint32(fromBits: 32)
-        let segmentationEventCancelled = bitReader.bit() == 1
-        _ = bitReader.bits(count: 7)
+        self.eventId = try bitReader.uint32(fromBits: 32)
+        let segmentationEventCancelled = try bitReader.bit() == 1
+        _ = try bitReader.bits(count: 7)
         if segmentationEventCancelled {
             self.scheduledEvent = nil
         } else {
@@ -280,28 +280,28 @@ extension SegmentationDescriptor {
 
 extension SegmentationDescriptor.ScheduledEvent {
     init(bitReader: DataBitReader, bitsLeftAfterDescriptor: Int) throws {
-        let programSegmentationFlag = bitReader.bit() == 1
-        let segmentationDurationFlag = bitReader.bit() == 1
-        let deliveryNotRestrictedFlag = bitReader.bit() == 1
-        self.deliveryRestrictions = Self.deliveryRestrictions(bitReader, deliveryNotRestrictedFlag: deliveryNotRestrictedFlag)
-        self.componentSegments = Self.componentSegments(bitReader, programSegmentationFlag: programSegmentationFlag)
-        self.segmentationDuration = Self.segmentationDuration(bitReader, segmentationDurationFlag: segmentationDurationFlag)
+        let programSegmentationFlag = try bitReader.bit() == 1
+        let segmentationDurationFlag = try bitReader.bit() == 1
+        let deliveryNotRestrictedFlag = try bitReader.bit() == 1
+        self.deliveryRestrictions = try Self.deliveryRestrictions(bitReader, deliveryNotRestrictedFlag: deliveryNotRestrictedFlag)
+        self.componentSegments = try Self.componentSegments(bitReader, programSegmentationFlag: programSegmentationFlag)
+        self.segmentationDuration = try Self.segmentationDuration(bitReader, segmentationDurationFlag: segmentationDurationFlag)
         self.segmentationUPID = try SegmentationDescriptor.SegmentationUPID(bitReader: bitReader)
         self.segmentationTypeID = try Self.segmentationTypeID(bitReader)
-        self.segmentNum = bitReader.byte()
-        self.segmentsExpected = bitReader.byte()
-        self.subSegment = Self.subSegment(bitReader, segmentationTypeID: segmentationTypeID, bitsLeftAfterDescriptor: bitsLeftAfterDescriptor)
+        self.segmentNum = try bitReader.byte()
+        self.segmentsExpected = try bitReader.byte()
+        self.subSegment = try Self.subSegment(bitReader, segmentationTypeID: segmentationTypeID, bitsLeftAfterDescriptor: bitsLeftAfterDescriptor)
     }
     
-    private static func deliveryRestrictions(_ bitReader: DataBitReader, deliveryNotRestrictedFlag: Bool) -> DeliveryRestrictions? {
+    private static func deliveryRestrictions(_ bitReader: DataBitReader, deliveryNotRestrictedFlag: Bool) throws -> DeliveryRestrictions? {
         if deliveryNotRestrictedFlag {
-            _ = bitReader.bits(count: 5)
+            _ = try bitReader.bits(count: 5)
             return nil
         } else {
-            let webDeliveryAllowedFlag = bitReader.bit() == 1
-            let noRegionalBlackoutFlag = bitReader.bit() == 1
-            let archiveAllowedFlag = bitReader.bit() == 1
-            let deviceRestrictions = DeliveryRestrictions.DeviceRestrictions(rawValue: bitReader.int(fromBits: 2)) ?? .none
+            let webDeliveryAllowedFlag = try bitReader.bit() == 1
+            let noRegionalBlackoutFlag = try bitReader.bit() == 1
+            let archiveAllowedFlag = try bitReader.bit() == 1
+            let deviceRestrictions = DeliveryRestrictions.DeviceRestrictions(rawValue: try bitReader.int(fromBits: 2)) ?? .none
             return DeliveryRestrictions(
                 webDeliveryAllowed: webDeliveryAllowedFlag,
                 noRegionalBlackout: noRegionalBlackoutFlag,
@@ -311,30 +311,30 @@ extension SegmentationDescriptor.ScheduledEvent {
         }
     }
     
-    private static func componentSegments(_ bitReader: DataBitReader, programSegmentationFlag: Bool) -> [ComponentSegmentation]? {
+    private static func componentSegments(_ bitReader: DataBitReader, programSegmentationFlag: Bool) throws -> [ComponentSegmentation]? {
         if programSegmentationFlag {
             return nil
         } else {
-            let componentCount = bitReader.byte()
-            return (0..<componentCount).reduce(into: []) { segments, _ in
-                let componentTag = bitReader.byte()
-                _ = bitReader.bits(count: 7)
-                let ptsOffset =  bitReader.uint64(fromBits: 33)
+            let componentCount = try bitReader.byte()
+            return try (0..<componentCount).reduce(into: []) { segments, _ in
+                let componentTag = try bitReader.byte()
+                _ = try bitReader.bits(count: 7)
+                let ptsOffset =  try bitReader.uint64(fromBits: 33)
                 segments?.append(ComponentSegmentation(componentTag: componentTag, ptsOffset: ptsOffset))
             }
         }
     }
     
-    private static func segmentationDuration(_ bitReader: DataBitReader, segmentationDurationFlag: Bool) -> UInt64? {
+    private static func segmentationDuration(_ bitReader: DataBitReader, segmentationDurationFlag: Bool) throws -> UInt64? {
         if segmentationDurationFlag {
-            return bitReader.uint64(fromBits: 40)
+            return try bitReader.uint64(fromBits: 40)
         } else {
             return nil
         }
     }
     
     private static func segmentationTypeID(_ bitReader: DataBitReader) throws -> SegmentationDescriptor.SegmentationTypeID {
-        let segmentationTypeIDRawValue = bitReader.byte()
+        let segmentationTypeIDRawValue = try bitReader.byte()
         guard let segmentationTypeID = SegmentationDescriptor.SegmentationTypeID(rawValue: segmentationTypeIDRawValue) else {
             throw ParserError.unrecognisedSegmentationTypeID(Int(segmentationTypeIDRawValue))
         }
@@ -345,7 +345,7 @@ extension SegmentationDescriptor.ScheduledEvent {
         _ bitReader: DataBitReader,
         segmentationTypeID: SegmentationDescriptor.SegmentationTypeID,
         bitsLeftAfterDescriptor: Int
-    ) -> SubSegment? {
+    ) throws -> SubSegment? {
         guard bitsLeftAfterDescriptor <= (bitReader.bitsLeft - 16) else {
             return nil
         }
@@ -354,8 +354,8 @@ extension SegmentationDescriptor.ScheduledEvent {
         let isPOPO = segmentationTypeID == .providerOverlayPlacementOpportunityStart
         let isDOPO = segmentationTypeID == .distributorOverlayPlacementOpportunityStart
         if isPPO || isDPO || isPOPO || isDOPO {
-            let subSegmentNum = bitReader.byte()
-            let subSegmentsExpected = bitReader.byte()
+            let subSegmentNum = try bitReader.byte()
+            let subSegmentsExpected = try bitReader.byte()
             return SubSegment(
                 subSegmentNum: subSegmentNum,
                 subSegmentsExpected: subSegmentsExpected

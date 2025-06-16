@@ -170,16 +170,16 @@ public extension SpliceSchedule.Event.ScheduledEvent.SpliceMode {
 
 extension SpliceSchedule {
     init(bitReader: DataBitReader) throws {
-        let spliceCount = bitReader.byte()
+        let spliceCount = try bitReader.byte()
         self.events = try (0..<spliceCount).map { _ in try SpliceSchedule.Event(bitReader: bitReader) }
     }
 }
 
 extension SpliceSchedule.Event {
     init(bitReader: DataBitReader) throws {
-        self.eventId = bitReader.uint32(fromBits: 32)
-        let isCancelled = bitReader.bit() == 1
-        _ = bitReader.bits(count: 7)
+        self.eventId = try bitReader.uint32(fromBits: 32)
+        let isCancelled = try bitReader.bit() == 1
+        _ = try bitReader.bits(count: 7)
         if isCancelled {
             self.scheduledEvent = nil
         } else {
@@ -190,20 +190,20 @@ extension SpliceSchedule.Event {
 
 extension SpliceSchedule.Event.ScheduledEvent {
     init(bitReader: DataBitReader) throws {
-        self.outOfNetworkIndicator = bitReader.bit() == 1
-        let programSpliceFlag = bitReader.bit() == 1
-        let durationFlag = bitReader.bit() == 1
-        _ = bitReader.bits(count: 5)
+        self.outOfNetworkIndicator = try bitReader.bit() == 1
+        let programSpliceFlag = try bitReader.bit() == 1
+        let durationFlag = try bitReader.bit() == 1
+        _ = try bitReader.bits(count: 5)
         if programSpliceFlag {
             self.spliceMode = .programSpliceMode(
-                SpliceMode.ProgramMode(utcSpliceTime: bitReader.uint32(fromBits: 32))
+                SpliceMode.ProgramMode(utcSpliceTime: try bitReader.uint32(fromBits: 32))
             )
         } else {
-            let componentCount = bitReader.byte()
-            self.spliceMode = .componentSpliceMode(
+            let componentCount = try bitReader.byte()
+            self.spliceMode = try .componentSpliceMode(
                 (0..<componentCount).map { _ in
-                    let componentTag = bitReader.byte()
-                    let utcSpliceTime = bitReader.uint32(fromBits: 32)
+                    let componentTag = try bitReader.byte()
+                    let utcSpliceTime = try bitReader.uint32(fromBits: 32)
                     return SpliceMode.ComponentMode(
                         componentTag: componentTag,
                         utcSpliceTime: utcSpliceTime
@@ -216,8 +216,8 @@ extension SpliceSchedule.Event.ScheduledEvent {
         } else {
             self.breakDuration = nil
         }
-        self.uniqueProgramId = bitReader.uint16(fromBits: 16)
-        self.availNum = bitReader.byte()
-        self.availsExpected = bitReader.byte()
+        self.uniqueProgramId = try bitReader.uint16(fromBits: 16)
+        self.availNum = try bitReader.byte()
+        self.availsExpected = try bitReader.byte()
     }
 }

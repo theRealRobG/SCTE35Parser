@@ -31,7 +31,7 @@ extension DataBitReader {
         }
     }
     
-    func string(fromBytes bytes: UInt) -> String {
-        return String(self.bytes(count: Int(bytes)).map { Character(UnicodeScalar($0)) })
+    func string(fromBytes bytes: UInt) throws -> String {
+        return try String(self.bytes(count: Int(bytes)).map { Character(UnicodeScalar($0)) })
     }
 }

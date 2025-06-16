@@ -271,37 +271,37 @@ public extension SpliceInfoSection {
                 expectedMinimumBitsLeft: 24,
                 parseDescription: "SpliceInfoSection; need at least 24 bits to get to end of section_length field"
             )
-            self.tableID = bitReader.byte()
-            guard bitReader.bit() == 0 else { throw ParserError.invalidSectionSyntaxIndicator }
-            guard bitReader.bit() == 0 else { throw ParserError.invalidPrivateIndicator }
-            self.sapType = SAPType(rawValue: bitReader.byte(fromBits: 2)) ?? .unspecified
-            let sectionLengthInBytes = bitReader.int(fromBits: 12)
+            self.tableID = try bitReader.byte()
+            guard try bitReader.bit() == 0 else { throw ParserError.invalidSectionSyntaxIndicator }
+            guard try bitReader.bit() == 0 else { throw ParserError.invalidPrivateIndicator }
+            self.sapType = SAPType(rawValue: try bitReader.byte(fromBits: 2)) ?? .unspecified
+            let sectionLengthInBytes = try bitReader.int(fromBits: 12)
             try bitReader.validate(
                 expectedMinimumBitsLeft: sectionLengthInBytes * 8,
                 parseDescription: "SpliceInfoSection; section_length defined as \(sectionLengthInBytes)"
             )
-            self.protocolVersion = bitReader.byte()
-            let isEncrypted = bitReader.bit() == 1
+            self.protocolVersion = try bitReader.byte()
+            let isEncrypted = try bitReader.bit() == 1
             if isEncrypted {
                 throw ParserError.encryptedMessageNotSupported
             }
-            let _ /* encryptionAlgorithm */ = EncryptedPacket.EncryptionAlgorithm(bitReader.byte(fromBits: 6))
-            self.ptsAdjustment = bitReader.uint64(fromBits: 33)
-            let _ /* cwIndex */ = bitReader.byte()
-            self.tier = bitReader.uint16(fromBits: 12)
-            let spliceCommandLength = bitReader.int(fromBits: 12)
+            let _ /* encryptionAlgorithm */ = EncryptedPacket.EncryptionAlgorithm(try bitReader.byte(fromBits: 6))
+            self.ptsAdjustment = try bitReader.uint64(fromBits: 33)
+            let _ /* cwIndex */ = try bitReader.byte()
+            self.tier = try bitReader.uint16(fromBits: 12)
+            let spliceCommandLength = try bitReader.int(fromBits: 12)
             self.spliceCommand = try SpliceCommand(bitReader: bitReader, spliceCommandLength: spliceCommandLength)
-            let descriptorLoopLength = bitReader.int(fromBits: 16)
+            let descriptorLoopLength = try bitReader.int(fromBits: 16)
             self.spliceDescriptors = try [SpliceDescriptor].init(bitReader: bitReader, descriptorLoopLength: descriptorLoopLength)
             if isEncrypted {
                 throw ParserError.encryptedMessageNotSupported
             } else {
                 self.encryptedPacket = nil
                 while bitReader.bitsLeft >= 40 {
-                    _ = bitReader.byte()
+                    _ = try bitReader.byte()
                 }
             }
-            self.CRC_32 = bitReader.uint32(fromBits: 32)
+            self.CRC_32 = try bitReader.uint32(fromBits: 32)
             self.nonFatalErrors = bitReader.nonFatalErrors
         } catch {
             guard let parserError = error as? ParserError else { throw error }

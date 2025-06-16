@@ -73,10 +73,10 @@ extension ATSCContentIdentifier {
                 InvalidATSCContentIdentifierInUPIDInfo(upidLength: Int(upidLength))
             )
         }
-        self.tsid = bitReader.uint16(fromBits: 16)
-        _ = bitReader.bits(count: 2)
-        self.endOfDay = bitReader.byte(fromBits: 5)
-        self.uniqueFor = bitReader.uint16(fromBits: 9)
-        self.contentID = bitReader.string(fromBytes: UInt(contentIDLength))
+        self.tsid = try bitReader.uint16(fromBits: 16)
+        _ = try bitReader.bits(count: 2)
+        self.endOfDay = try bitReader.byte(fromBits: 5)
+        self.uniqueFor = try bitReader.uint16(fromBits: 9)
+        self.contentID = try bitReader.string(fromBytes: UInt(contentIDLength))
     }
 }
