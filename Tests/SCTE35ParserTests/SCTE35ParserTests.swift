@@ -1402,4 +1402,53 @@ final class SCTE35ParserTests: XCTestCase {
         )
         try XCTAssertEqual(expectedSpliceInfoSection, SpliceInfoSection(base64String))
     }
+    
+    // MARK: - Input Validation
+
+    /// Test: ISAN/EIDR UPID with non-hex character to target force-unwrap
+    func test_invalidHexInISANShouldThrow() {
+        let badISANHex = "FC302000000000000000FFF00506FE00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000Z"
+        XCTAssertThrowsError(try SpliceInfoSection(hexString: badISANHex), "Malformed ISAN with non-hex char should throw")
+    }
+    
+    /// Test: Fuzz with random data to ensure parser never crashes
+    /// The main purpose of this test is to ensure that parsing random base64 input does not crash the parser or the test runner.
+    /// The XCTAssertNoThrow assertion is used here for clarity, but the key goal is to validate parser stability, not the assertion itself.
+    func test_randomNoiseInput_shouldNotCrash() {
+        for _ in 0..<100 {
+            let randomData = Data((0..<Int.random(in: 8...128)).map{ _ in UInt8.random(in: 0...255) })
+            let base64String = randomData.base64EncodedString()
+            XCTAssertNoThrow(try? SpliceInfoSection(base64String: base64String), "Random base64 input should not crash")
+        }
+    }
+    
+    // MARK: - Descriptor Length Validation
+    
+    /// Test: Descriptor loop length shorter than required (off-by-one/zero)
+    func test_descriptorLengthTooShort_throwsError() {
+        let shortDescriptorHex = "FC30280000000000000000700A06FF1252E922"
+        XCTAssertThrowsError(try SpliceInfoSection(hexString: shortDescriptorHex), "Descriptor length too short should throw")
+    }
+    
+    /// Test: Descriptor length longer than data (overrun)
+    func test_descriptorLengthTooLong_throwsError() {
+        let overrunDescriptorHex = "FC3028000000000000000020700506FF1252E9220012021043554549000000007F9F0A013050000015871049"
+        XCTAssertThrowsError(try SpliceInfoSection(hexString: overrunDescriptorHex), "Descriptor length too long should throw")
+    }
+    
+    // MARK: - Unknown/Reserved Field Handling
+    
+    /// Test: Unknown/Reserved values for command, descriptor, type IDs
+    func test_unknownCommandAndDescriptorIDs() {
+        let unknownCommandHex = "FC30FF00000000000000FFF00506FE000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        XCTAssertThrowsError(try SpliceInfoSection(hexString: unknownCommandHex), "Unknown splice command type should throw")
+        
+        let unknownDescriptorHex = "FC302800000000000000FFF00506FE00000000000000FF000000000000000000000000000000000000"
+        XCTAssertThrowsError(try SpliceInfoSection(hexString: unknownDescriptorHex), "Unknown splice descriptor tag should throw")
+        
+        let unknownSegTypeIDHex = "FC302800000000000000FFF00506FE000000000000000000000000000000000000FF000000"
+        XCTAssertThrowsError(try SpliceInfoSection(hexString: unknownSegTypeIDHex), "Unknown segmentation type ID should throw")
+    }
+
+
 }
