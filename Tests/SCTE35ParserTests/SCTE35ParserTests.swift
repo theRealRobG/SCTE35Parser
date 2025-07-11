@@ -1412,6 +1412,8 @@ final class SCTE35ParserTests: XCTestCase {
     }
     
     /// Test: Fuzz with random data to ensure parser never crashes
+    /// The main purpose of this test is to ensure that parsing random base64 input does not crash the parser or the test runner.
+    /// The XCTAssertNoThrow assertion is used here for clarity, but the key goal is to validate parser stability, not the assertion itself.
     func test_randomNoiseInput_shouldNotCrash() {
         for _ in 0..<100 {
             let randomData = Data((0..<Int.random(in: 8...128)).map{ _ in UInt8.random(in: 0...255) })
